@@ -20,8 +20,7 @@ const { socials } = config;
 
 <section
   id="hero-first-fold"
-  class="hero-first-fold relative w-full h-[100dvh] flex flex-col justify-between overflow-hidden border-b border-border/40 select-none"
-  style="height: 100dvh; min-height: 100dvh; max-height: 100dvh;"
+  class="hero-first-fold relative w-full lg:h-[100dvh] flex flex-col justify-between overflow-hidden border-b border-border/40 select-none"
 >
   <!-- 3D Particle Canvas covering 100% of the viewport -->
   <canvas id="inngest-scene" class="absolute inset-0 w-full h-full block z-0 cursor-default"></canvas>
@@ -32,34 +31,34 @@ const { socials } = config;
   </div>
 
   <!-- Hero Stage: Left Typography (2/3) & Right 3D Particle Code Engine (1/3) -->
-  <div class="relative z-10 flex-1 w-full px-6 sm:px-10 lg:px-14 xl:px-16 flex flex-col justify-center pointer-events-none py-6 sm:py-8 lg:py-10">
-    <div class="w-full h-full max-h-[760px] grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+  <div class="relative z-10 flex-1 w-full px-6 sm:px-10 lg:px-14 xl:px-16 flex flex-col justify-center pointer-events-none py-8 sm:py-10 lg:py-10">
+    <div class="w-full h-full max-h-[760px] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center lg:items-stretch">
       
       <!-- Left Column: The 4 Coordinated Parts (Dispersed vertically across first screen) -->
-      <div class="lg:col-span-8 xl:col-span-8 h-full min-h-[480px] sm:min-h-[540px] max-h-[660px] flex flex-col justify-between pointer-events-auto py-2">
+      <div class="lg:col-span-8 xl:col-span-8 h-full flex flex-col justify-between pointer-events-auto py-2 gap-8 lg:gap-0 lg:min-h-[480px] lg:max-h-[660px]">
         
         <!-- Part 1: Main Headline (Top Anchor) -->
         <div>
-          <h1 class="hero-title text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tight leading-[1.02]">
+          <h1 class="hero-title text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tight leading-[1.05] lg:leading-[1.02]">
             Hi, I'm Explorer
           </h1>
         </div>
 
         <!-- Part 2: Bio & Vision Statement (Upper-Mid Anchor) -->
         <div>
-          <p class="hero-desc text-xl sm:text-2xl lg:text-[1.38rem] leading-relaxed sm:leading-[1.8] max-w-4xl font-normal opacity-90">
+          <p class="hero-desc text-lg sm:text-2xl lg:text-[1.38rem] leading-relaxed sm:leading-[1.8] max-w-4xl font-normal opacity-90">
             <span class="inline-block">聚焦云计算架构设计、Cloudflare 边缘生态与 AI 智能体系统工程。</span>
-            <br class="hidden lg:inline" />
+            <br class="hidden sm:inline" />
             <span class="inline-block">在自主智能体的时代，记录前沿实操，构筑数字花园。</span>
           </p>
         </div>
 
         <!-- Part 3: Action Buttons (Lower-Mid Anchor) -->
         <div>
-          <div class="flex flex-wrap items-center gap-5">
+          <div class="flex flex-wrap items-center gap-4 sm:gap-5">
             <a
               href="#main-content"
-              class="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-[#fb5536] hover:bg-[#e04325] text-white font-medium text-base sm:text-lg transition-all shadow-lg shadow-[#fb5536]/25 hover:shadow-[#fb5536]/35 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+              class="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl bg-[#fb5536] hover:bg-[#e04325] text-white font-medium text-base sm:text-lg transition-all shadow-lg shadow-[#fb5536]/25 hover:shadow-[#fb5536]/35 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
               <span>浏览精选文章</span>
               <svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,7 +67,7 @@ const { socials } = config;
             </a>
             <LinkButton
               href="/about"
-              class="inline-flex items-center gap-2 px-8 py-4 rounded-xl border border-border/80 hover:border-foreground/40 bg-background/50 hover:bg-background/90 backdrop-blur-sm font-medium text-base sm:text-lg transition-all hover:-translate-y-0.5 active:translate-y-0"
+              class="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl border border-border/80 hover:border-foreground/40 bg-background/50 hover:bg-background/90 backdrop-blur-sm font-medium text-base sm:text-lg transition-all hover:-translate-y-0.5 active:translate-y-0"
             >
               <span>关于我 (About)</span>
             </LinkButton>
@@ -89,7 +88,7 @@ const { socials } = config;
       </div>
 
       <!-- Right Column: Dedicated Space for 3D Particle-to-Code Engine (1/3 of space = 4 cols) -->
-      <div id="code-canvas-column" class="lg:col-span-4 xl:col-span-4 min-h-[340px] sm:min-h-[380px] pointer-events-none relative">
+      <div id="code-canvas-column" class="hidden lg:block lg:col-span-4 xl:col-span-4 min-h-[340px] sm:min-h-[380px] pointer-events-none relative">
         <!-- Canvas captures precision interactive clicks across the code stage -->
       </div>
 
@@ -98,9 +97,19 @@ const { socials } = config;
 </section>
 
 <style>
-  .hero-first-fold {
-    height: 100dvh;
-    max-height: 100dvh;
+  @media (min-width: 1024px) {
+    .hero-first-fold {
+      height: 100dvh;
+      min-height: 100dvh;
+      max-height: 100dvh;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .hero-first-fold {
+      min-height: calc(100dvh - 3rem);
+      padding-bottom: 2rem;
+    }
   }
 
   .hero-first-fold {
@@ -291,6 +300,10 @@ const { socials } = config;
       return document.documentElement.getAttribute("data-theme") === "light";
     }
 
+    isMobile() {
+      return this.W < 1024;
+    }
+
     getThemeColors() {
       if (this.isLightMode()) {
         return {
@@ -329,7 +342,7 @@ const { socials } = config;
 
     bindEvents() {
       this.canvas.addEventListener("click", (e) => {
-        if (!this.canInteract) return;
+        if (this.isMobile() || !this.canInteract) return;
 
         const rect = this.canvas.getBoundingClientRect();
         const clientX = e.clientX - rect.left;
@@ -350,6 +363,7 @@ const { socials } = config;
       });
 
       this.canvas.addEventListener("mousemove", (e) => {
+        if (this.isMobile()) return;
         const rect = this.canvas.getBoundingClientRect();
         const clientX = e.clientX - rect.left;
         const clientY = e.clientY - rect.top;
@@ -414,6 +428,13 @@ const { socials } = config;
       this.canvas.height = Math.floor(this.H * this.DPR);
       this.ctx.setTransform(this.DPR, 0, 0, this.DPR, 0, 0);
       this.ctx.imageSmoothingEnabled = true;
+
+      if (this.isMobile()) {
+        this.canvas.style.pointerEvents = "none";
+      } else {
+        this.canvas.style.pointerEvents = "auto";
+      }
+
       this.rebuildFormations();
     }
 
@@ -469,6 +490,27 @@ const { socials } = config;
       const centerX = this.W / 2;
       const centerY = this.H / 2;
       const maxRadius = Math.max(this.W, this.H) * 0.82;
+
+      // Mobile Graceful Degradation:
+      // On mobile screens (< 1024px), generate only lightweight ambient stars for deep-space atmosphere
+      if (this.isMobile()) {
+        this.persistentWhiteStars = [];
+        const mobileStarCount = 50;
+        for (let i = 0; i < mobileStarCount; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const dist = (0.10 + 0.90 * Math.sqrt(Math.random())) * maxRadius;
+          const x = centerX + dist * Math.cos(angle);
+          const y = centerY + (Math.random() - 0.5) * (this.H * 1.35);
+          const z = dist * Math.sin(angle);
+          const baseSize = 0.95 + Math.random() * 0.65;
+          this.persistentWhiteStars.push({ x, y, z, baseSize, alpha: 0.65 });
+        }
+        this.headers = [];
+        this.headerWhiteParticles = [];
+        this.orangeCodeParticles = [];
+        this.canInteract = false;
+        return;
+      }
 
       // 1. Persistent White Stars: Roam deep space ALWAYS to sustain 3D rotating depth
       // True 360-degree circular symmetry in the horizontal XZ plane
@@ -1323,6 +1365,13 @@ const { socials } = config;
           ctx.arc(screenX, screenY, starRadius * 0.45, 0, Math.PI * 2);
           ctx.fill();
         }
+      }
+
+      // Mobile Graceful Degradation:
+      // On mobile screens, only render the ambient drifting stars and skip code particles
+      if (this.isMobile()) {
+        ctx.globalAlpha = 1;
+        return;
       }
 
       // =========================================================================
