@@ -268,7 +268,7 @@ const { socials } = config;
     headerLineHeight = 23;
     codeFontSize = 13.5;
     codeLineHeight = 23.5;
-    codeBodyIndentX = 38; // Style B: Indented relative to step header for Python scope hierarchy
+    codeBodyIndentX = 18; // Inngest Classic: Aligns code body first column with 'step' header
 
     // Unified Particle Entities
     persistentWhiteStars: any[] = []; // Background stars that sustain 3D rotating depth ALWAYS
@@ -433,6 +433,9 @@ const { socials } = config;
       this.headerLineHeight = this.headerFontSize * 1.65;
       this.codeFontSize = isMobile ? 12 : (isLargeDesktop ? 14.5 : 13.5);
       this.codeLineHeight = this.codeFontSize * 1.72;
+
+      offCtx.font = `600 ${this.headerFontSize}px 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+      this.codeBodyIndentX = Math.round(offCtx.measureText("■ ").width);
 
       offCtx.font = `500 ${this.codeFontSize}px 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
 
