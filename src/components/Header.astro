@@ -27,6 +27,12 @@ const pathWithoutTrailingSlash =
 
 const currentPath = stripLocale(pathWithoutTrailingSlash, locale);
 
+export interface Props {
+  transparent?: boolean;
+}
+
+const { transparent = false } = Astro.props;
+
 const isActive = (path: string) => {
   const currentPathArray = currentPath.split("/").filter(p => p.trim());
   const pathArray = path.split("/").filter(p => p.trim());
@@ -43,13 +49,22 @@ const isActive = (path: string) => {
 </a>
 
 <header
-  class="app-layout flex flex-col items-center justify-between sm:flex-row"
+  class:list={[
+    "flex flex-col items-center justify-between sm:flex-row w-full transition-all",
+    transparent ? "w-full px-6 sm:px-10 lg:px-14 xl:px-16" : "app-layout",
+  ]}
 >
   <div
-    class="border-border bg-background relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6"
+    class:list={[
+      "relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6 transition-colors",
+      transparent
+        ? "border-border/30 bg-transparent backdrop-blur-xs"
+        : "border-border bg-background",
+    ]}
   >
     <a
       href={getRelativeLocaleUrl(locale, "")}
+      id="site-logo-link"
       class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
     >
       {site.title}
@@ -218,9 +233,25 @@ const isActive = (path: string) => {
     });
   }
 
+  function handleLogoClick() {
+    const logo = document.getElementById("site-logo-link");
+    if (!logo) return;
+    logo.addEventListener("click", e => {
+      const homePath = logo.getAttribute("href") || "/";
+      const cur = window.location.pathname;
+      if (cur === homePath || cur === homePath.replace(/\/$/, "") || cur === "/") {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  }
+
   toggleNav();
   document.addEventListener("astro:after-swap", toggleNav);
 
   handleSkipToContent();
   document.addEventListener("astro:after-swap", handleSkipToContent);
+
+  handleLogoClick();
+  document.addEventListener("astro:after-swap", handleLogoClick);
 </script>

@@ -1,6 +1,7 @@
 ---
 import config from "@/config";
 import LinkButton from "./LinkButton.astro";
+import IconRss from "@/assets/icons/IconRss.svg";
 
 const { site, socials } = config;
 
@@ -33,4 +34,57 @@ const items = await Promise.all(
       ) : null
     )
   }
+
+  <!-- RSS Button at the end of socials bar with copy feedback -->
+  <button
+    type="button"
+    class="rss-copy-btn group relative p-2 hover:rotate-6 sm:p-1 cursor-pointer focus-outline"
+    title="点击复制 RSS 订阅链接"
+    aria-label="RSS Feed"
+  >
+    <IconRss class="inline-block size-6 scale-125 stroke-current stroke-2 opacity-90 group-hover:stroke-accent sm:scale-110 rtl:-rotate-90 transition-colors" />
+    <span class="sr-only">RSS Feed</span>
+  </button>
 </div>
+
+<!-- Global Toast for RSS Copy -->
+<div
+  id="rss-toast"
+  class="pointer-events-none fixed bottom-6 right-6 z-50 transform translate-y-4 opacity-0 transition-all duration-300 ease-out flex items-center gap-2 rounded-xl bg-neutral-900/95 text-white border border-neutral-700/80 px-4 py-2.5 text-xs shadow-2xl backdrop-blur-md dark:bg-neutral-800/95"
+  role="alert"
+>
+  <span class="text-accent font-bold">✓</span>
+  <span>RSS 订阅地址已复制到剪贴板！</span>
+</div>
+
+<script>
+  function setupRssCopyButtons() {
+    const btns = document.querySelectorAll(".rss-copy-btn");
+    const toast = document.getElementById("rss-toast");
+
+    btns.forEach(btn => {
+      if ((btn as any).__hasRssListener) return;
+      (btn as any).__hasRssListener = true;
+
+      btn.addEventListener("click", async e => {
+        e.preventDefault();
+        const rssUrl = new URL("/rss.xml", window.location.origin).href;
+        try {
+          await navigator.clipboard.writeText(rssUrl);
+          if (toast) {
+            toast.classList.remove("opacity-0", "translate-y-4");
+            toast.classList.add("opacity-100", "translate-y-0");
+            setTimeout(() => {
+              toast.classList.remove("opacity-100", "translate-y-0");
+              toast.classList.add("opacity-0", "translate-y-4");
+            }, 2400);
+          }
+        } catch (err) {
+          console.error("Failed to copy RSS URL", err);
+        }
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupRssCopyButtons);
+</script>

@@ -1,0 +1,2179 @@
+---
+// ParticleCodeEngine.astro
+// Authentic Inngest 3D Particle-to-Code First Fold
+// Unified Particle Conservation Architecture:
+// 1. Initial Cosmos: Deep space is filled with BOTH white stars and roaming orange particles from frame 0
+// 2. Header Assembly: White particles are pulled from the environment to assemble the 3 function headers
+// 3. Hierarchical Harvesting: Orange particles are physically harvested from the surrounding 3D cosmos into each function body
+// 4. Depleted State: Once all code is assembled, the ambient orange particles are 'consumed' into the code, while persistent white stars sustain the 3D rotating depth
+// 5. Ultra-Slow Rotation: ct * 0.000008 - almost static, with a breathtaking subtle celestial drift
+// 6. Tour Click Gate: Clicks strictly locked during assembly; enabled only after 3-step tour finishes
+// 7. Interactive Typewriter: Snappy line-by-line streaming with blinking terminal block cursor (▋)
+// 8. 3D Depth Scroll Exit: Transforms to large foreground orange particles, diving deep into 3D space (Z -> -1400) while exiting bottom-right
+import Header from "@/components/Header.astro";
+import Socials from "@/components/Socials.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import config from "@/config";
+
+const { socials } = config;
+---
+
+<section
+  id="hero-first-fold"
+  class="hero-first-fold relative w-full h-[100dvh] flex flex-col justify-between overflow-hidden border-b border-border/40 select-none"
+  style="height: 100dvh; min-height: 100dvh; max-height: 100dvh;"
+>
+  <!-- 3D Particle Canvas covering 100% of the viewport -->
+  <canvas id="inngest-scene" class="absolute inset-0 w-full h-full block z-0 cursor-default"></canvas>
+
+  <!-- Top Navigation Bar (Integrated transparently, stars drift behind) -->
+  <div class="relative z-30 w-full">
+    <Header transparent={true} />
+  </div>
+
+  <!-- Hero Stage: Left Typography (2/3) & Right 3D Particle Code Engine (1/3) -->
+  <div class="relative z-10 flex-1 w-full px-6 sm:px-10 lg:px-14 xl:px-16 flex flex-col justify-center pointer-events-none py-6 sm:py-8 lg:py-10">
+    <div class="w-full h-full max-h-[760px] grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+      
+      <!-- Left Column: The 4 Coordinated Parts (Dispersed vertically across first screen) -->
+      <div class="lg:col-span-8 xl:col-span-8 h-full min-h-[480px] sm:min-h-[540px] max-h-[660px] flex flex-col justify-between pointer-events-auto py-2">
+        
+        <!-- Part 1: Main Headline (Top Anchor) -->
+        <div>
+          <h1 class="hero-title text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tight leading-[1.02]">
+            Hi, I'm Explorer
+          </h1>
+        </div>
+
+        <!-- Part 2: Bio & Vision Statement (Upper-Mid Anchor) -->
+        <div>
+          <p class="hero-desc text-xl sm:text-2xl lg:text-[1.38rem] leading-relaxed sm:leading-[1.8] max-w-4xl font-normal opacity-90">
+            <span class="inline-block">聚焦云计算架构设计、Cloudflare 边缘生态与 AI 智能体系统工程。</span>
+            <br class="hidden lg:inline" />
+            <span class="inline-block">在自主智能体的时代，记录前沿实操，构筑数字花园。</span>
+          </p>
+        </div>
+
+        <!-- Part 3: Action Buttons (Lower-Mid Anchor) -->
+        <div>
+          <div class="flex flex-wrap items-center gap-5">
+            <a
+              href="#main-content"
+              class="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-[#fb5536] hover:bg-[#e04325] text-white font-medium text-base sm:text-lg transition-all shadow-lg shadow-[#fb5536]/25 hover:shadow-[#fb5536]/35 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+            >
+              <span>浏览精选文章</span>
+              <svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+              </svg>
+            </a>
+            <LinkButton
+              href="/about"
+              class="inline-flex items-center gap-2 px-8 py-4 rounded-xl border border-border/80 hover:border-foreground/40 bg-background/50 hover:bg-background/90 backdrop-blur-sm font-medium text-base sm:text-lg transition-all hover:-translate-y-0.5 active:translate-y-0"
+            >
+              <span>关于我 (About)</span>
+            </LinkButton>
+          </div>
+        </div>
+
+        <!-- Part 4: Connect & Socials Row (Bottom Floor Anchor) -->
+        {
+          socials.length > 0 && (
+            <div class="flex flex-wrap items-center gap-4 pt-6 border-t border-border/25 max-w-xl">
+              <span class="text-xs font-mono uppercase tracking-widest text-[#8e96a0] dark:text-[#8e96a0]">
+                CONNECT:
+              </span>
+              <Socials />
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Right Column: Dedicated Space for 3D Particle-to-Code Engine (1/3 of space = 4 cols) -->
+      <div id="code-canvas-column" class="lg:col-span-4 xl:col-span-4 min-h-[340px] sm:min-h-[380px] pointer-events-none relative">
+        <!-- Canvas captures precision interactive clicks across the code stage -->
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-first-fold {
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+
+  .hero-first-fold {
+    background-color: var(--color-background, #080a0e);
+    color: #f3f4f6;
+  }
+  .hero-title {
+    color: #ffffff;
+  }
+  .hero-tagline {
+    color: #e2e8f0;
+  }
+  .hero-desc {
+    color: #cbd5e1;
+  }
+
+  :global(html[data-theme="light"]) .hero-first-fold {
+    background-color: var(--color-background, #fdfdfd);
+    color: #0f172a;
+  }
+  :global(html[data-theme="light"]) .hero-title {
+    color: #0f172a;
+  }
+  :global(html[data-theme="light"]) .hero-tagline {
+    color: #1e293b;
+  }
+  :global(html[data-theme="light"]) .hero-desc {
+    color: #334155;
+  }
+</style>
+
+<script>
+  // Authentic Inngest 3D Particle-to-Code Engine
+  // Tailored for Explorer: Cloudflare, AI Agents & Edge Systems
+  const CODE_SNIPPETS = [
+    {
+      stepTitle: "■ step.start()",
+      lines: [
+        'agent = await step.start(',
+        '    time="now",',
+        '    status="alive",',
+        ')',
+      ]
+    },
+    {
+      stepTitle: "■ step.wait()",
+      lines: [
+        'await step.wait(',
+        '    with_human=True,',
+        '    until="the_next_day",',
+        ')',
+      ]
+    },
+    {
+      stepTitle: "■ step.live()",
+      lines: [
+        'await step.send(to="the_stars")',
+        '',
+        'return "Live across infinite stars."',
+      ]
+    }
+  ];
+
+  const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
+  const clamp = (v: number, min = 0, max = 1) => Math.max(min, Math.min(max, v));
+
+  class InngestParticleScene {
+    canvas: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
+    W = 0;
+    H = 0;
+    DPR = 1;
+    timeScale = 1.0;
+    continuousTime = 0; // Monotonic continuous time for ultra-slow celestial drift
+    raf: number | null = null;
+
+    // Operational Modes: "TOUR" (automatic cycling) or "INTERACTIVE" (user click typewriter)
+    mode: "TOUR" | "INTERACTIVE" = "TOUR";
+
+    // Pacing Architecture (Measured in milliseconds)
+    // 1. Initial Cosmos Phase: White & Orange particles rotate freely in 3D cosmos (0 ~ 2400ms)
+    //    User experiences pure celestial rotating space before any assembly begins
+    // 2. Sequential Header Assembly: 3 function titles assemble one-by-one with clear pauses (2400 ~ 7200ms)
+    //    All bullets remain subtle grey during this structural assembly stage!
+    //    - Header 0 assemble: 2400 ~ 3100ms (700ms)
+    //    - Header 0 pause: 3100 ~ 3750ms (650ms distinct pause)
+    //    - Header 1 assemble: 3750 ~ 4450ms (700ms)
+    //    - Header 1 pause: 4450 ~ 5100ms (650ms distinct pause)
+    //    - Header 2 assemble: 5100 ~ 5800ms (700ms)
+    //    - All 3 headers stacked hold: 5800 ~ 7200ms (1400ms generous pause)
+    // 3. Sequential Function Body Assembly: Now that 3 headers are stacked, each step's body assembles (7200 ~ 23400ms)
+    //    Only here does the active step's bullet light up ORANGE!
+    //    - Step 0 Body: 7200 ~ 12600ms (5400ms)
+    //    - Step 1 Body: 12600 ~ 18000ms (5400ms)
+    //    - Step 2 Body: 18000 ~ 23400ms (5400ms)
+    // 4. Completed Stacked Pause / User Interaction: Step 2 bullet orange, clicks enabled (23400 ~ 27600ms: 4200ms)
+    // 5. Disperse: 由快到慢 back into cosmos (27600 ~ 28550ms: 950ms)
+    // 6. Cosmic Drift: Rotate freely before loop restarts (28550 ~ 29550ms: 1000ms)
+    // Initial Page Entrance Holographic Bootup (Only on initial load or entering from another page):
+    // 0 ~ 2000ms: wait 2s completely transparent (alpha = 0)
+    // 2000 ~ 2200ms: power strikes on to 1/3 brightness (alpha -> 0.333)
+    // 2200 ~ 2850ms: sustained 1/3 brightness low-power holographic hum (alpha = 0.333)
+    // 2850 ~ 2970ms: sudden voltage blackout (快速全灭 -> 0)
+    // 2970 ~ 3130ms: rapid power surge to full brightness (快速全亮 -> 1.0)
+    // 3130 ~ 6200ms: voltage stabilizes into normal operation with extra 2s display (稳定全亮额外展示2秒，历时约3.07秒后开启组装)
+    hasCompletedInitialIntro = false;
+    initialIntroTime = 0;
+    initialIntroDuration = 6200;
+
+    // Repeating Tour Assembly Milestones (Once intro completes, tour cycles seamlessly forever without repeating intro/flicker):
+    // 1. Sequential Header Assembly: 0 ~ 4800ms
+    // 2. Sequential Function Body Assembly: 4800 ~ 21000ms (Step 0 -> Step 1 -> Step 2)
+    // 3. Completed Stacked Pause / User Interaction: 21000 ~ 25200ms (4200ms)
+    // 4. Two-Phase Dispersal anchored to 3 headers: 25200 ~ 26450ms (1250ms)
+    // 5. Cosmic Float: 26450 ~ 27650ms (1200ms)
+    headerAssembleDuration = 750;
+    headerPauseDuration = 650;
+    headerStackedPauseDuration = 1250;
+    headerPhaseDuration = 3 * 750 + 2 * 650 + 1250; // = 4800ms
+
+    stepAssembleDuration = 1900; // 1900ms: gentle lift off -> fast transit -> soft landing + 240ms crystallization
+    stepHoldDuration = 2600;     // 2600ms: generous hold pause to read code body with strong 停顿感
+    stepFoldDuration = 550;      // 550ms: visible, smooth upward fold of code body
+    stepGapDuration = 350;       // 350ms: clear breath and bullet shift before next function body opens
+    bodyCycleDuration = 1900 + 2600 + 550 + 350; // = 5400ms
+
+    tourStackedPauseDuration = 4200; // 4.2s paused with Step 2 lit, waiting for interaction
+    tourDisperseDuration = 1250;     // 1250ms: Two-phase dispersal (Phase 1: slow irregular cloud; Phase 2: fast-to-slow wide cosmos)
+    tourFloatDuration = 6200;        // 6200ms (1200ms + 额外 5000ms): 解构粒子动画结束后额外漫游 5 秒再开启新组装，从容优雅不紧促
+
+    tourCycleTime = 0;
+    totalTourCycleDuration = 4800 + 3 * 5400 + 4200 + 1250 + 6200; // = 32650ms
+
+    // Interaction Gate
+    canInteract = false;
+
+    // Interactive State
+    activeInteractiveStep = -1;
+    typewriterStartTime = 0;
+    lineDurationMs = 180; // Snappy line-by-line streaming
+    lastUserInteraction = 0;
+
+    // Accordion Expansion State (0 to 1)
+    targetExpand = [0, 0, 0];
+    currentExpand = [0, 0, 0];
+    stepBodyHeights = [0, 0, 0];
+    baseStartX = 0;
+    baseStartY = 0;
+    maxCodeLineWidth = 0;
+
+    // Header assembly progress for each header [h0, h1, h2]: 0 = in cosmos, 1 = assembled into header
+    headerAssembleProgress: number[] = [0, 0, 0];
+    // Dispersal to Stardust State: 0 = normal, 1 = 100% dissolved back to roaming particles
+    headerDisperseProgress = 0;
+
+    // Scroll state
+    scrollY = 0;
+    smoothScrollY = 0;
+    hasFullyScrolledOut = false;
+    scrollResumePauseRemaining = 0; // 上拉回到主页面后，组装动画恢复前停顿 2 秒 (2000ms)，避免动效急促
+
+    // Font metrics
+    headerFontSize = 14;
+    headerLineHeight = 23;
+    codeFontSize = 13.5;
+    codeLineHeight = 23.5;
+    codeBodyIndentX = 38; // Style B: Indented relative to step header for Python scope hierarchy
+
+    // Unified Particle Entities
+    persistentWhiteStars: any[] = []; // Background stars that sustain 3D rotating depth ALWAYS
+    headerWhiteParticles: any[] = []; // 36 particles that gather to assemble headers (black in light, white in dark)
+    orangeCodeParticles: any[] = [];  // Orange particles that roam the cosmos from frame 0 and get harvested into code
+
+    hoveredHeaderIdx = -1;
+
+    constructor(canvas: HTMLCanvasElement) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext("2d")!;
+      this.DPR = Math.min(window.devicePixelRatio || 1, 2.5);
+      this.lastUserInteraction = performance.now();
+      this.resize();
+      this.bindEvents();
+      this.start();
+    }
+
+    isLightMode() {
+      return document.documentElement.getAttribute("data-theme") === "light";
+    }
+
+    getThemeColors() {
+      if (this.isLightMode()) {
+        return {
+          star: "#090d16", // Deep crisp obsidian ink dots
+          starCore: "#000000",
+          starGlow: "rgba(9, 13, 22, 0.16)",
+          codeChar: "#090d16",
+          codeParticle: "#ea4a26", // Punchy, authentic Inngest blaze orange
+          codeParticleCore: "#ff6f4d",
+          codeParticleGlow: "rgba(234, 74, 38, 0.26)",
+          headerText: "#090d16", // Solid black text, never fades or dims!
+          headerActive: "#090d16",
+          headerInactive: "#090d16",
+          bulletActive: "#ea4a26", // Orange active square bullet
+          bulletInactive: "rgba(9, 13, 22, 0.22)", // Subtle muted square bullet
+          cursor: "#ea4a26",
+        };
+      } else {
+        return {
+          star: "#e2e8f0", // Diamond celestial star
+          starCore: "#ffffff",
+          starGlow: "rgba(255, 255, 255, 0.36)",
+          codeChar: "#f1f5f9",
+          codeParticle: "#ff552e", // Incandescent electric Inngest flame orange
+          codeParticleCore: "#ffd2c2",
+          codeParticleGlow: "rgba(255, 85, 46, 0.40)",
+          headerText: "#f8fafc", // Solid white text, never fades or dims!
+          headerActive: "#f8fafc",
+          headerInactive: "#f8fafc",
+          bulletActive: "#ff552e", // Flame orange active square bullet
+          bulletInactive: "rgba(248, 250, 252, 0.24)", // Subtle muted square bullet
+          cursor: "#ff552e",
+        };
+      }
+    }
+
+    bindEvents() {
+      this.canvas.addEventListener("click", (e) => {
+        if (!this.canInteract) return;
+
+        const rect = this.canvas.getBoundingClientRect();
+        const clientX = e.clientX - rect.left;
+        const clientY = e.clientY - rect.top;
+
+        for (let i = 0; i < this.headers.length; i++) {
+          const hdr = this.headers[i];
+          if (
+            clientX >= hdr.x - 20 &&
+            clientX <= hdr.x + 320 &&
+            clientY >= hdr.targetY - 16 &&
+            clientY <= hdr.targetY + 16
+          ) {
+            this.handleHeaderClick(i);
+            break;
+          }
+        }
+      });
+
+      this.canvas.addEventListener("mousemove", (e) => {
+        const rect = this.canvas.getBoundingClientRect();
+        const clientX = e.clientX - rect.left;
+        const clientY = e.clientY - rect.top;
+        let isHover = false;
+        let foundIdx = -1;
+
+        if (this.canInteract && this.headerDisperseProgress < 0.5 && this.scrollY < 60) {
+          for (let i = 0; i < this.headers.length; i++) {
+            const hdr = this.headers[i];
+            if (
+              clientX >= hdr.x - 20 &&
+              clientX <= hdr.x + 320 &&
+              clientY >= hdr.targetY - 16 &&
+              clientY <= hdr.targetY + 16
+            ) {
+              isHover = true;
+              foundIdx = i;
+              break;
+            }
+          }
+        }
+
+        this.hoveredHeaderIdx = foundIdx;
+        this.canvas.style.cursor = isHover ? "pointer" : "default";
+
+        if (isHover || clientX > this.W * 0.5) {
+          this.lastUserInteraction = performance.now();
+        }
+      });
+
+      const handleScroll = () => {
+        this.scrollY = window.scrollY || 0;
+      };
+      window.addEventListener("scroll", handleScroll, { passive: true });
+    }
+
+    handleHeaderClick(index: number) {
+      if (!this.canInteract) return;
+
+      this.mode = "INTERACTIVE";
+      this.lastUserInteraction = performance.now();
+      this.headerDisperseProgress = 0;
+      this.headerAssembleProgress = [1, 1, 1];
+
+      if (this.activeInteractiveStep === index) {
+        this.targetExpand[index] = 0;
+        this.activeInteractiveStep = -1;
+      } else {
+        for (let j = 0; j < 3; j++) {
+          this.targetExpand[j] = j === index ? 1 : 0;
+        }
+        this.activeInteractiveStep = index;
+        this.typewriterStartTime = performance.now();
+      }
+    }
+
+    resize() {
+      const rect = this.canvas.getBoundingClientRect();
+      this.W = rect.width || window.innerWidth || 1200;
+      this.H = rect.height || window.innerHeight || 700;
+      this.canvas.width = Math.floor(this.W * this.DPR);
+      this.canvas.height = Math.floor(this.H * this.DPR);
+      this.ctx.setTransform(this.DPR, 0, 0, this.DPR, 0, 0);
+      this.ctx.imageSmoothingEnabled = true;
+      this.rebuildFormations();
+    }
+
+    headers: any[] = [];
+
+    rebuildFormations() {
+      const offCanvas = document.createElement("canvas");
+      const offCtx = offCanvas.getContext("2d");
+      if (!offCtx) return;
+      offCanvas.width = this.W;
+      offCanvas.height = this.H;
+
+      const isMobile = this.W < 1024;
+      const isLargeDesktop = this.W >= 1440;
+
+      this.headerFontSize = isMobile ? 12.5 : (isLargeDesktop ? 15 : 14);
+      this.headerLineHeight = this.headerFontSize * 1.65;
+      this.codeFontSize = isMobile ? 12 : (isLargeDesktop ? 14.5 : 13.5);
+      this.codeLineHeight = this.codeFontSize * 1.72;
+
+      offCtx.font = `500 ${this.codeFontSize}px 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+
+      let maxLineWidth = 0;
+      CODE_SNIPPETS.forEach(snippet => {
+        maxLineWidth = Math.max(maxLineWidth, offCtx.measureText(snippet.stepTitle).width);
+        snippet.lines.forEach(l => {
+          maxLineWidth = Math.max(maxLineWidth, this.codeBodyIndentX + offCtx.measureText(l).width);
+        });
+      });
+      this.maxCodeLineWidth = maxLineWidth;
+
+      if (isMobile) {
+        this.baseStartX = Math.max(16, (this.W - maxLineWidth) / 2);
+        this.baseStartY = Math.max(340, this.H * 0.48);
+      } else {
+        const pad = this.W >= 1440 ? 64 : (this.W >= 1200 ? 48 : 32);
+        const usableWidth = this.W - pad * 2;
+        const leftWidth = usableWidth * (2 / 3);
+
+        this.baseStartX = pad + leftWidth + 24;
+        if (this.baseStartX + maxLineWidth > this.W - pad) {
+          this.baseStartX = Math.max(pad + leftWidth * 0.85, this.W - pad - maxLineWidth);
+        }
+        const approximateTotalH = 3 * this.headerLineHeight + 6 * this.codeLineHeight + 24;
+        this.baseStartY = Math.max(90, (this.H - approximateTotalH) / 2 + 10);
+      }
+
+      this.stepBodyHeights = CODE_SNIPPETS.map(snippet => snippet.lines.length * this.codeLineHeight);
+
+      const centerX = this.W / 2;
+      const centerY = this.H / 2;
+      const maxRadius = Math.max(this.W, this.H) * 0.82;
+
+      // 1. Persistent White Stars: Roam deep space ALWAYS to sustain 3D rotating depth
+      // True 360-degree circular symmetry in the horizontal XZ plane
+      // Mathematically guarantees identical density and zero vacuum void at ANY rotation angle (0 to 360)
+      this.persistentWhiteStars = [];
+      const persistentCount = 280;
+      for (let i = 0; i < persistentCount; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = (0.12 + 0.88 * Math.sqrt(Math.random())) * maxRadius;
+        const x = centerX + dist * Math.cos(angle);
+        const y = centerY + (Math.random() - 0.5) * (this.H * 1.35);
+        const z = dist * Math.sin(angle); // Perfect circular symmetry in horizontal XZ plane!
+        const baseSize = 1.05 + Math.random() * 0.70; // 1.05px ~ 1.75px crisp stars
+
+        this.persistentWhiteStars.push({
+          x, y, z,
+          baseSize,
+          alpha: 0.70
+        });
+      }
+
+      // 2. Initial Headers Setup
+      this.headers = CODE_SNIPPETS.map((snippet, idx) => {
+        return {
+          stepIndex: idx,
+          title: snippet.stepTitle,
+          titleWidth: offCtx.measureText(snippet.stepTitle).width,
+          x: this.baseStartX,
+          targetY: this.baseStartY + idx * (this.headerLineHeight + 8),
+        };
+      });
+
+      // 3. Header White Particles: Rich, dense, luminous swarm of stars (~440 particles across 3 headers)
+      // Symmetrically distributed across the 3D celestial cosmos, assembling with 3D curved trajectories
+      this.headerWhiteParticles = [];
+      for (let i = 0; i < 3; i++) {
+        const snippet = CODE_SNIPPETS[i];
+        const title = snippet.stepTitle; // e.g. "■ step.run()"
+        let currentX = this.baseStartX;
+        const targetY = this.baseStartY + i * (this.headerLineHeight + 6);
+
+        for (let c = 0; c < title.length; c++) {
+          const ch = title[c];
+          const chW = offCtx.measureText(ch).width;
+          const charCenterX = currentX + chW / 2;
+
+          // 14 particles for square bullet, 9 particles per character for dense visible swarm
+          const isBullet = (ch === "■");
+          const countForChar = ch === " " ? 0 : (isBullet ? 14 : 9);
+
+          for (let pIdx = 0; pIdx < countForChar; pIdx++) {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = (0.18 + 0.82 * Math.sqrt(Math.random())) * maxRadius;
+            const cosmosX = centerX + dist * Math.cos(angle);
+            const cosmosY = centerY + (Math.random() - 0.5) * (this.H * 1.20);
+            const cosmosZ = dist * Math.sin(angle); // Perfect circular symmetry!
+
+            const sAngle = Math.random() * Math.PI * 2;
+            const sDist = 20 + Math.random() * 48;
+
+            // Micro offsets for geometric stroke density
+            let subDx = 0;
+            let subDy = 0;
+            if (isBullet) {
+              const col = pIdx % 3;
+              const row = Math.floor(pIdx / 3);
+              subDx = (col - 1) * 3.0 + (Math.random() - 0.5) * 0.8;
+              subDy = (row - 1.8) * 2.6 + (Math.random() - 0.5) * 0.8;
+            } else {
+              // Organic stardust clustering envelope around character stroke
+              const pAngle = (pIdx / countForChar) * Math.PI * 2 + (c * 0.7);
+              const pRadius = (0.22 + 0.78 * Math.sqrt((pIdx + 1) / countForChar)) * (chW * 0.35);
+              subDx = Math.cos(pAngle) * pRadius + (Math.random() - 0.5) * 1.0;
+              subDy = Math.sin(pAngle) * (this.headerFontSize * 0.28) + (Math.random() - 0.5) * 1.0;
+            }
+
+            const charRatio = c / Math.max(1, title.length - 1);
+            const curveSign = (pIdx % 2 === 0 ? 1 : -1);
+            const curveLateral = curveSign * (14 + Math.random() * 22);
+            const curveLift = 12 + Math.random() * 20;
+
+            this.headerWhiteParticles.push({
+              headerIdx: i,
+              charIdx: c,
+              char: ch,
+              pSubIdx: pIdx,
+              cosmosX, cosmosY, cosmosZ,
+              targetX: charCenterX + subDx,
+              targetY: targetY + subDy,
+              subDx, subDy,
+              x: cosmosX,
+              y: cosmosY,
+              z: cosmosZ,
+              shatterDx: Math.cos(sAngle) * sDist,
+              shatterDy: Math.sin(sAngle) * sDist,
+              charRatio,
+              curveLateral,
+              curveLift,
+              flightEase: 0,
+              crystProg: 0,
+              baseSize: isBullet ? 1.45 : (1.20 + Math.random() * 0.50), // Crisp luminous stars
+              alpha: 0.80,
+              isHarvested: false,
+            });
+          }
+          currentX += chW;
+        }
+      }
+
+      // 4. Orange Code Particles: Rich, dense, luminous stream roaming cosmos and harvested into code
+      // Symmetrically distributed across the entire 360-degree cosmos (~460 particles)
+      this.orangeCodeParticles = [];
+      CODE_SNIPPETS.forEach((snippet, snippetIdx) => {
+        let snippetCharIdx = 0;
+
+        snippet.lines.forEach((line, lineIdx) => {
+          let lineX = this.baseStartX + this.codeBodyIndentX;
+
+          for (let c = 0; c < line.length; c++) {
+            const ch = line[c];
+            const chW = offCtx.measureText(ch).width;
+
+            if (ch !== " " && ch !== "\t") {
+              // Primary character particle + companion stream particle for rich volume
+              const particleMultiplier = (c % 2 === 0 ? 2 : 1);
+
+              for (let m = 0; m < particleMultiplier; m++) {
+                const angle = Math.random() * Math.PI * 2;
+                const dist = (0.20 + 0.80 * Math.sqrt(Math.random())) * maxRadius;
+                const cosmosX = centerX + dist * Math.cos(angle);
+                const cosmosY = centerY + (Math.random() - 0.5) * (this.H * 1.20);
+                const cosmosZ = dist * Math.sin(angle); // Perfect circular symmetry!
+
+                const sAngle = Math.random() * Math.PI * 2;
+                const sDist = 20 + Math.random() * 55;
+
+                const lineRatio = lineIdx / Math.max(1, snippet.lines.length - 1);
+                const charInLineRatio = c / Math.max(1, line.length);
+                const charDelayRatio = lineRatio * 0.52 + charInLineRatio * 0.22;
+
+                const curveSign = (snippetCharIdx % 2 === 0 ? 1 : -1);
+                const curveLateral = curveSign * (14 + Math.random() * 22) + (m === 1 ? 5 : 0);
+                const curveLift = 12 + Math.random() * 20 + (m === 1 ? -4 : 0);
+                const subX = m === 0 ? 0 : (Math.random() - 0.5) * 4;
+
+                this.orangeCodeParticles.push({
+                  snippetIdx,
+                  lineIdx,
+                  char: m === 0 ? ch : "", // Primary particle holds the char, companion adds dense luminous glow
+                  targetX: lineX + chW / 2 + subX,
+                  charInLineRatio,
+                  charIdx: snippetCharIdx++,
+                  charDelayRatio,
+                  curveLateral,
+                  curveLift,
+                  flightEase: 0,
+                  // Initially in cosmos:
+                  cosmosX,
+                  cosmosY,
+                  cosmosZ,
+                  x: cosmosX,
+                  y: cosmosY,
+                  z: cosmosZ,
+                  shatterDx: Math.cos(sAngle) * sDist,
+                  shatterDy: Math.sin(sAngle) * sDist,
+                  baseSize: 1.50 + (snippetCharIdx % 3) * 0.35, // 1.50px ~ 2.20px luminous tangible particles
+                  alpha: 0.78,
+                  letterMix: 0,
+                  isHarvested: false, // Tracks if harvested into code or roaming in cosmos!
+                });
+              }
+            }
+            lineX += chW;
+          }
+        });
+      });
+    }
+
+    start() {
+      let lastTimestamp = performance.now();
+      const loop = (now: number) => {
+        const rawDt = Math.max(0, now - lastTimestamp);
+        const dt = Math.min(50, rawDt || 16.7) * this.timeScale;
+        lastTimestamp = now;
+
+        // Smooth scroll damping: provides silky continuous sub-pixel interpolation instead of discrete mouse-wheel ticks
+        const scrollDiff = (this.scrollY || 0) - this.smoothScrollY;
+        this.smoothScrollY += scrollDiff * Math.min(1, dt * 0.012);
+        if (Math.abs(scrollDiff) < 0.15) {
+          this.smoothScrollY = this.scrollY || 0;
+        }
+
+        const heroH = this.H || window.innerHeight || 800;
+        const scrollMax = Math.max(650, heroH * 0.95);
+        const scrollProg = clamp(this.smoothScrollY / scrollMax, 0, 1);
+        const isScrolling = scrollProg > 0.012;
+
+        // Ultra-slow continuous time: when scrolling, continuousTime still advances with gentle micro-flow
+        // so particles maintain delicate organic shimmer instead of freezing into static dead dots
+        this.continuousTime += isScrolling ? dt * 0.35 : dt;
+
+        this.update(dt);
+        this.render();
+        this.raf = requestAnimationFrame(loop);
+      };
+      this.raf = requestAnimationFrame(loop);
+    }
+
+    update(dt: number) {
+      const now = performance.now();
+
+      // Check scrolling state:
+      const heroH = this.H || window.innerHeight || 800;
+      const scrollMax = Math.max(650, heroH * 0.95);
+      const scrollProg = clamp(this.smoothScrollY / scrollMax, 0, 1);
+      const isScrolling = scrollProg > 0.012;
+
+      // 彻底滑出首屏（页面完全看不见）：立即将场景重置为全新状态，并标记 hasFullyScrolledOut
+      if ((this.scrollY || 0) >= heroH || this.smoothScrollY >= heroH) {
+        if (!this.hasFullyScrolledOut) {
+          this.hasFullyScrolledOut = true;
+          // 完全拉过主页面：立即重置所有状态，彻底抹除之前的粒子组装痕迹
+          this.hasCompletedInitialIntro = false;
+          this.initialIntroTime = 0;
+          this.tourCycleTime = 0;
+          this.scrollResumePauseRemaining = 0;
+          this.targetExpand = [0, 0, 0];
+          this.currentExpand = [0, 0, 0];
+          this.headerAssembleProgress = [0, 0, 0];
+          this.headerDisperseProgress = 0;
+          this.activeInteractiveStep = -1;
+          this.mode = "TOUR";
+          this.canInteract = false;
+
+          for (let i = 0; i < this.orangeCodeParticles.length; i++) {
+            const p = this.orangeCodeParticles[i];
+            p.isHarvested = false;
+            p.flightEase = 0;
+            p.letterMix = 0;
+            p.crystProg = 0;
+            p.alpha = 0.75;
+          }
+          for (let i = 0; i < this.headerWhiteParticles.length; i++) {
+            const dot = this.headerWhiteParticles[i];
+            dot.isHarvested = false;
+            dot.flightEase = 0;
+            dot.crystProg = 0;
+            dot.alpha = 0.75;
+          }
+        }
+      }
+
+      // 回到顶部时解除标记，开启全新的全息开局
+      if (scrollProg <= 0.012 && this.hasFullyScrolledOut) {
+        this.hasFullyScrolledOut = false;
+        this.hasCompletedInitialIntro = false;
+        this.initialIntroTime = 0;
+        this.tourCycleTime = 0;
+        this.scrollResumePauseRemaining = 0;
+      }
+
+      // CRITICAL: When scrolling, completely FREEZE the tour timeline, accordion integration, and particle updates!
+      // Assembly is interrupted and paused, seamlessly carrying over into scroll dispersal.
+      if (isScrolling) {
+        this.scrollResumePauseRemaining = 2000;
+        return;
+      }
+
+      // ==========================================
+      // A. OPERATIONAL MODE LOGIC & TIMELINE
+      // ==========================================
+      if (this.mode === "TOUR") {
+        if (!this.hasCompletedInitialIntro) {
+          this.initialIntroTime += dt;
+          if (this.initialIntroTime >= this.initialIntroDuration) {
+            this.hasCompletedInitialIntro = true;
+            this.tourCycleTime = 0;
+          }
+          this.canInteract = false;
+          this.headerAssembleProgress = [0, 0, 0];
+          this.headerDisperseProgress = 0;
+          this.targetExpand = [0, 0, 0];
+        } else {
+          // 上拉恢复时停顿两秒再继续组装动画，避免动效太急促
+          if (this.scrollResumePauseRemaining > 0) {
+            this.scrollResumePauseRemaining = Math.max(0, this.scrollResumePauseRemaining - dt);
+            // 停顿静候 2 秒期间保持 tourCycleTime 恒定，不累加 dt
+          } else {
+            this.tourCycleTime = (this.tourCycleTime + dt) % this.totalTourCycleDuration;
+          }
+          const t = this.tourCycleTime;
+
+          // Timeline milestones (seamless repeating loop, permanently 100% full brightness):
+          // 0 ~ 4800ms: Sequential Header Assembly (Header 0, Header 1, Header 2 assemble with clear pauses)
+          // 4800 ~ 21000ms: Sequential Function Body Assembly (Step 0 Body -> Step 1 Body -> Step 2 Body)
+          // 21000 ~ 25200ms: Stacked Pause (All 3 headers stacked, Step 2 bullet orange, clicks enabled)
+          // 25200 ~ 26450ms: Disperse (2-phase dispersal from 3 header lines)
+          // 26450 ~ 32650ms: Cosmic float (6200ms: 1200ms original + 额外 5000ms 漫游)
+
+          const h0Start = 0;
+          const h0End = h0Start + this.headerAssembleDuration;
+          const h1Start = h0End + this.headerPauseDuration;
+          const h1End = h1Start + this.headerAssembleDuration;
+          const h2Start = h1End + this.headerPauseDuration;
+          const h2End = h2Start + this.headerAssembleDuration;
+          const hPhaseEnd = this.headerPhaseDuration;
+
+          const b0Start = hPhaseEnd;
+          const b1Start = b0Start + this.bodyCycleDuration;
+          const b2Start = b1Start + this.bodyCycleDuration;
+          const b2End = b2Start + this.bodyCycleDuration;
+          const pauseEnd = b2End + this.tourStackedPauseDuration;
+          const disperseEnd = pauseEnd + this.tourDisperseDuration;
+
+          if (t < hPhaseEnd) {
+            // Sequential assembly of the three function headers with clear pauses!
+            this.canInteract = false;
+            this.headerDisperseProgress = 0;
+            this.targetExpand = [0, 0, 0];
+
+            // Header 0
+            if (t < h0Start) {
+              this.headerAssembleProgress[0] = 0;
+            } else if (t < h0End) {
+              const prog = clamp((t - h0Start) / this.headerAssembleDuration);
+              this.headerAssembleProgress[0] = easeInOutCubic(prog);
+            } else {
+              this.headerAssembleProgress[0] = 1.0;
+            }
+
+            // Header 1
+            if (t < h1Start) {
+              this.headerAssembleProgress[1] = 0;
+            } else if (t < h1End) {
+              const prog = clamp((t - h1Start) / this.headerAssembleDuration);
+              this.headerAssembleProgress[1] = easeInOutCubic(prog);
+            } else {
+              this.headerAssembleProgress[1] = 1.0;
+            }
+
+            // Header 2
+            if (t < h2Start) {
+              this.headerAssembleProgress[2] = 0;
+            } else if (t < h2End) {
+              const prog = clamp((t - h2Start) / this.headerAssembleDuration);
+              this.headerAssembleProgress[2] = easeInOutCubic(prog);
+            } else {
+              this.headerAssembleProgress[2] = 1.0;
+            }
+          } else if (t < b2End) {
+            // All 3 headers are in place! Now sequentially assemble the function bodies:
+            this.canInteract = false;
+            this.headerAssembleProgress = [1, 1, 1];
+            this.headerDisperseProgress = 0;
+
+            let currentStepIdx = 0;
+            let bodyTime = 0;
+
+            if (t < b1Start) {
+              currentStepIdx = 0;
+              bodyTime = t - b0Start;
+            } else if (t < b2Start) {
+              currentStepIdx = 1;
+              bodyTime = t - b1Start;
+            } else {
+              currentStepIdx = 2;
+              bodyTime = t - b2Start;
+            }
+
+            if (bodyTime < 280) {
+              // 1. Unfold accordion slot
+              const unfoldT = clamp(bodyTime / 280);
+              this.targetExpand = [0, 0, 0];
+              this.targetExpand[currentStepIdx] = easeOutQuart(unfoldT);
+            } else if (bodyTime < this.stepAssembleDuration + this.stepHoldDuration) {
+              // 2. Body code assembled & held for reading with clear 停顿感
+              this.targetExpand = [0, 0, 0];
+              this.targetExpand[currentStepIdx] = 1.0;
+            } else if (bodyTime < this.stepAssembleDuration + this.stepHoldDuration + this.stepFoldDuration) {
+              // 3. Upward folding: code contracts up into header
+              const foldTime = bodyTime - (this.stepAssembleDuration + this.stepHoldDuration);
+              const foldT = clamp(foldTime / this.stepFoldDuration);
+              this.targetExpand = [0, 0, 0];
+              this.targetExpand[currentStepIdx] = 1.0 - easeInOutCubic(foldT);
+            } else {
+              // 4. Gap before next function starts assembling
+              this.targetExpand = [0, 0, 0];
+            }
+          } else if (t < pauseEnd) {
+            // 4. Completed Stacked Pause: all 3 headers stacked, Step 2 lit! Clicks enabled!
+            this.canInteract = true;
+            this.headerAssembleProgress = [1, 1, 1];
+            this.headerDisperseProgress = 0;
+            this.targetExpand = [0, 0, 0];
+          } else if (t < disperseEnd) {
+            // 5. Fast-to-slow dispersal: 由快到慢 back into cosmos
+            this.canInteract = false;
+            this.headerAssembleProgress = [1, 1, 1];
+            this.targetExpand = [0, 0, 0];
+            const dispT = clamp((t - pauseEnd) / this.tourDisperseDuration);
+            this.headerDisperseProgress = dispT;
+          } else {
+            // 6. Cosmic float before loop restarts
+            this.canInteract = false;
+            this.headerAssembleProgress = [0, 0, 0];
+            this.headerDisperseProgress = 1;
+            this.targetExpand = [0, 0, 0];
+          }
+        }
+      } else {
+        // INTERACTIVE MODE
+        if (this.scrollResumePauseRemaining > 0) {
+          this.scrollResumePauseRemaining = Math.max(0, this.scrollResumePauseRemaining - dt);
+          this.typewriterStartTime += dt; // 顺延打字起始时间，停顿期间不急促出字
+        }
+        this.canInteract = true;
+        this.headerAssembleProgress = [1, 1, 1];
+        this.headerDisperseProgress = 0;
+
+        const idleDuration = now - this.lastUserInteraction;
+        if (idleDuration > 10000) {
+          this.targetExpand = [0, 0, 0];
+          this.activeInteractiveStep = -1;
+          this.mode = "TOUR";
+          this.tourCycleTime = 0;
+        }
+      }
+
+      // Smooth accordion height integration
+      for (let i = 0; i < 3; i++) {
+        const diff = this.targetExpand[i] - this.currentExpand[i];
+        this.currentExpand[i] += diff * Math.min(1, dt * 0.024);
+        if (Math.abs(diff) < 0.001) this.currentExpand[i] = this.targetExpand[i];
+      }
+
+      // ==========================================
+      // B. DYNAMIC ACCORDION COORDINATES
+      // ==========================================
+      const gap = 12;
+      let curY = this.baseStartY;
+
+      this.headers[0].targetY = curY;
+      curY += this.headerLineHeight + 6;
+
+      const step0BodyStartY = curY;
+      curY += this.currentExpand[0] * (this.stepBodyHeights[0] + gap);
+
+      this.headers[1].targetY = curY;
+      curY += this.headerLineHeight + 6;
+
+      const step1BodyStartY = curY;
+      curY += this.currentExpand[1] * (this.stepBodyHeights[1] + gap);
+
+      this.headers[2].targetY = curY;
+      curY += this.headerLineHeight + 6;
+
+      const step2BodyStartY = curY;
+
+      // ==========================================
+      // C. UPDATE HEADER WHITE PARTICLES
+      // Cascading left-to-right assembly into headers, or reverse de-crystallization to cosmos
+      // ==========================================
+      const hDisperse = this.headerDisperseProgress;
+      const tTourH = this.tourCycleTime;
+      const h0Start = 0;
+      const h0End = h0Start + this.headerAssembleDuration;
+      const h1Start = h0End + this.headerPauseDuration;
+      const h1End = h1Start + this.headerAssembleDuration;
+      const h2Start = h1End + this.headerPauseDuration;
+      const hPhaseEnd = this.headerPhaseDuration;
+
+      for (let i = 0; i < this.headerWhiteParticles.length; i++) {
+        const p = this.headerWhiteParticles[i];
+        const hdr = this.headers[p.headerIdx];
+        const normalY = hdr.targetY;
+
+        if (hDisperse > 0.001) {
+          const cloudAngle = ((p.charIdx * 67 + p.headerIdx * 131 + (p.pSubIdx || 0) * 37) % 360) * (Math.PI / 180);
+          const cloudDist = 14 + ((p.pSubIdx || 0) % 6) * 5; // 14px ~ 44px: bounded local dispersal
+
+          if (hDisperse < 0.35) {
+            // Phase 1: 慢速解体不规则扩散到周围区域，但整体看起来也非常聚集
+            const p1T = hDisperse / 0.35;
+            const p1Ease = p1T * p1T; // 慢速渐变
+            p.x = p.targetX + Math.cos(cloudAngle) * cloudDist * p1Ease;
+            p.y = normalY + Math.sin(cloudAngle) * (cloudDist * 0.7) * p1Ease;
+            p.z = 0;
+            p.flightEase = 1.0;
+            p.crystProg = 1.0;
+            p.alpha = Math.min(1.0, 0.4 + p1T * 0.6) * 0.90;
+            p.isHarvested = true;
+          } else {
+            // Phase 2: 然后由快至慢扩散到周围的广大区域
+            const p2T = (hDisperse - 0.35) / 0.65;
+            const burstT = easeOutQuart(p2T); // 由快至慢
+            const cloudEndX = p.targetX + Math.cos(cloudAngle) * cloudDist;
+            const cloudEndY = normalY + Math.sin(cloudAngle) * (cloudDist * 0.7);
+
+            p.x = cloudEndX + (p.cosmosX - cloudEndX) * burstT + p.shatterDx * Math.sin(burstT * Math.PI) * 0.75;
+            p.y = cloudEndY + (p.cosmosY - cloudEndY) * burstT + p.shatterDy * Math.sin(burstT * Math.PI) * 0.75;
+            p.z = p.cosmosZ * burstT;
+            p.alpha = 0.90 * (1 - p2T * 0.15);
+            p.flightEase = 1.0 - burstT;
+            p.isHarvested = false;
+          }
+        } else if (!this.hasCompletedInitialIntro) {
+          // Free roaming in initial cosmos
+          p.isHarvested = false;
+          p.flightEase = 0;
+          p.crystProg = 0;
+          p.alpha = 0.78;
+        } else if (this.mode === "TOUR" && tTourH < hPhaseEnd) {
+          // Sequential Assembly with left-to-right cascade and crystallization
+          const hStart = p.headerIdx === 0 ? h0Start : (p.headerIdx === 1 ? h1Start : h2Start);
+          const tIn = tTourH - hStart;
+
+          const depT = p.charRatio * 260 + (p.pSubIdx % 4) * 12;
+          const flyDur = 340;
+          const crystDur = 180;
+          const arrT = depT + flyDur;
+          const endT = arrT + crystDur;
+
+          if (tTourH < hStart || tIn < depT) {
+            p.isHarvested = false;
+            p.flightEase = 0;
+            p.crystProg = 0;
+            p.alpha = 0.78;
+          } else if (tIn < arrT) {
+            p.isHarvested = true;
+            const fT = (tIn - depT) / flyDur;
+            // 由慢而快: gentle slow cosmic detachment accelerating to high-velocity touchdown
+            p.flightEase = Math.pow(fT, 2.2);
+            p.crystProg = 0;
+            p.alpha = 0.92;
+          } else if (tIn < endT) {
+            p.isHarvested = true;
+            p.flightEase = 1.0;
+            p.crystProg = (tIn - arrT) / crystDur;
+            p.alpha = 1.0;
+          } else {
+            p.isHarvested = true;
+            p.flightEase = 1.0;
+            p.crystProg = 1.0;
+            p.alpha = 0;
+          }
+        } else if (this.mode === "INTERACTIVE") {
+          p.isHarvested = true;
+          p.flightEase = 1.0;
+          p.crystProg = 1.0;
+          p.alpha = 0;
+        } else {
+          // Fully assembled and held in place during body tour
+          p.isHarvested = true;
+          p.flightEase = 1.0;
+          p.crystProg = 1.0;
+          p.alpha = 0;
+        }
+      }
+
+      // ==========================================
+      // D. UPDATE ORANGE PARTICLES (ENVIRONMENT HARVESTING)
+      // Orange particles roam freely in cosmos until their step harvests them!
+      // ==========================================
+      const tTour = this.tourCycleTime;
+      const b0Start = this.headerPhaseDuration;
+      const b1Start = b0Start + this.bodyCycleDuration;
+      const b2Start = b1Start + this.bodyCycleDuration;
+      const b2End = b2Start + this.bodyCycleDuration;
+      const pauseEnd = b2End + this.tourStackedPauseDuration;
+
+      for (let i = 0; i < this.orangeCodeParticles.length; i++) {
+        const p = this.orangeCodeParticles[i];
+        const snIdx = p.snippetIdx;
+        const exp = this.currentExpand[snIdx];
+        const bodyStartY = snIdx === 0 ? step0BodyStartY : (snIdx === 1 ? step1BodyStartY : step2BodyStartY);
+        const dynamicTargetY = bodyStartY + p.lineIdx * this.codeLineHeight;
+        p.targetY = dynamicTargetY;
+
+        const bodyBaseTime = snIdx === 0 ? b0Start : (snIdx === 1 ? b1Start : b2Start);
+        const tInStep = Math.max(0, tTour - bodyBaseTime);
+
+        if (!this.hasCompletedInitialIntro) {
+          p.x = p.cosmosX;
+          p.y = p.cosmosY;
+          p.z = p.cosmosZ;
+          p.flightEase = 0;
+          p.letterMix = 0;
+          p.crystProg = 0;
+          p.alpha = 0.75;
+          p.isHarvested = false;
+        } else if (this.mode === "TOUR" && tTour >= bodyBaseTime && tTour < pauseEnd) {
+          const foldStartTime = bodyBaseTime + this.stepAssembleDuration + this.stepHoldDuration;
+          const isFolding = tTour >= foldStartTime && tTour < foldStartTime + this.stepFoldDuration;
+          const foldProgress = isFolding ? clamp((tTour - foldStartTime) / this.stepFoldDuration) : (tTour >= foldStartTime + this.stepFoldDuration ? 1 : 0);
+          const foldEase = easeInOutCubic(foldProgress);
+
+          // Target line coordinates
+          const normalTargetY = bodyStartY + p.lineIdx * this.codeLineHeight;
+          const foldedTargetY = bodyStartY + (p.lineIdx * this.codeLineHeight) * (1 - foldEase) - foldEase * 4;
+          const activeTargetY = isFolding ? foldedTargetY : normalTargetY;
+          p.targetY = activeTargetY;
+
+          // Sequential line-by-line flight timing: gentle liftoff -> rapid transit -> soft magnetic cushion + 240ms crystallization
+          const totalSnippetLines = CODE_SNIPPETS[snIdx].lines.length;
+          const lineDepartureMs = (p.lineIdx / Math.max(1, totalSnippetLines - 1)) * 950;
+          const flightDurationMs = 700;
+          const crystDurationMs = 280;
+          const charMicroDelay = (p.charInLineRatio || 0) * 120;
+          const startFlightT = lineDepartureMs + charMicroDelay;
+          const arriveFlightT = startFlightT + flightDurationMs;
+          const endFlightT = arriveFlightT + crystDurationMs;
+
+          if (tTour >= foldStartTime + this.stepFoldDuration) {
+            // Fully folded! Code is completely hidden inside header
+            p.targetY = bodyStartY;
+            p.flightEase = 1;
+            p.letterMix = 1;
+            p.crystProg = 1;
+            p.alpha = 0;
+            p.isHarvested = true;
+          } else if (isFolding) {
+            // Upward fold: lines compress upwards into header while fading
+            p.targetY = activeTargetY;
+            p.flightEase = 1;
+            p.letterMix = 1;
+            p.crystProg = 1;
+            p.alpha = clamp((1 - foldEase) * 1.5);
+            p.isHarvested = true;
+          } else if (tInStep < startFlightT) {
+            // Has not departed yet: continues roaming in deep space!
+            p.targetY = activeTargetY;
+            p.flightEase = 0;
+            p.letterMix = 0;
+            p.crystProg = 0;
+            p.alpha = 0.75;
+            p.isHarvested = false;
+          } else if (tInStep < arriveFlightT) {
+            // IN FLIGHT: 由慢而快 (gentle slow cosmic detachment accelerating smoothly to high-velocity touchdown)
+            const flightProgress = (tInStep - startFlightT) / flightDurationMs;
+            const easeT = Math.pow(flightProgress, 2.2);
+            p.flightEase = easeT;
+            p.targetY = activeTargetY;
+            p.letterMix = 0; // Pure glowing particle in flight!
+            p.crystProg = 0;
+            p.alpha = 0.92;
+            p.isHarvested = true;
+          } else if (tInStep < endFlightT) {
+            // CRYSTALLIZING (凝华结晶): Particle arrives and crossfades seamlessly into the glyph!
+            const cProg = (tInStep - arriveFlightT) / crystDurationMs;
+            p.flightEase = 1;
+            p.targetY = activeTargetY;
+            p.letterMix = cProg; // 0 to 1 during crystallization
+            p.crystProg = cProg;
+            p.alpha = 1.0;
+            p.isHarvested = true;
+          } else {
+            // ARRIVED & FULLY CRYSTALLIZED into code character!
+            p.flightEase = 1;
+            p.targetY = activeTargetY;
+            p.letterMix = 1;
+            p.crystProg = 1;
+            p.alpha = clamp(exp * 1.5);
+            p.isHarvested = true;
+          }
+        } else if (this.mode === "TOUR" && hDisperse > 0.001) {
+          // Dispersal decomposes directly from parent function name line, never appearing from below!
+          const hdr = this.headers[p.snippetIdx];
+          const headerY = hdr ? hdr.targetY : (this.baseStartY + p.snippetIdx * (this.headerLineHeight + 8));
+          const titleW = hdr ? (hdr.titleWidth || 160) : 160;
+          const headerX = (hdr ? hdr.x : this.baseStartX) + (p.charInLineRatio || 0) * titleW + (p.shatterDx * 0.12);
+          const cloudAngle = ((p.charIdx * 73 + p.snippetIdx * 127) % 360) * (Math.PI / 180);
+          const cloudDist = 12 + ((p.charIdx * 37) % 28); // 12px ~ 40px: organic stardust envelope around function name
+
+          if (hDisperse < 0.35) {
+            // Phase 1: 慢速解体不规则扩散到三行函数名周围区域，整体非常聚集
+            const p1T = hDisperse / 0.35;
+            const p1Ease = p1T * p1T; // 慢速渐变
+            p.x = headerX + Math.cos(cloudAngle) * cloudDist * p1Ease;
+            p.y = headerY + Math.sin(cloudAngle) * (cloudDist * 0.70) * p1Ease;
+            p.z = 0;
+            p.letterMix = 0;
+            p.alpha = Math.min(1.0, 0.4 + p1T * 0.6) * 0.92;
+            p.isHarvested = false;
+          } else {
+            // Phase 2: 然后由快至慢扩散到周围的广大区域
+            const p2T = (hDisperse - 0.35) / 0.65;
+            const burstT = easeOutQuart(p2T); // 由快至慢
+            const cloudEndX = headerX + Math.cos(cloudAngle) * cloudDist;
+            const cloudEndY = headerY + Math.sin(cloudAngle) * (cloudDist * 0.70);
+
+            p.x = cloudEndX + (p.cosmosX - cloudEndX) * burstT + p.shatterDx * Math.sin(burstT * Math.PI) * 0.85;
+            p.y = cloudEndY + (p.cosmosY - cloudEndY) * burstT + p.shatterDy * Math.sin(burstT * Math.PI) * 0.85;
+            p.z = p.cosmosZ * burstT;
+            p.letterMix = 0;
+            p.alpha = 0.92 * (1 - p2T * 0.15);
+            p.isHarvested = false;
+          }
+        } else if (this.mode === "INTERACTIVE") {
+          p.isHarvested = true;
+        } else {
+          // Free roaming in cosmos (during header phase tTour < b0Start, or during cosmic float)
+          p.x = p.cosmosX;
+          p.y = p.cosmosY;
+          p.z = p.cosmosZ;
+          p.flightEase = 0;
+          p.letterMix = 0;
+          p.crystProg = 0;
+          p.alpha = 0.75;
+          p.isHarvested = false;
+        }
+      }
+    }
+
+    render() {
+      const ctx = this.ctx;
+      const W = this.W;
+      const H = this.H;
+      ctx.clearRect(0, 0, W, H);
+
+      // 【防逆向倒流】：若用户曾完全拉过主屏，在回退途中整个画布保持一片空白，
+      // 绝不出现半拉情况下的逆向回退粒子！直到回到最顶部 (scrollProg <= 0.012) 才触发全新的全息开局。
+      if (this.hasFullyScrolledOut) {
+        return;
+      }
+
+      const theme = this.getThemeColors();
+
+      // Tranquil, majestic 3D celestial orbit (halved again to ~0.68 deg/sec) with organic inclination precession
+      const ct = this.continuousTime;
+      const bgYaw = ct * 0.000011875; // Halved again from 0.00002375
+      const bgPitch = 0.055 + Math.sin(ct * 0.000005625) * 0.035; // Halved again from 0.00001125
+      const cosY = Math.cos(bgYaw);
+      const sinY = Math.sin(bgYaw);
+      const cosX = Math.cos(bgPitch);
+      const sinX = Math.sin(bgPitch);
+      const camZ = 1600;
+      const focal = 1100;
+      const centerX = W / 2;
+      const centerY = H / 2;
+
+      // Scroll physics
+      const heroH = this.H || window.innerHeight || 800;
+      const scrollMax = Math.max(650, heroH * 0.95);
+      const scrollProg = clamp(this.smoothScrollY / scrollMax, 0, 1);
+      const isScrolling = scrollProg > 0.012;
+
+      // Swarm Dispersal & Final Escape Dynamics:
+      // 用户规范：
+      // 1. 未被调用的粒子采用右平移同时向远方移动的淡出效果
+      // 2. 被调用的粒子解体后衔接过渡自然，直接向右下方移动，在最右下方逃逸
+
+
+      // 背景粒子/未被调用的粒子：采用右平移同时向远方移动的淡出效果
+      const bgS = scrollProg;
+      const bgEscapeX = Math.pow(bgS, 1.15) * (W * 0.42);
+      const bgEscapeY = Math.pow(bgS, 1.10) * (H * 0.15);
+      const bgDepthZ = -Math.pow(bgS, 1.4) * 1500; // 向远方深空推离
+      const bgAlphaMult = Math.max(0, 1.0 - Math.pow(bgS, 1.3)); // 渐进淡出消退
+
+      // 阶段二（scrollProg > 0.88）：整体解体逃逸淡出消退系数
+      let scrollAlphaMult = 1.0;
+      if (scrollProg > 0.88) {
+        const fadeT = (scrollProg - 0.88) / 0.12;
+        scrollAlphaMult = Math.max(0, 1.0 - Math.pow(fadeT, 1.4));
+      }
+
+
+      // Initial page entrance holographic projection bootup (ONLY played on initial mount / navigation):
+      // 1. 等待两秒 (0 ~ 2000ms): 完全透明等待 (alpha = 0)
+      // 2. 进入三分之一亮度 (2000 ~ 2200ms): 迅速通电亮起至 1/3 亮度 (alpha -> 0.333)
+      // 3. 维持三分之一亮度 (2200 ~ 2850ms): 全息投影低压运转 (alpha = 0.333)
+      // 4. 快速全灭 (2850 ~ 2970ms): 模拟电压不稳瞬灭 (alpha -> 0)
+      // 5. 快速全亮 (2970 ~ 3130ms): 电压瞬冲暴涨至满亮 (alpha -> 1.0)
+      // 6. 恢复正常效果 (3130 ~ 4200ms): 全息投影进入正常稳定状态 (alpha = 1.0)
+      let introAlphaMult = 1.0;
+      if (!this.hasCompletedInitialIntro && !isScrolling) {
+        const tIn = this.initialIntroTime;
+        if (tIn < 2000) {
+          // 1. 等待两秒: 完全透明体，零杂光
+          introAlphaMult = 0;
+        } else if (tIn < 2200) {
+          // 2. 通电进入三分之一亮度 (历时 200ms)
+          const f = (tIn - 2000) / 200;
+          introAlphaMult = (1 - Math.pow(1 - f, 3)) * 0.333;
+        } else if (tIn < 2850) {
+          // 3. 稳定维持在三分之一亮度 (历时 650ms，全息投影低压加载)
+          introAlphaMult = 0.333;
+        } else if (tIn < 2970) {
+          // 4. 快速全灭: 电压骤降跌至完全熄灭 (历时 120ms)
+          const fDrop = (tIn - 2850) / 120;
+          introAlphaMult = Math.max(0, (1.0 - fDrop * fDrop) * 0.333);
+        } else if (tIn < 3130) {
+          // 5. 快速全亮: 电压回升瞬间暴冲至满亮 1.0 (历时 160ms)
+          const fSurge = (tIn - 2970) / 160;
+          introAlphaMult = Math.min(1.0, Math.pow(fSurge, 1.8));
+        } else {
+          // 6. 电压稳定正常，全亮运转 (稳定全亮后额外展示两秒，3130 ~ 6200ms 历时约 3.07 秒后正式开启组装)
+          introAlphaMult = 1.0;
+        }
+      }
+
+      // =========================================================================
+      // 1. RENDER PERSISTENT WHITE STARS
+      // ALWAYS present in the environment to sustain the 3D rotating depth
+      // 背景粒子向右方并同时向远方逃逸消退
+      // =========================================================================
+      for (let i = 0; i < this.persistentWhiteStars.length; i++) {
+        const star = this.persistentWhiteStars[i];
+        const rx0 = star.x - centerX;
+        const ry0 = star.y - centerY;
+        const rz0 = star.z;
+
+        const rx1 = rx0 * cosY + rz0 * sinY;
+        const rz1 = -rx0 * sinY + rz0 * cosY;
+        const ry2 = ry0 * cosX - rz1 * sinX;
+        const rz2 = ry0 * sinX + rz1 * cosX;
+
+        // Near-plane safety clamping: distance to camera with receding depth to far distance
+        const safeDist = Math.max(550, camZ - (rz2 + bgDepthZ));
+        const scale = Math.min(1.40, Math.max(0.10, focal / safeDist));
+        let screenX = centerX + rx1 * scale + bgEscapeX;
+        let screenY = centerY + ry2 * scale + bgEscapeY;
+
+        if (screenX < -120 || screenX > W + 120 || screenY < -120 || screenY > H + 120) continue;
+
+        const depthProgress = clamp((rz2 + 500) / 1000);
+        const starRadius = Math.max(0.70, Math.min(2.10, star.baseSize * scale));
+        const alphaBase = this.isLightMode() ? (0.45 + 0.45 * depthProgress) : (0.35 + 0.55 * depthProgress);
+        const starFinalAlpha = clamp(alphaBase * introAlphaMult);
+        if (starFinalAlpha <= 0.01) continue;
+
+        const starRenderAlpha = starFinalAlpha * bgAlphaMult;
+        if (starRenderAlpha <= 0.01) continue;
+        ctx.globalAlpha = starRenderAlpha;
+
+        // Starlight glow aura for prominent stars:
+        if (starRadius > 1.25) {
+          ctx.fillStyle = theme.starGlow;
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, starRadius * 1.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.fillStyle = theme.star;
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, starRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (starRadius > 1.4 && !this.isLightMode()) {
+          ctx.fillStyle = theme.starCore;
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, starRadius * 0.45, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // =========================================================================
+      // SIMULTANEOUS STARDUST PLUME ESCAPE DYNAMICS (协同逃逸奔涌星尘模型)
+      // 用户规范：
+      // 1. 下拉后动画代码粒子立即消解（Immediate Dissolution，不再逐行等待）
+      // 2. 全部粒子同时起步协同逃逸（Simultaneous Escape，而非逐行顺序）
+      // 3. 不局限于狭窄河道，打造符合宇宙流体动力学的奔涌星尘滑流（Aerodynamic Stardust Plume）
+      // 4. 沿宏伟弧线在主页面滑过 80% 时到达右下方 20% 空间，向远方深空淡出排海
+      // =========================================================================
+      const escapeExitX = W * 1.04;
+      const escapeExitY = H * 1.06;
+      const tEscape = clamp((scrollProg - 0.012) / 0.92, 0, 1);
+      const easeProgress = Math.pow(tEscape, 1.45);
+      const dissolveT = clamp((scrollProg - 0.012) / 0.08, 0, 1);
+      const dissolveEase = dissolveT * dissolveT * (3 - 2 * dissolveT);
+      const lateralT = Math.min(1, easeProgress / 0.15);
+      const lateralEase = lateralT * lateralT * (3 - 2 * lateralT);
+
+      // =========================================
+      // 2. RENDER HEADER WHITE/BLACK PARTICLES (Cosmos roaming -> Header assembly -> Scroll dive)
+      // =========================================================================
+      for (let i = 0; i < this.headerWhiteParticles.length; i++) {
+        const dot = this.headerWhiteParticles[i];
+        const hdr = this.headers[dot.headerIdx];
+        const curHdrY = hdr ? hdr.targetY : dot.targetY;
+
+        // In normal tour or interactive mode, if fully crystallized into text and not dispersing and not scrolling, skip dot!
+        if (dot.isHarvested && dot.crystProg >= 1.0 && this.headerDisperseProgress <= 0.001 && !isScrolling) {
+          continue;
+        }
+
+        // Projected position in rotating 3D cosmos:
+        const hrx0 = dot.cosmosX - centerX;
+        const hry0 = dot.cosmosY - centerY;
+        const hrz0 = dot.cosmosZ;
+        const hrx1 = hrx0 * cosY + hrz0 * sinY;
+        const hrz1 = -hrx0 * sinY + hrz0 * cosY;
+        const hry2 = hry0 * cosX - hrz1 * sinX;
+        const hrz2 = hry0 * sinX + hrz1 * cosX;
+        const safeHDist = Math.max(550, camZ - hrz2);
+        const hScale = Math.min(1.40, Math.max(0.42, focal / safeHDist));
+        const hCosmosX = centerX + hrx1 * hScale;
+        const hCosmosY = centerY + hry2 * hScale;
+
+        let screenX = hCosmosX;
+        let screenY = hCosmosY;
+        let dotRadius = Math.max(0.85, Math.min(2.10, dot.baseSize * hScale));
+        let dotAlpha = dot.alpha;
+
+        if (isScrolling) {
+          if (!dot.isHarvested) {
+            // 【未被当前动画调用的粒子】：采用右平移同时向远方移动的淡出效果
+            const safeDist = Math.max(550, camZ - (hrz2 + bgDepthZ));
+            const scale = Math.min(1.40, Math.max(0.10, focal / safeDist));
+            screenX = centerX + hrx1 * scale + bgEscapeX;
+            screenY = centerY + hry2 * scale + bgEscapeY;
+            dotRadius = Math.max(0.70, Math.min(2.10, dot.baseSize * scale));
+            dotAlpha = clamp(dot.alpha * introAlphaMult * bgAlphaMult);
+          } else {
+            // 【被当前动画调用的粒子】：协同消解为奔涌星尘滑流（Simultaneous Stardust Plume），自然逃逸至最右下方
+            let originX = dot.targetX;
+            let originY = curHdrY + (dot.subDy || 0);
+            if ((dot.flightEase || 0) < 1) {
+              const easeT = dot.flightEase || 0;
+              const arcLift = (dot.curveLift || 14) * Math.sin(easeT * Math.PI);
+              const arcLat = (dot.curveLateral || 0) * Math.sin(easeT * Math.PI);
+              originX = hCosmosX + (dot.targetX - hCosmosX) * easeT + arcLat;
+              originY = hCosmosY + (curHdrY + (dot.subDy || 0) - hCosmosY) * easeT - arcLift;
+            }
+
+            // 1. 瞬时消解微震动（Immediate Dissolution）：下拉即刻解构字形笔画
+            const dissolveDx = dot.shatterDx * (0.25 + 0.75 * dissolveEase);
+            const dissolveDy = dot.shatterDy * (0.25 + 0.75 * dissolveEase);
+
+            // 2. 纵向先锋与拖曳彗尾（Longitudinal Stagger）：形成长达 800px 的流线型星尘
+            const hHash = (((dot.headerIdx * 53 + dot.charIdx * 23 + (dot.pSubIdx || 0) * 17) % 100) / 50) - 1.0;
+            const spatialLead = ((originX - this.baseStartX) / 400 + (originY - this.baseStartY) / 300 - 1.0) * 0.15;
+            const flightLead = (hHash * 0.28 + spatialLead) * Math.sin(Math.min(1, easeProgress) * Math.PI);
+            const u = Math.max(0, easeProgress + flightLead);
+
+            // 3. 宏伟弧线与向右下方移动（Arc Curvature & Down-Right Flight along u）
+            const arcLift = Math.sin(Math.min(1, u) * Math.PI) * (W * 0.075);
+            const baseX = originX + (escapeExitX - originX) * u + arcLift * 0.45;
+            const baseY = originY + (escapeExitY - originY) * u - arcLift * 0.20;
+
+            // 4. 流体力学法向与有机呼吸流道（Organic Breath & Harmonic Vortices）
+            const dx = escapeExitX - originX;
+            const dy = escapeExitY - originY;
+            const len = Math.hypot(dx, dy) || 1;
+            const nx = -dy / len;
+            const ny = dx / len;
+
+            const funnel = 1.0 - 0.75 * Math.pow(Math.min(1, u), 1.6);
+            const laneRaw = (((dot.headerIdx * 67 + dot.charIdx * 23 + (dot.pSubIdx || 0) * 17) % 100) / 50) - 1.0;
+            const lane = Math.sign(laneRaw) * Math.pow(Math.abs(laneRaw), 1.25);
+
+            const plumeWidth = (55 + Math.sin(Math.min(1, u) * Math.PI) * 50) * funnel;
+            const vortex1 = Math.sin(u * Math.PI * 2.8 + ct * 0.0028 + lane * 2.0) * (18 * funnel);
+            const vortex2 = Math.cos(u * Math.PI * 4.2 + ct * 0.0036 + lane * 1.6) * (12 * funnel);
+            const lateralOffset = (lane * plumeWidth + vortex1 + vortex2) * lateralEase;
+
+            screenX = baseX + nx * lateralOffset + dissolveDx * (1 - easeProgress);
+            screenY = baseY + ny * lateralOffset + dissolveDy * (1 - easeProgress);
+
+            // 5. 右下方深空向远方逃逸与淡出消退（Recede in -Z Cosmos & Fade Out）
+            let exitAlpha = 1.0;
+            let exitScaleZ = 1.0;
+            if (u > 0.88) {
+              const exitT = clamp((u - 0.88) / 0.16, 0, 1);
+              exitAlpha = Math.max(0, 1.0 - Math.pow(exitT, 1.4));
+              const exitZ = -exitT * 850;
+              exitScaleZ = 950 / (950 - exitZ);
+            }
+
+            dotRadius = Math.max(0.75, Math.min(2.2, dot.baseSize * exitScaleZ));
+            dotAlpha = 0.95 * exitAlpha;
+          }
+        } else if (this.headerDisperseProgress > 0.001) {
+          const dispT = this.headerDisperseProgress;
+          const cloudAngle = ((dot.charIdx * 67 + dot.headerIdx * 131 + (dot.pSubIdx || 0) * 37) % 360) * (Math.PI / 180);
+          const cloudDist = 14 + ((dot.pSubIdx || 0) % 6) * 5; // 14px ~ 44px: bounded local dispersal
+          const anchorX = dot.targetX;
+          const anchorY = curHdrY + (dot.subDy || 0);
+
+          if (dispT < 0.35) {
+            // Phase 1: 慢速解体不规则扩散到周围区域，但整体看起来也非常聚集
+            const p1T = dispT / 0.35;
+            const p1Ease = p1T * p1T; // 慢速渐变
+            const shimmerX = Math.sin(ct * 0.04 + dot.charIdx * 2 + (dot.pSubIdx || 0)) * 0.5;
+            const shimmerY = Math.cos(ct * 0.04 + dot.charIdx * 2 + (dot.pSubIdx || 0)) * 0.5;
+            screenX = anchorX + Math.cos(cloudAngle) * cloudDist * p1Ease + shimmerX;
+            screenY = anchorY + Math.sin(cloudAngle) * (cloudDist * 0.7) * p1Ease + shimmerY;
+            dotRadius = Math.max(0.90, dot.baseSize);
+            dotAlpha = Math.min(1.0, 0.4 + p1T * 0.6) * 0.90;
+          } else {
+            // Phase 2: 然后由快至慢扩散到周围的广大区域
+            const p2T = (dispT - 0.35) / 0.65;
+            const burstT = easeOutQuart(p2T); // 由快至慢
+            const cloudEndX = anchorX + Math.cos(cloudAngle) * cloudDist;
+            const cloudEndY = anchorY + Math.sin(cloudAngle) * (cloudDist * 0.7);
+
+            const arcLift = (dot.curveLift || 14) * Math.sin(burstT * Math.PI) * 0.75;
+            const arcLat = (dot.curveLateral || 0) * Math.sin(burstT * Math.PI) * 0.75;
+            screenX = cloudEndX + (hCosmosX - cloudEndX) * burstT + dot.shatterDx * Math.sin(burstT * Math.PI) * 0.7 + arcLat;
+            screenY = cloudEndY + (hCosmosY - cloudEndY) * burstT + dot.shatterDy * Math.sin(burstT * Math.PI) * 0.7 - arcLift;
+            const currentHScale = 1.0 * (1 - burstT) + hScale * burstT;
+            dotRadius = Math.max(0.85, Math.min(2.10, dot.baseSize * currentHScale));
+            dotAlpha = 0.90 * (1 - p2T * 0.15);
+          }
+        } else if (!dot.isHarvested) {
+          // Roaming in cosmos
+          screenX = hCosmosX;
+          screenY = hCosmosY;
+          dotRadius = Math.max(0.85, Math.min(2.10, dot.baseSize * hScale));
+          dotAlpha = clamp(dot.alpha * introAlphaMult);
+        } else if (dot.crystProg >= 1.0 && this.headerDisperseProgress <= 0.001) {
+          // Fully crystallized into header text: do not draw any dots!
+          continue;
+        } else if (dot.crystProg > 0 && dot.crystProg < 1.0) {
+          // Crystallizing onto character stroke: soft diffuse energy bloom (no hard dot array)
+          screenX = dot.targetX;
+          screenY = curHdrY + (dot.subDy || 0);
+          dotRadius = Math.max(0.75, dot.baseSize * (1.1 + dot.crystProg * 0.6));
+          dotAlpha = Math.pow(1.0 - dot.crystProg, 1.8) * 0.55 * dot.alpha;
+        } else {
+          // In flight: 3D curved kinetic trajectory
+          const easeT = dot.flightEase || 0;
+          const arcLift = (dot.curveLift || 14) * Math.sin(easeT * Math.PI);
+          const arcLat = (dot.curveLateral || 0) * Math.sin(easeT * Math.PI);
+          screenX = hCosmosX + (dot.targetX - hCosmosX) * easeT + arcLat;
+          screenY = hCosmosY + (curHdrY + (dot.subDy || 0) - hCosmosY) * easeT - arcLift;
+          const currentHScale = hScale * (1 - easeT) + 1.0 * easeT;
+          dotRadius = Math.max(0.95, Math.min(2.10, dot.baseSize * currentHScale));
+          dotAlpha = dot.alpha;
+        }
+
+        if (screenX < -120 || screenX > W + 120 || screenY < -120 || screenY > H + 120) continue;
+        if (dotAlpha <= 0.01) continue;
+
+        const dotBaseAlpha = this.isLightMode() ? dotAlpha * 0.95 : dotAlpha;
+        ctx.globalAlpha = isScrolling ? dotBaseAlpha : (dotBaseAlpha * scrollAlphaMult);
+
+        // Header particles stay their authentic colors (NOT all orange!):
+        // In light mode: deep obsidian ink (theme.star = "#090d16")
+        // In dark mode: radiant diamond star (theme.star = "#e2e8f0", theme.starCore = "#ffffff")
+        if (dotRadius > 1.3) {
+          ctx.fillStyle = theme.starGlow;
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, dotRadius * 1.7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.fillStyle = theme.star;
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, dotRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (dotRadius > 1.4 && !this.isLightMode()) {
+          ctx.fillStyle = theme.starCore;
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, dotRadius * 0.45, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // =========================================================================
+      // 3. RENDER ASSEMBLED HEADERS (When assembled and not scrolling)
+      // =========================================================================
+      if (!isScrolling && this.hasCompletedInitialIntro) {
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        ctx.font = `600 ${this.headerFontSize}px 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+
+        const t = this.tourCycleTime;
+        const b0Start = this.headerPhaseDuration;
+        const b1Start = b0Start + this.bodyCycleDuration;
+        const b2Start = b1Start + this.bodyCycleDuration;
+        const b2End = b2Start + this.bodyCycleDuration;
+        const pauseEnd = b2End + this.tourStackedPauseDuration;
+
+        const h0Start = 0;
+        const h0End = h0Start + this.headerAssembleDuration;
+        const h1Start = h0End + this.headerPauseDuration;
+        const h1End = h1Start + this.headerAssembleDuration;
+        const h2Start = h1End + this.headerPauseDuration;
+        const h2End = h2Start + this.headerAssembleDuration;
+
+        for (let i = 0; i < this.headers.length; i++) {
+          const hdr = this.headers[i];
+          const isExpanded = this.currentExpand[i] > 0.25;
+          const isHovered = this.canInteract && this.hoveredHeaderIdx === i;
+
+          // Determine which header's square bullet is active (orange):
+          // During header assembly & stacked hold (t < b0Start), ALL bullets are grey!
+          let isBulletActive = false;
+          if (this.mode === "TOUR") {
+            if (t < b0Start) {
+              isBulletActive = false; // Grey bullet during header assembly
+            } else if (t >= b2End && t < pauseEnd) {
+              isBulletActive = (i === 2); // Final completed stacked pause: 3rd header stays lit!
+            } else if (t >= b2Start) {
+              isBulletActive = (i === 2);
+            } else if (t >= b1Start) {
+              isBulletActive = (i === 1);
+            } else if (t >= b0Start) {
+              isBulletActive = (i === 0);
+            }
+          } else {
+            // Interactive mode:
+            isBulletActive = (this.activeInteractiveStep === i) || isHovered || isExpanded;
+          }
+
+          const bulletColor = isBulletActive ? theme.bulletActive : theme.bulletInactive;
+          const screenX = hdr.x;
+          const screenY = hdr.targetY;
+
+          if (screenX < -150 || screenX > W + 150) continue;
+
+          const titleText = hdr.title.replace("■", "").trim();
+
+          if (this.mode === "INTERACTIVE") {
+            ctx.globalAlpha = 1.0 * scrollAlphaMult;
+            ctx.fillStyle = bulletColor;
+            ctx.fillText("■", screenX, screenY);
+            ctx.fillStyle = theme.headerText;
+            ctx.fillText(titleText, screenX + 18, screenY);
+          } else if (t < b0Start) {
+            // HEADER ASSEMBLY PHASE:
+            const hStart = i === 0 ? h0Start : (i === 1 ? h1Start : h2Start);
+            const hEnd = i === 0 ? h0End : (i === 1 ? h1End : h2End);
+
+            if (t < hStart) {
+              continue;
+            } else if (t >= hEnd) {
+              ctx.globalAlpha = 1.0 * scrollAlphaMult;
+              ctx.fillStyle = bulletColor;
+              ctx.fillText("■", screenX, screenY);
+              ctx.fillStyle = theme.headerText;
+              ctx.fillText(titleText, screenX + 18, screenY);
+            } else {
+              // Character-by-character left-to-right crystallization!
+              const fullTitle = hdr.title;
+              let curX = screenX;
+              const tIn = t - hStart;
+
+              for (let c = 0; c < fullTitle.length; c++) {
+                const ch = fullTitle[c];
+                const chW = ctx.measureText(ch).width;
+                const charRatio = c / Math.max(1, fullTitle.length - 1);
+                const depT = charRatio * 260;
+                const arrT = depT + 340;
+                const endT = arrT + 180;
+
+                let cAlpha = 0;
+                if (tIn >= endT) {
+                  cAlpha = 1.0;
+                } else if (tIn >= arrT) {
+                  cAlpha = (tIn - arrT) / 180;
+                }
+
+                if (cAlpha > 0.02 && ch !== " ") {
+                  ctx.save();
+                  ctx.globalAlpha = cAlpha * scrollAlphaMult;
+                  ctx.fillStyle = (ch === "■") ? bulletColor : theme.headerText;
+                  if (cAlpha < 1.0) {
+                    ctx.shadowColor = theme.starGlow;
+                    ctx.shadowBlur = (1.0 - cAlpha) * 8;
+                  }
+                  ctx.fillText(ch, curX, screenY);
+                  ctx.restore();
+                }
+                curX += chW;
+              }
+            }
+          } else if (t < pauseEnd) {
+            // BODY ASSEMBLY & STACKED PAUSE:
+            ctx.globalAlpha = 1.0 * scrollAlphaMult;
+            ctx.fillStyle = bulletColor;
+            ctx.fillText("■", screenX, screenY);
+            ctx.fillStyle = theme.headerText;
+            ctx.fillText(titleText, screenX + 18, screenY);
+          } else if (this.headerDisperseProgress > 0.001) {
+            // DISPERSAL:
+            const dispT = this.headerDisperseProgress;
+            if (dispT < 0.35) {
+              // Phase 1: In-place melting / de-crystallization into ignited cluster cloud
+              const p1T = dispT / 0.35;
+              const textAlpha = (1.0 - p1T) * scrollAlphaMult;
+              if (textAlpha > 0.02) {
+                ctx.globalAlpha = textAlpha;
+                ctx.fillStyle = bulletColor;
+                ctx.fillText("■", screenX, screenY);
+                ctx.fillStyle = theme.headerText;
+                ctx.fillText(titleText, screenX + 18, screenY);
+              }
+            }
+            // Phase 2 (dispT >= 0.35): text is completely melted into particles!
+          }
+        }
+      }
+
+      // =========================================================================
+      // 4. RENDER ORANGE PARTICLES (Roaming in cosmos OR Captured in flight OR In code)
+      // =========================================================================
+      for (let i = 0; i < this.orangeCodeParticles.length; i++) {
+        const p = this.orangeCodeParticles[i];
+        const snIdx = p.snippetIdx;
+        const exp = this.currentExpand[snIdx];
+        const isHarvested = p.isHarvested;
+        const hdr = this.headers[snIdx];
+
+        // Projected origin in 3D celestial rotating cosmos:
+        const crx0 = p.cosmosX - centerX;
+        const cry0 = p.cosmosY - centerY;
+        const crz0 = p.cosmosZ;
+        const crx1 = crx0 * cosY + crz0 * sinY;
+        const crz1 = -crx0 * sinY + crz0 * cosY;
+        const cry2 = cry0 * cosX - crz1 * sinX;
+        const crz2 = cry0 * sinX + crz1 * cosX;
+        // Near-plane safety clamping: distance to camera is at least 550px, scale bounded in [0.42, 1.40]
+        const safeCDist = Math.max(550, camZ - crz2);
+        const cScale = Math.min(1.40, Math.max(0.42, focal / safeCDist));
+        const cosmosScreenX = centerX + crx1 * cScale;
+        const cosmosScreenY = centerY + cry2 * cScale;
+
+        // If in scrolling mode:
+        if (isScrolling) {
+          if (!isHarvested) {
+            // 【未被当前动画调用的粒子】：采用右平移同时向远方移动的淡出效果
+            const safeCDistReceded = Math.max(550, camZ - (crz2 + bgDepthZ));
+            const cScaleReceded = Math.min(1.40, Math.max(0.08, focal / safeCDistReceded));
+            const screenX = centerX + crx1 * cScaleReceded + bgEscapeX;
+            const screenY = centerY + cry2 * cScaleReceded + bgEscapeY;
+
+            if (screenX < -120 || screenX > W + 120 || screenY < -120 || screenY > H + 120) continue;
+
+            const dotAlpha = clamp(p.alpha * 0.90 * introAlphaMult * bgAlphaMult);
+            if (dotAlpha <= 0.01) continue;
+            ctx.globalAlpha = dotAlpha;
+
+            const dotRadius = Math.max(0.85, Math.min(2.4, p.baseSize * cScaleReceded));
+            if (dotRadius > 1.35) {
+              ctx.fillStyle = theme.codeParticleGlow;
+              ctx.beginPath();
+              ctx.arc(screenX, screenY, dotRadius * 1.85, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.fillStyle = theme.codeParticle;
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, dotRadius, 0, Math.PI * 2);
+            ctx.fill();
+            continue;
+          }
+
+          // 【被当前动画调用的粒子】：解体后汇入河流状流道，纵向前后拉伸，蜿蜒奔向最右下方逃逸
+          let originX = p.targetX;
+          let originY = p.targetY || (hdr ? hdr.targetY : this.baseStartY);
+
+          if (p.letterMix < 1) {
+            const easeT = p.flightEase || 0;
+            const arcLift = (p.curveLift || 16) * Math.sin(easeT * Math.PI);
+            const arcLat = (p.curveLateral || 0) * Math.sin(easeT * Math.PI);
+            originX = cosmosScreenX + (p.targetX - cosmosScreenX) * easeT + arcLat;
+            originY = cosmosScreenY + (p.targetY - cosmosScreenY) * easeT - arcLift;
+          } else {
+            const isFolded = exp <= 0.05 && this.activeInteractiveStep !== snIdx;
+            originX = p.targetX;
+            originY = isFolded ? (hdr ? hdr.targetY : p.targetY) : (p.targetY || (hdr ? hdr.targetY + 20 : this.baseStartY + 50));
+          }
+
+          // 【被当前动画调用的粒子】：协同消解为奔涌星尘滑流（Simultaneous Stardust Plume），自然逃逸至最右下方
+          // 1. 瞬时消解微震动（Immediate Dissolution）：下拉即刻解构字形笔画
+          const dissolveDx = p.shatterDx * (0.25 + 0.75 * dissolveEase);
+          const dissolveDy = p.shatterDy * (0.25 + 0.75 * dissolveEase);
+
+          // 2. 纵向先锋与拖曳彗尾（Longitudinal Stagger）：形成长达 800px 的流线型星尘
+          const pHash = (((p.charIdx * 73 + p.lineIdx * 37 + Math.floor(Math.abs(p.shatterDx))) % 100) / 50) - 1.0;
+          const spatialLead = ((originX - this.baseStartX) / 400 + (originY - this.baseStartY) / 300 - 1.0) * 0.15;
+          const flightLead = (pHash * 0.28 + spatialLead) * Math.sin(Math.min(1, easeProgress) * Math.PI);
+          const u = Math.max(0, easeProgress + flightLead);
+
+          // 3. 宏伟弧线与向右下方移动（Arc Curvature & Down-Right Flight along u）
+          const arcLift = Math.sin(Math.min(1, u) * Math.PI) * (W * 0.075);
+          const baseX = originX + (escapeExitX - originX) * u + arcLift * 0.45;
+          const baseY = originY + (escapeExitY - originY) * u - arcLift * 0.20;
+
+          // 4. 流体力学法向与有机呼吸流道（Organic Breath & Harmonic Vortices）
+          const dx = escapeExitX - originX;
+          const dy = escapeExitY - originY;
+          const len = Math.hypot(dx, dy) || 1;
+          const nx = -dy / len;
+          const ny = dx / len;
+
+          const funnel = 1.0 - 0.75 * Math.pow(Math.min(1, u), 1.6);
+          const laneRaw = (((p.charIdx * 43 + p.snippetIdx * 29) % 100) / 50) - 1.0;
+          const lane = Math.sign(laneRaw) * Math.pow(Math.abs(laneRaw), 1.25);
+
+          const plumeWidth = (55 + Math.sin(Math.min(1, u) * Math.PI) * 50) * funnel;
+          const vortex1 = Math.sin(u * Math.PI * 2.8 + ct * 0.0028 + lane * 2.0) * (18 * funnel);
+          const vortex2 = Math.cos(u * Math.PI * 4.2 + ct * 0.0036 + lane * 1.6) * (12 * funnel);
+          const lateralOffset = (lane * plumeWidth + vortex1 + vortex2) * lateralEase;
+
+          screenX = baseX + nx * lateralOffset + dissolveDx * (1 - easeProgress);
+          screenY = baseY + ny * lateralOffset + dissolveDy * (1 - easeProgress);
+
+          // 5. 右下方深空向远方逃逸与淡出消退（Recede in -Z Cosmos & Fade Out）
+          let exitAlpha = 1.0;
+          let exitScaleZ = 1.0;
+          if (u > 0.88) {
+            const exitT = clamp((u - 0.88) / 0.16, 0, 1);
+            exitAlpha = Math.max(0, 1.0 - Math.pow(exitT, 1.4));
+            const exitZ = -exitT * 850;
+            exitScaleZ = 950 / (950 - exitZ);
+          }
+
+          const dotRadius = Math.max(0.85, Math.min(2.8, (1.8 + (p.charIdx % 3) * 0.35) * exitScaleZ));
+          const dotAlpha = 0.95 * exitAlpha;
+
+          if (screenX < -120 || screenX > W + 120 || screenY < -120 || screenY > H + 120) continue;
+          if (dotAlpha <= 0.01) continue;
+
+          ctx.globalAlpha = dotAlpha;
+
+          // Radiant corona during scroll
+          if (dotRadius > 1.4) {
+            ctx.fillStyle = theme.codeParticleGlow;
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, dotRadius * 1.85, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          ctx.fillStyle = theme.codeParticle;
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, dotRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Incandescent core
+          if (dotRadius > 1.6) {
+            ctx.fillStyle = theme.codeParticleCore;
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, dotRadius * 0.45, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          continue;
+        }
+
+        // Dispersal back to cosmos at end of tour: decomposes directly from the three function names, NOT from below!
+        if (this.mode === "TOUR" && this.headerDisperseProgress > 0.001) {
+          const dispT = this.headerDisperseProgress;
+          const hdr = this.headers[p.snippetIdx];
+          const headerY = hdr ? hdr.targetY : (this.baseStartY + p.snippetIdx * (this.headerLineHeight + 8));
+          const titleW = hdr ? (hdr.titleWidth || 160) : 160;
+          const headerX = (hdr ? hdr.x : this.baseStartX) + (p.charInLineRatio || 0) * titleW + (p.shatterDx * 0.12);
+          const cloudAngle = ((p.charIdx * 73 + p.snippetIdx * 127) % 360) * (Math.PI / 180);
+          const cloudDist = 12 + ((p.charIdx * 37) % 28); // 12px ~ 40px: bounded local dispersal around function name
+
+          let screenX = headerX;
+          let screenY = headerY;
+          let dotRadius = Math.max(1.15, p.baseSize);
+          let dotAlpha = p.alpha;
+
+          if (dispT < 0.35) {
+            // Phase 1: 慢速解体不规则扩散到三行函数名周围区域，整体非常聚集 (Tight irregular stardust cluster cloud around function names)
+            const p1T = dispT / 0.35;
+            const p1Ease = p1T * p1T; // 慢速渐变
+            const shimmerX = Math.sin(ct * 0.02 + p.charIdx * 2.3) * 0.6;
+            const shimmerY = Math.cos(ct * 0.02 + p.charIdx * 2.3) * 0.6;
+            screenX = headerX + Math.cos(cloudAngle) * cloudDist * p1Ease + shimmerX;
+            screenY = headerY + Math.sin(cloudAngle) * (cloudDist * 0.70) * p1Ease + shimmerY;
+            dotRadius = Math.max(1.15, p.baseSize);
+            dotAlpha = Math.min(1.0, 0.4 + p1T * 0.6) * 0.92;
+          } else {
+            // Phase 2: 然后由快至慢扩散到周围的广大区域 (Curved liftoff returning to cosmos)
+            const p2T = (dispT - 0.35) / 0.65;
+            const burstT = easeOutQuart(p2T); // 由快至慢
+            const cloudEndX = headerX + Math.cos(cloudAngle) * cloudDist;
+            const cloudEndY = headerY + Math.sin(cloudAngle) * (cloudDist * 0.70);
+
+            const arcLift = (p.curveLift || 14) * Math.sin(burstT * Math.PI) * 0.75;
+            const arcLat = (p.curveLateral || 0) * Math.sin(burstT * Math.PI) * 0.75;
+            screenX = cloudEndX + (cosmosScreenX - cloudEndX) * burstT + p.shatterDx * Math.sin(burstT * Math.PI) * 0.7 + arcLat;
+            screenY = cloudEndY + (cosmosScreenY - cloudEndY) * burstT + p.shatterDy * Math.sin(burstT * Math.PI) * 0.7 - arcLift;
+
+            const currentScale = 1.0 * (1 - burstT) + cScale * burstT;
+            dotRadius = Math.max(1.15, Math.min(2.55, p.baseSize * currentScale));
+            dotAlpha = 0.92 * (1 - p2T * 0.15);
+          }
+
+          if (screenX < -120 || screenX > W + 120 || screenY < -120 || screenY > H + 120) continue;
+          ctx.globalAlpha = dotAlpha * scrollAlphaMult;
+
+          if (dotRadius > 1.35) {
+            ctx.fillStyle = theme.codeParticleGlow;
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, dotRadius * 1.85, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          ctx.fillStyle = theme.codeParticle;
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, dotRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (dotRadius > 1.55) {
+            ctx.fillStyle = theme.codeParticleCore;
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, dotRadius * 0.45, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          continue;
+        }
+
+        // When roaming freely in cosmos:
+        if (!isHarvested) {
+          if (cosmosScreenX < -120 || cosmosScreenX > W + 120 || cosmosScreenY < -120 || cosmosScreenY > H + 120) continue;
+
+          const dotRadius = Math.max(1.15, Math.min(2.55, p.baseSize * cScale));
+          const finalAlpha = clamp(p.alpha * 0.90 * introAlphaMult);
+          if (finalAlpha <= 0.01) continue;
+          ctx.globalAlpha = finalAlpha;
+
+          // Starlight corona
+          if (dotRadius > 1.35) {
+            ctx.fillStyle = theme.codeParticleGlow;
+            ctx.beginPath();
+            ctx.arc(cosmosScreenX, cosmosScreenY, dotRadius * 1.85, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          ctx.fillStyle = theme.codeParticle;
+          ctx.beginPath();
+          ctx.arc(cosmosScreenX, cosmosScreenY, dotRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Incandescent core
+          if (dotRadius > 1.55) {
+            ctx.fillStyle = theme.codeParticleCore;
+            ctx.beginPath();
+            ctx.arc(cosmosScreenX, cosmosScreenY, dotRadius * 0.45, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        } else if (this.mode === "TOUR") {
+          // If particle arrived and the step is completely folded away, skip
+          if (p.letterMix >= 1 && exp <= 0.005) continue;
+
+          // Once arrived, the particle has fully materialized into the code glyph stroke.
+          // Typography is rendered in Section 5 with pixel-perfect metrics and radiant aura.
+          // Hence, arrived particles DO NOT draw duplicate dots or text here!
+          if (p.letterMix >= 1) {
+            continue;
+          } else if (p.crystProg > 0.001) {
+            // CRYSTALLIZATION ARRIVAL BLOOM (凝华结晶，无圆点排列)
+            // Soft expanding diffuse energy puff (dissipates completely into character stroke)
+            const cProg = p.crystProg;
+            const bloomRadius = (p.baseSize || 1.8) * (1.1 + cProg * 0.9);
+            const bloomAlpha = Math.pow(1.0 - cProg, 2.2) * 0.40 * p.alpha;
+            if (bloomAlpha > 0.02) {
+              ctx.fillStyle = theme.codeParticleGlow;
+              ctx.globalAlpha = bloomAlpha;
+              ctx.beginPath();
+              ctx.arc(p.targetX, p.targetY, bloomRadius * 1.8, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          } else {
+            // IN FLIGHT: Glowing orange particle traveling along smooth 3D curved kinetic trajectory (由慢而快)
+            const easeT = p.flightEase || 0;
+            const arcLift = (p.curveLift || 16) * Math.sin(easeT * Math.PI);
+            const arcLat = (p.curveLateral || 0) * Math.sin(easeT * Math.PI);
+            const screenX = cosmosScreenX + (p.targetX - cosmosScreenX) * easeT + arcLat;
+            const screenY = cosmosScreenY + (p.targetY - cosmosScreenY) * easeT - arcLift;
+
+            if (screenX < -120 || screenX > W + 120 || screenY < -120 || screenY > H + 120) continue;
+
+            // Continuous radius from cosmos scale to 1.0 code scale:
+            const currentScale = cScale * (1 - easeT) + 1.0 * easeT;
+            const dotRadius = Math.max(1.15, Math.min(2.55, p.baseSize * currentScale));
+
+            ctx.globalAlpha = p.alpha;
+
+            // Starlight corona
+            if (dotRadius > 1.35) {
+              ctx.fillStyle = theme.codeParticleGlow;
+              ctx.beginPath();
+              ctx.arc(screenX, screenY, dotRadius * 1.85, 0, Math.PI * 2);
+              ctx.fill();
+            }
+
+            ctx.fillStyle = theme.codeParticle;
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, dotRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Incandescent core
+            if (dotRadius > 1.55) {
+              ctx.fillStyle = theme.codeParticleCore;
+              ctx.beginPath();
+              ctx.arc(screenX, screenY, dotRadius * 0.45, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+      }
+
+      // =========================================================================
+      // 5. RENDER ASSEMBLED FUNCTION BODY TEXT (During Tour Mode)
+      // Unified emergence: line-by-line, char-by-char with monospace metrics,
+      // radiant ember glow aura cooling into crisp text, matching header crystallization!
+      // =========================================================================
+      if (this.mode === "TOUR" && !isScrolling && this.hasCompletedInitialIntro && this.headerDisperseProgress <= 0.001) {
+        const tTour = this.tourCycleTime;
+        const b0Start = this.headerPhaseDuration;
+        const b1Start = b0Start + this.bodyCycleDuration;
+        const b2Start = b1Start + this.bodyCycleDuration;
+        const b2End = b2Start + this.bodyCycleDuration;
+        const pauseEnd = b2End + this.tourStackedPauseDuration;
+
+        if (tTour >= b0Start && tTour < pauseEnd) {
+          let activeStep = 0;
+          let bodyBaseTime = b0Start;
+          if (tTour >= b2Start) {
+            activeStep = 2;
+            bodyBaseTime = b2Start;
+          } else if (tTour >= b1Start) {
+            activeStep = 1;
+            bodyBaseTime = b1Start;
+          }
+
+          const exp = this.currentExpand[activeStep];
+          if (exp > 0.005) {
+            const hdr = this.headers[activeStep];
+            const bodyStartY = hdr.targetY + this.headerLineHeight + 6;
+            const currentBodyH = exp * this.stepBodyHeights[activeStep];
+            const snippet = CODE_SNIPPETS[activeStep];
+            const tInStep = Math.max(0, tTour - bodyBaseTime);
+
+            const foldStartTime = this.stepAssembleDuration + this.stepHoldDuration;
+            const isFolding = tInStep >= foldStartTime && tInStep < foldStartTime + this.stepFoldDuration;
+            const isFolded = tInStep >= foldStartTime + this.stepFoldDuration;
+
+            if (!isFolded) {
+              const foldProgress = isFolding ? clamp((tInStep - foldStartTime) / this.stepFoldDuration) : 0;
+              const foldEase = easeInOutCubic(foldProgress);
+              const foldAlphaMult = clamp((1.0 - foldEase) * 1.5);
+
+              ctx.save();
+              ctx.beginPath();
+              ctx.rect(this.baseStartX - 30, bodyStartY - 4, this.maxCodeLineWidth + 100, currentBodyH + 8);
+              ctx.clip();
+
+              ctx.font = `500 ${this.codeFontSize}px 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+              ctx.textAlign = "left";
+              ctx.textBaseline = "middle";
+
+              const totalSnippetLines = snippet.lines.length;
+              const flightDurationMs = 700;
+              const crystDurationMs = 280;
+
+              for (let lineIdx = 0; lineIdx < totalSnippetLines; lineIdx++) {
+                const line = snippet.lines[lineIdx];
+                const normalTargetY = bodyStartY + lineIdx * this.codeLineHeight + this.codeLineHeight * 0.45;
+                const foldedTargetY = bodyStartY + (lineIdx * this.codeLineHeight) * (1 - foldEase) - foldEase * 4 + this.codeLineHeight * 0.45;
+                const lineY = isFolding ? foldedTargetY : normalTargetY;
+
+                const lineDepartureMs = (lineIdx / Math.max(1, totalSnippetLines - 1)) * 950;
+                let curX = this.baseStartX + this.codeBodyIndentX;
+
+                for (let c = 0; c < line.length; c++) {
+                  const ch = line[c];
+                  const chW = ctx.measureText(ch).width;
+
+                  if (ch !== " " && ch !== "\t") {
+                    const charMicroDelay = (c / Math.max(1, line.length - 1)) * 120;
+                    const arriveFlightT = lineDepartureMs + charMicroDelay + flightDurationMs;
+                    const endFlightT = arriveFlightT + crystDurationMs;
+
+                    let cAlpha = 0;
+                    if (tInStep >= endFlightT) {
+                      cAlpha = 1.0;
+                    } else if (tInStep >= arriveFlightT) {
+                      cAlpha = (tInStep - arriveFlightT) / crystDurationMs;
+                    }
+
+                    if (cAlpha > 0.02) {
+                      ctx.save();
+                      ctx.globalAlpha = cAlpha * scrollAlphaMult * foldAlphaMult;
+
+                      if (cAlpha < 1.0) {
+                        ctx.shadowColor = theme.codeParticle;
+                        ctx.shadowBlur = (1.0 - cAlpha) * 8;
+                        if (!this.isLightMode()) {
+                          ctx.fillStyle = cAlpha < 0.5 ? "#ffa066" : theme.codeChar;
+                        } else {
+                          ctx.fillStyle = cAlpha < 0.45 ? theme.codeParticle : theme.codeChar;
+                        }
+                      } else {
+                        ctx.fillStyle = theme.codeChar;
+                      }
+
+                      ctx.fillText(ch, curX, lineY);
+                      ctx.restore();
+                    }
+                  }
+                  curX += chW;
+                }
+              }
+              ctx.restore();
+            }
+          }
+        }
+      }
+
+      // =========================================================================
+      // 6. RENDER INTERACTIVE LINE-BY-LINE TYPEWRITER
+      // =========================================================================
+      if (this.mode === "INTERACTIVE" && !isScrolling) {
+        for (let s = 0; s < 3; s++) {
+          const exp = this.currentExpand[s];
+          if (exp <= 0.01 || this.activeInteractiveStep !== s) continue;
+
+          const hdr = this.headers[s];
+          const bodyStartY = hdr.targetY + this.headerLineHeight + 4;
+          const currentBodyH = exp * this.stepBodyHeights[s];
+          const snippet = CODE_SNIPPETS[s];
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(this.baseStartX - 30, bodyStartY - 4, this.maxCodeLineWidth + 100, currentBodyH + 8);
+          ctx.clip();
+
+          ctx.font = `500 ${this.codeFontSize}px 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+          ctx.textAlign = "left";
+          ctx.textBaseline = "middle";
+
+          const elapsed = performance.now() - this.typewriterStartTime;
+          const linesRevealed = Math.floor(elapsed / this.lineDurationMs);
+          const cursorBlink = Math.floor(performance.now() / 480) % 2 === 0;
+
+          snippet.lines.forEach((line, lineIdx) => {
+            const lineY = bodyStartY + lineIdx * this.codeLineHeight + this.codeLineHeight * 0.45;
+            const lineStartX = this.baseStartX + this.codeBodyIndentX;
+
+            if (lineIdx < linesRevealed) {
+              ctx.globalAlpha = clamp(exp * 1.5);
+              ctx.fillStyle = theme.codeChar;
+              ctx.fillText(line, lineStartX, lineY);
+
+              if (lineIdx === snippet.lines.length - 1 && linesRevealed >= snippet.lines.length) {
+                if (cursorBlink) {
+                  const lineW = ctx.measureText(line).width;
+                  ctx.fillStyle = theme.cursor;
+                  ctx.fillRect(lineStartX + lineW + 3, lineY - this.codeFontSize * 0.72, 7, this.codeFontSize * 1.15);
+                }
+              }
+            } else if (lineIdx === linesRevealed) {
+              ctx.globalAlpha = clamp(exp * 1.5);
+              ctx.fillStyle = theme.codeChar;
+              ctx.fillText(line, lineStartX, lineY);
+
+              if (cursorBlink) {
+                const lineW = ctx.measureText(line).width;
+                ctx.fillStyle = theme.cursor;
+                ctx.fillRect(lineStartX + lineW + 3, lineY - this.codeFontSize * 0.72, 7, this.codeFontSize * 1.15);
+              }
+            }
+          });
+
+          ctx.restore();
+        }
+      }
+
+      ctx.globalAlpha = 1;
+    }
+
+    destroy() {
+      if (this.raf) cancelAnimationFrame(this.raf);
+    }
+  }
+
+  let sceneInstance: InngestParticleScene | null = null;
+
+  function initScene() {
+    const canvas = document.getElementById("inngest-scene") as HTMLCanvasElement | null;
+    if (!canvas) return;
+    if (sceneInstance) {
+      sceneInstance.destroy();
+      sceneInstance = null;
+    }
+    sceneInstance = new InngestParticleScene(canvas);
+    (window as any).__inngestScene = sceneInstance;
+
+    window.addEventListener("resize", () => {
+      sceneInstance?.resize();
+    });
+
+    const themeObserver = new MutationObserver(() => {
+      sceneInstance?.render();
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+  }
+
+  initScene();
+
+  document.addEventListener("astro:page-load", () => {
+    initScene();
+  });
+
+  document.addEventListener("astro:before-swap", () => {
+    if (sceneInstance) {
+      sceneInstance.destroy();
+      sceneInstance = null;
+    }
+  });
+</script>

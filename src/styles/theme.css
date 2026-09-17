@@ -24,11 +24,11 @@
 
 /* Dark theme values */
 [data-theme="dark"] {
-  --background: #212737;
+  --background: #080a0e;
   --foreground: #eaedf3;
   --accent: #ff6b01;
   --accent-foreground: #ffffff;
-  --muted: #343f60;
-  --muted-foreground: #afb9ca;
-  --border: #ab4b08;
+  --muted: #151a24;
+  --muted-foreground: #94a3b8;
+  --border: #222938;
 }

@@ -24,6 +24,6 @@ description: "关于 Explorer 与这个数字花园"
 如果你对相关技术感兴趣，或者有任何想法与建议，欢迎通过以下渠道与我交流：
 
 - **GitHub**：[@lastexplorer](https://github.com/lastexplorer)
-- **Email**：[lastexplorer2077@gmail.com](mailto:lastexplorer2077@gmail.com)
+- **Email**：[explorer@example.com](mailto:explorer@example.com)
 
 感谢你的到访与阅读！✨

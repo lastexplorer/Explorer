@@ -30,7 +30,11 @@ export default defineAstroPaperConfig({
   },
   socials: [
     { name: "github",   url: "https://github.com/lastexplorer" },
-    { name: "mail",     url: "mailto:lastexplorer2077@gmail.com" },
+    { name: "x",        url: "https://x.com/explorer" },
+    { name: "telegram", url: "https://t.me/explorer" },
+    { name: "whatsapp", url: "https://wa.me/1234567890" },
+    { name: "facebook", url: "https://facebook.com/explorer" },
+    { name: "mail",     url: "mailto:explorer@example.com" },
   ],
   shareLinks: [
     { name: "whatsapp", url: "https://wa.me/?text=" },
