@@ -1,6 +1,7 @@
 ---
 author: Explorer
 pubDatetime: 2026-09-26T06:30:00.000Z
+modDatetime: 2026-10-23T17:40:00.000Z
 title: OpenCode v1 到 v2 全量迁移与 CLI 升级实战手册
 featured: false
 draft: false
@@ -12,8 +13,6 @@ tags:
   - 迁移
 description: 记录 OpenCode 从 v1.x 平滑迁移至 v2.x 原生 Bun 单二进制架构的核心避坑经验、会话哈希对齐修复，以及 WSL / Linux 环境标准化升级 SOP。
 ---
-
-# OpenCode v1 到 v2 全量迁移与 CLI 升级实战手册（含 WSL 部署指引）
 
 > **文档定位**：记录 OpenCode 从 v1.x 平滑迁移至 v2.x（桌面端 + 终端 CLI）的核心避坑经验、数据结构迁移方案，以及专供 **WSL / Linux 智能体** 复用的标准升级操作规范（SOP）。
 

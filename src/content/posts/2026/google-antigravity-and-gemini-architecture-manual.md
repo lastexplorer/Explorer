@@ -1,6 +1,7 @@
 ﻿---
 author: Explorer
 pubDatetime: 2026-09-26T05:46:00.000Z
+modDatetime: 2026-10-23T17:40:00.000Z
 title: Google Antigravity 与 Gemini 全平台完全架构配置与运维手册
 featured: false
 draft: false
@@ -111,7 +112,7 @@ Windows 调用原生无窗口引擎 wscript.exe (零黑框闪烁)
 ### 2.3 核心脚本源码
 
 #### 引导脚本：`%LOCALAPPDATA%\antigravity-launcher\launcher.vbs`
-```vbscript
+```vbs
 Option Explicit
 Dim ws, procEnv, http, i, exePath, args, cmd
 
@@ -300,7 +301,7 @@ agy config set remote_control.name "desktop-pc"
 通过 `wscript.exe` + `SW_HIDE (0)` 彻底消除黑框：
 
 创建脚本：`%LOCALAPPDATA%\agy\bin\agy_daemon_proxy.vbs`
-```vbscript
+```vbs
 Dim WshShell, procEnv, http, isReady, retryCount
 Set WshShell = CreateObject("WScript.Shell")
 WshShell.CurrentDirectory = "C:\Users\<User>\AppData\Local\agy\bin"

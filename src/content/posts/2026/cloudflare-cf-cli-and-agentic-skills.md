@@ -1,6 +1,7 @@
 ---
 author: Explorer
 pubDatetime: 2026-09-29T11:30:00.000Z
+modDatetime: 2026-10-23T17:40:00.000Z
 title: Cloudflare 全新 cf CLI 与 Agentic 技能体系配置实战手册
 featured: true
 draft: false
@@ -11,8 +12,6 @@ tags:
   - DevOps
 description: 记录全局部署 Cloudflare 官方全新 Agent 原生 CLI 工具 cf (v1.0.0-beta.5) 与配套 8 项官方智能体技能库的实战全流程及避坑要点。
 ---
-
-# Cloudflare 全新 cf CLI 与 Agentic 技能体系配置实战手册
 
 > **归档日期**：2026-09-29  
 > **核心组件**：Cloudflare `cf` CLI (`v1.0.0-beta.5`) + Cloudflare 官方 Agent 技能生态矩阵  

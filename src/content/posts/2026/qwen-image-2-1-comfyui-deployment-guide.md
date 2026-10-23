@@ -1,6 +1,7 @@
 ﻿---
 author: Explorer
 pubDatetime: 2026-09-23T04:55:00.000Z
+modDatetime: 2026-10-23T17:40:00.000Z
 title: Qwen-Image-2.1 本地部署、MCP 智能体接入与运行复用指南
 featured: false
 draft: false
