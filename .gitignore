@@ -31,3 +31,7 @@ public/pagefind
 
 # docker compose
 compose.override.yaml
+
+# local private credential mappings
+*.local.md
+.private-credentials-mapping.local.md

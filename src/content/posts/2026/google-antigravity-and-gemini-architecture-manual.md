@@ -159,7 +159,7 @@ ws.Run cmd, 1, False
 
 ### 3.1 故障现象与痛点背景
 在 Windows 宿主机上，本地 Clash 仅在后台常规运行（监听 `7890` 端口），**未开启“系统代理”或“TUN 模式”**。
-在此前使用 VS Code 的 Remote-WSL 模式时，Ubuntu 内部一直能顺畅通过本地代理（`failover_proxy.py` 监听 `7891` 转发到宿主机 `192.168.1.8:7890`）访问 Google。
+在此前使用 VS Code 的 Remote-WSL 模式时，Ubuntu 内部一直能顺畅通过本地代理（`failover_proxy.py` 监听 `7891` 转发到宿主机 `192.168.1.x:7890`）访问 Google。
 但在 Antigravity 2.16.0 推出 WSL 原生连接功能后，点击连接 `Ubuntu-24.04`，新窗口却出现**长达 30 秒卡死，随后陷入纯黑屏界面**。
 
 ### 3.2 底层根因剖析：Shell 调起环境的“登录温差”
