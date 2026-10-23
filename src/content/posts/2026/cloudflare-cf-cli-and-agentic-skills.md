@@ -1,7 +1,7 @@
-﻿---
+---
 author: Explorer
 pubDatetime: 2026-09-29T11:30:00.000Z
-modDatetime: 2026-10-23T09:46:44.165Z
+modDatetime: 2026-10-23T10:23:38.443Z
 title: Cloudflare 全新 cf CLI 与 Agentic 技能体系配置实战手册
 featured: true
 draft: false
@@ -138,4 +138,3 @@ cf tunnel run <tunnel-name>
    在跨个人/企业项目时，推荐通过环境变量 `CLOUDFLARE_API_TOKEN` 或命名配置文件隔离鉴权，避免全局 Token 串号。
 3. **CI/CD 环境构建隔离**：  
    在自动化流水线中，推荐将 `cf` 安装在本地项目开发依赖或通过 `npx cf` 按需调用，确保构建节点版本严格锁死。
-

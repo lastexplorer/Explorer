@@ -1,7 +1,7 @@
 ---
 author: Explorer
 pubDatetime: 2026-09-17T02:30:00.000Z
-modDatetime: 2026-10-23T17:40:00.000Z
+modDatetime: 2026-10-23T10:23:38.443Z
 title: Cloudflare 零成本全栈生态实战与 AI Agent 自动化运维指南
 featured: true
 draft: false
@@ -12,6 +12,7 @@ tags:
   - Serverless
 description: 记录基于 Cloudflare 免费层级与 Astro 搭建极速博客的完整技术链路，以及利用 GitHub CLI、Wrangler、官方 Skills 与 MCP 协议实现 AI Agent 全自动运维的实战手册。
 ---
+
 > 本文档汇集了：
 > 1. **推文核心精髓**：以“赛博大善人”理念彻底用 Cloudflare Serverless 替代传统付费 VPS 的能力全景；
 > 2. **Awesome-Cloudflare 开源生态矩阵**：社区顶流开源项目选型及全套平替方案；
@@ -307,4 +308,3 @@ npx -y skills add cloudflare/skills --skill '*' --yes --global
 *文档版本：v2.0 (全景大纲整合版)*  
 *更新日期：2026-09-17*  
 *适用体系：Cloudflare 生态全家桶 / Astro / GitHub Actions / AI Agent MCP*
-

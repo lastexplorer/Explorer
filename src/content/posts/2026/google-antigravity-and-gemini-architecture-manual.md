@@ -1,34 +1,31 @@
 ﻿---
 author: Explorer
-pubDatetime: 2026-09-26T05:46:00.000Z
+pubDatetime: 2026-10-22T01:19:00.000Z
 modDatetime: 2026-10-23T17:40:00.000Z
-title: Google Antigravity 与 Gemini 全平台完全架构配置与运维手册
+title: Google Antigravity 与 Gemini 全平台完全架构配置与运维手册 (v3.2)
 featured: false
 draft: false
 tags:
   - Antigravity
   - Gemini
-  - AIAgent
   - Architecture
-  - LinuxWSL
-description: 深度剖析 Google Antigravity 桌面端、CLI、WSL 原生集成、免 TUN 代理透明注入与持久化自愈工程方案，涵盖 Electron/Chromium 与 Go 运行时的底层网络机制。
+  - WSL
+  - 代理自愈
+description: 涵盖 Antigravity 客户端、CLI、WSL 原生集成、免 TUN 代理透明注入与持久化自愈工程方案的完全版技术手册。
 ---
-# 🚀 Google Antigravity & Gemini 全平台完全架构配置与运维手册
 
-> **文档版本**：v3.1（2026年9月 Antigravity 2.17.0 适配与加固主控版）  
+> **文档版本**：v3.2（2026年10月 Antigravity 2.22.0 升级自愈与黑屏排障完全版）  
 > **整合来源**：  
 > 1. 《Google Gemini Windows 客户端内置代理与离线修复指南》  
 > 2. 《Windows 端 Antigravity CLI (`agy`) 配置与手机远程控制完全指南》  
 > 3. 《Google Antigravity 客户端全界面汉化与多机复用部署指南》  
-> 4. 《Antigravity 2.16+ / 2.17+ WSL 原生集成与免 TUN 代理黑屏自愈工程方案》  
+> 4. 《Antigravity 2.16+ / 2.17+ / 2.22+ WSL 原生集成与免 TUN 代理黑屏自愈工程方案》  
 > **核心原则**：免开虚拟网卡（TUN 模式）、零全局系统环境污染、点击官方原生图标即开即用、跨平台协同零冲突、全链路自动自愈。
-
----
 
 ## 目录
 - [第一篇：全景架构概览与三大产品形态定位](#第一篇全景架构概览与三大产品形态定位)
 - [第二篇：反重力桌面端（Antigravity App）免 TUN 代理注入与全入口加固](#第二篇反重力桌面端antigravity-app免-tun-代理注入与全入口加固)
-- [第三篇：反重力 2.16+ WSL 模式黑屏根因剖析与无感代理注入自愈方案](#第三篇反重力-216-wsl-模式黑屏根因剖析与无感代理注入自愈方案)
+- [第三篇：反重力 2.16+ / 2.22+ WSL 模式黑屏根因剖析与无感代理注入自愈方案](#第三篇反重力-216--222-wsl-模式黑屏根因剖析与无感代理注入自愈方案)
 - [第四篇：Antigravity CLI (`agy`) Windows 配置、静默自启与手机远程控制](#第四篇antigravity-cli-agy-windows-配置静默自启与手机远程控制)
 - [第五篇：反重力客户端全界面深度汉化与防卡死部署规范](#第五篇反重力客户端全界面深度汉化与防卡死部署规范)
 - [第六篇：官方 Google Gemini 独立桌面端（Gemini Desktop App）专题](#第六篇官方-google-gemini-独立桌面端gemini-desktop-app专题)
@@ -95,7 +92,7 @@ Windows 调用原生无窗口引擎 wscript.exe (零黑框闪烁)
 ### 2.2 防冲刷持久化加固架构与六大入口 100% 覆盖
 反重力 App 内置 `electron-updater` 机制。升级时安装器会重置快捷方式，并清理 `%LOCALAPPDATA%\Programs\antigravity` 目录。
 为此，我们将脚本放在独立持久化目录：
-`C:\Users\<User>\AppData\Local\antigravity-launcher\`
+`C:\Users\<username>\AppData\Local\antigravity-launcher\`
 
 并在 Windows 所有 6 大启动入口进行全面重定向：
 1. **桌面快捷方式**：`Desktop\Antigravity.lnk`
@@ -155,7 +152,7 @@ ws.Run cmd, 1, False
 
 ---
 
-## 第三篇：反重力 2.16+ WSL 模式黑屏根因剖析与无感代理注入自愈方案
+## 第三篇：反重力 2.16+ / 2.22+ WSL 模式黑屏根因剖析与无感代理注入自愈方案
 
 ### 3.1 故障现象与痛点背景
 在 Windows 宿主机上，本地 Clash 仅在后台常规运行（监听 `7890` 端口），**未开启“系统代理”或“TUN 模式”**。
@@ -167,7 +164,7 @@ ws.Run cmd, 1, False
 
 1. **VS Code (Remote-WSL) 的启动行为**：
    - VS Code 在拉起 WSL 远端服务端时，调用的是**交互式登录 Shell（`bash -l` 或 `bash -i`）**；
-   - Linux 在登录模式下会完整加载用户的配置文件（`/home/<user>/.bashrc`）；
+   - Linux 在登录模式下会完整加载用户的配置文件（`/home/<username>/.bashrc`）；
    - `.bashrc` 中声明的 `export HTTP_PROXY=http://127.0.0.1:7891` 生效，流量被成功送入本地转发代理，平稳连接 Windows Clash。
 
 2. **Antigravity 2.16 的启动行为**：
@@ -221,10 +218,10 @@ ws.Run cmd, 1, False
 1. **当前版本日常重启与使用**：
    - **绝不会失效**。
    - 官方源码在启动前仅执行快速判断：`test -x "${serverBinaryPath(version)}"`。只要该路径存在且具有可执行权限，官方客户端**绝不会重新下载或覆写它**，包装器将长期稳固生效。
-2. **大版本跨级升级（例如 2.16 升至 2.17.0）时（已实测验证）**：
-   - 反重力在宿主机升级后首次连接 WSL 时，会在 WSL 目录中新建对应版本目录（例如 `~/.antigravity-server/bin/2.17.0/`），并在该目录下下载一份官方全新的裸二进制 `language_server`；
-   - 此时旧版 `2.16.0` 的包装脚本不会被删除，但新版本因为刚下载下来尚未被包装，若直接运行可能会再次出现黑屏；
-   - **解决方式**：触发 WSL 启动或首次连接后，执行 `~/.antigravity-server/patch_wsl_proxy.sh` 脚本，脚本采用通配符遍历自动适配任何新版本目录，一秒完成新二进制包装与加固。
+2. **大版本跨级升级（例如 2.16 升至 2.17.0 / 2.22.0）时（已实测验证）**：
+   - 反重力在宿主机升级后首次连接 WSL 时，会在 WSL 目录中新建对应版本目录（例如 `~/.antigravity-server/bin/2.22.0/`），并在该目录下下载一份官方全新的裸二进制 `language_server`；
+   - 此时旧版 `2.16.0` 的包装脚本不会被删除，但新版本因为刚下载下来尚未被包装，若直接运行就会再次出现黑屏卡死；
+   - **解决方式**：触发 WSL 启动或首次连接后，执行 `~/.antigravity-server/patch_wsl_proxy.sh` 脚本（或宿主机执行 `reinforce.py`），脚本采用通配符遍历自动适配任何新版本目录，一秒完成新二进制包装与加固。
 
 ### 3.5 WSL 自动扫描打补丁脚本：`~/.antigravity-server/patch_wsl_proxy.sh`
 ```bash
@@ -261,7 +258,34 @@ done
 反重力主进程启用了 `app.requestSingleInstanceLock()` 单实例互斥锁。官方点击 Connect 是“切换模式（Relaunch）”。
 如果需要同时在屏幕上并排开两个窗口，可以通过**隔离 User Data Directory** 彻底绕过单实例锁：
 ```cmd
-"C:\Windows\System32\wscript.exe" "C:\Users\<User>\AppData\Local\antigravity-launcher\launcher.vbs" --user-data-dir="%LOCALAPPDATA%\Antigravity-WSL" --wsl-distro=Ubuntu-24.04
+"C:\Windows\System32\wscript.exe" "C:\Users\<username>\AppData\Local\antigravity-launcher\launcher.vbs" --user-data-dir="%LOCALAPPDATA%\Antigravity-WSL" --wsl-distro=Ubuntu-24.04
+```
+
+### 3.7 升级后突发黑屏“三步极速自愈法”（2.22.0 实战案例）
+
+#### 故障现场实录
+当客户端自动跨级更新至 2.22.0 后，首次切换或拉起 WSL 模式时，界面长达 30 秒无响应并最终陷入黑屏。查看客户端日志 `%APPDATA%\Antigravity\logs\main.log`：
+```text
+[error] electron: Failed to load URL: https://127.0.0.1:44617/ with error: ERR_TIMED_OUT
+```
+
+#### 双重阻碍机理
+1. **新核心缺失代理**：新下载的 `~/.antigravity-server/bin/2.22.0/language_server` 裸程序在非登录 Shell 中无代理直连 Google，触发 TCP 连接超时；
+2. **死锁僵死进程占位**：首次失败后，无代理的 `language_server` 进程并没有随 Electron 报错退出，而是继续驻留在 WSL 后台（占位端口）。即使此时打好了补丁，若未杀掉旧进程，前端刷新仍会连接旧的死锁进程导致持续黑屏。
+
+#### 30 秒极速自愈标准流程
+遇到上述黑屏时，无需慌张，在 Windows PowerShell 或终端中执行以下三步闭环：
+
+```powershell
+# 第一步：运行全环境加固（自动扫描 WSL 并给 2.22.0 注入代理包装器）
+python "$env:LOCALAPPDATA\antigravity-launcher\reinforce.py"
+
+# 第二步：强行终止 WSL 内部卡死超时的无代理旧进程
+wsl.exe -d Ubuntu-24.04 -- pkill -9 -f language_server
+
+# 第三步：刷新页面
+# 在黑屏客户端窗口直接按下快捷键 Ctrl + R（或 Ctrl + Shift + R 强制重载）
+# 客户端将自动唤起携带代理的新版 language_server，1 秒顺畅加载！
 ```
 
 ---
@@ -304,7 +328,7 @@ agy config set remote_control.name "desktop-pc"
 ```vbs
 Dim WshShell, procEnv, http, isReady, retryCount
 Set WshShell = CreateObject("WScript.Shell")
-WshShell.CurrentDirectory = "C:\Users\<User>\AppData\Local\agy\bin"
+WshShell.CurrentDirectory = "C:\Users\<username>\AppData\Local\agy\bin"
 Set procEnv = WshShell.Environment("Process")
 procEnv("HTTP_PROXY") = "http://127.0.0.1:7890"
 procEnv("HTTPS_PROXY") = "http://127.0.0.1:7890"
@@ -456,16 +480,22 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ^
   "Write-Host '[OK] 已成功加固 URL Protocol 网页授权协议';"
 
 echo.
-echo [2/2] 正在自动检测并加固 WSL 子系统 (Ubuntu-24.04) 内部代理包装器...
+echo [2/3] 正在自动检测并加固 WSL 子系统 (Ubuntu-24.04) 内部代理包装器...
 where wsl.exe >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     wsl.exe -d Ubuntu-24.04 -- bash -c "if [ -f ~/.antigravity-server/patch_wsl_proxy.sh ]; then ~/.antigravity-server/patch_wsl_proxy.sh; fi"
 )
 
 echo.
+echo [3/3] 正在自动检测并加固 Google Gemini 桌面端 ASAR 代理注入...
+if exist "%LOCALAPPDATA%\Google\Gemini\patch_gemini.py" (
+    python "%LOCALAPPDATA%\Google\Gemini\patch_gemini.py"
+)
+
+echo.
 echo ========================================================
-echo   [OK] Windows + WSL 全环境加固完毕！
-echo   点击桌面 Antigravity 图标即可免 TUN 正常启动。
+echo   [OK] Antigravity + Gemini + WSL 全环境加固完毕！
+echo   点击桌面任意图标即可免 TUN 正常启动。
 echo ========================================================
 pause
 ```
@@ -500,48 +530,58 @@ Write-Host "[OK] 已恢复官方 URL 协议"
 ### 7.3 关键文件与日志速查清单
 | 功能分类 | 关键路径 |
 | :--- | :--- |
-| **持久化代理目录** | `C:\Users\<User>\AppData\Local\antigravity-launcher\` |
-| **反重力主程序路径** | `C:\Users\<User>\AppData\Local\Programs\antigravity\Antigravity.exe` |
-| **客户端日志目录** | `C:\Users\<User>\AppData\Roaming\Antigravity\logs\` (`main.log`, `language_server.log`) |
-| **WSL 服务端核心目录** | `/home/<user>/.antigravity-server/bin/<version>/` |
-| **WSL 自动扫描修复工具** | `/home/<user>/.antigravity-server/patch_wsl_proxy.sh` |
-| **CLI 守护进程脚本** | `C:\Users\<User>\AppData\Local\agy\bin\agy_daemon_proxy.vbs` |
-| **Gemini 独立客户端目录** | `C:\Users\<User>\AppData\Local\Google\Gemini\` |
+| **持久化代理目录** | `C:\Users\<username>\AppData\Local\antigravity-launcher\` |
+| **反重力主程序路径** | `C:\Users\<username>\AppData\Local\Programs\antigravity\Antigravity.exe` |
+| **客户端日志目录** | `C:\Users\<username>\AppData\Roaming\Antigravity\logs\` (`main.log`, `language_server.log`) |
+| **WSL 服务端核心目录** | `/home/<username>/.antigravity-server/bin/<version>/` |
+| **WSL 自动扫描修复工具** | `/home/<username>/.antigravity-server/patch_wsl_proxy.sh` |
+| **中央一键加固脚本** | `C:\Users\<username>\AppData\Local\antigravity-launcher\reinforce.py` |
+| **CLI 守护进程脚本** | `C:\Users\<username>\AppData\Local\agy\bin\agy_daemon_proxy.vbs` |
+| **Gemini 独立客户端目录** | `C:\Users\<username>\AppData\Local\Google\Gemini\` |
+| **Gemini 代理补丁脚本** | `C:\Users\<username>\AppData\Local\Google\Gemini\patch_gemini.py` |
 | **项目定制配置文件 (2.17+)** | `<WorkspaceRoot>/.gemini/config.json`（废弃旧 `.agents/settings.json`） |
 
----
+### 7.4 常见突发故障排查与应急急救手册 (FAQ)
 
-## 第八篇：海外 AI PWA 应用（Chrome 宿主）代理注入与多浏览器物理隔离规范（以 Muse 为例）
+#### Q1: 反重力桌面端切换到 WSL 模式后，窗口卡死 30 秒随后变成纯黑屏，无法进入？
+- **根本原因**：
+  1. 宿主机 Antigravity 发生了跨版本升级（例如 2.16 → 2.17 或 2.17 → 2.22.0），WSL 自动拉取了新版本目录（如 `~/.antigravity-server/bin/2.22.0/`）中的官方未包装裸程序 `language_server`；
+  2. WSL 是非登录 Shell 唤起，未加载 `~/.bashrc`，新核心无代理直连 Google 被拦截，30 秒后 Electron 报 `ERR_TIMED_OUT` 并陷入黑屏；
+  3. 首次启动失败后，该无代理的僵死进程仍在 WSL 后台驻留，占位端口。
+- **应急急救（三步法，30 秒搞定）**：
+  1. 终端执行加固自愈：`python "$env:LOCALAPPDATA\antigravity-launcher\reinforce.py"`
+  2. 强杀僵死残留进程：`wsl.exe -d Ubuntu-24.04 -- pkill -9 -f language_server`
+  3. 在黑屏窗口按下键盘 `Ctrl + R`（或 `Ctrl + Shift + R` 强制刷新），即可秒级加载进入。
 
-### 8.1 架构设计背景与“主力浏览器垄断”陷阱
-- **背景**：用户日常使用 Microsoft Edge 作为主力日常浏览器，常驻大量网页。
-- **陷阱**：若海外 AI 应用（如 Meta Muse、Google AI Studio）以 Edge PWA 形式安装：
-  1. Chromium 的“单数据目录单进程”铁律：已有 Edge 窗口会抢占接管 PWA 启动，强行丢弃自定义代理参数；
-  2. Windows 底层 `pwahelper.exe` 宿主在派发进程时，会自动过滤任何 `--proxy-server` 参数，导致直连超时报“无法连接”。
-- **架构解法：主副浏览器物理隔离**：
-  - **日常办公与常规冲浪**：保留使用系统默认的 **Microsoft Edge**（直连/常规环境）；
-  - **海外 AI Web / PWA 专属沙箱**：由 **Google Chrome** 专属接管托管。
-
-### 8.2 Muse AI 官方 Chrome PWA 规范配置
-1. **安装规范**：在 Chrome 普通窗口（非无痕模式）中打开 `https://muse.ai`，通过地址栏右侧“安装应用”生成原生 PWA。
-2. **快捷方式加固（直接调用 `chrome.exe`，注入代理）**：
-   - **目标 (Target)**：`C:\Program Files (x86)\Google\Chrome\Application\chrome.exe`
-   - **参数 (Arguments)**：
-     ```bash
-     --profile-directory=Default --app-id=hichoggbhebpgpgcbcgfpkjmohpcflhh --proxy-server="http://127.0.0.1:7890"
-     ```
-   - **图标**：`%LOCALAPPDATA%\Google\Chrome\User Data\Default\Web Applications\_crx_hichoggbhebpgpgcbcgfpkjmohpcflhh\Muse.ico,0`
-3. **运行效果**：
-   - 0 延迟秒开；
-   - 100% 走本地 Clash 7890 代理；
-   - 与日常 Edge 100% 物理隔离，互不干扰。
-
-### 8.3 官方 Google Gemini 客户端升级自愈备忘
-- **现象**：Gemini 自动热更新（如从 `app-1.11.4` 升级到 `app-1.12.3`）后，`app.asar` 会被官方新版覆盖，导致代理失效。
-- **一键自愈**：
-  在终端中执行：
+#### Q2: 软件更新后，桌面或任务栏图标点击报错或无法联网？
+- **根本原因**：
+  官方升级安装程序重写了任务栏、开始菜单图标或注册表 URL Protocol。
+- **应急急救**：
+  在终端直接运行中央加固脚本：
   ```powershell
-  Stop-Process -Name Gemini, GeminiAppLauncher -Force -ErrorAction SilentlyContinue
-  python "$env:LOCALAPPDATA\Google\Gemini\patch_gemini.py"
+  python "$env:LOCALAPPDATA\antigravity-launcher\reinforce.py"
   ```
-  即可重新注入 7890 代理、窗口置顶、退出彻底释放等 5 大安全补丁。
+  该脚本内置增量状态感知机制，会自动巡检 Windows 6 大快捷方式、注册表网页授权协议、开机守护任务、WSL 内部所有版本包装器以及 Gemini 桌面端 ASAR 补丁。
+  
+  执行后将输出结构化看板：
+  - ⚡ **【本次已加固 / 失效自愈项】**：精准列出本次被官方覆盖重置或失效的具体项（若全部正常则明确显示 0 项加固）；
+  - 🟢 **【维持健康 / 原本正常项】**：列出保持加固状态、本次无需重复修改的正常项。
+
+#### Q3: 补丁已经打好了，为什么刷新后依然提示 ERR_TIMED_OUT 或连接不上？
+- **排查诊断树**：
+  1. **检查宿主机 Clash 运行状态**：确保 Clash 正在后台运行且本地端口 `7890` 正常监听；
+  2. **检查 WSL 内部 failover 代理服务**：WSL 内部需要转发代理 `failover_proxy.py`（监听 `127.0.0.1:7891` 转发至宿主机 `192.168.1.x:7890`），执行命令验证：
+     ```bash
+     wsl.exe -d Ubuntu-24.04 -- ps aux | grep failover_proxy
+     wsl.exe -d Ubuntu-24.04 -- curl -x http://127.0.0.1:7891 -I https://www.google.com --connect-timeout 5
+     ```
+  3. **检查是否有僵死旧进程占用端口**：
+     ```bash
+     wsl.exe -d Ubuntu-24.04 -- pkill -9 -f language_server
+     ```
+     彻底清空后在前端重新 `Ctrl + R` 唤起。
+
+#### Q4: 查看反重力桌面端与服务端的实时运行日志在何处？
+- **Windows 端主进程与前端日志**：`%APPDATA%\Antigravity\logs\main.log`
+- **Windows 端语言服务器日志**：`%APPDATA%\Antigravity\logs\language_server.log`
+- **WSL 端目录**：`~/.antigravity-server/bin/<version>/`

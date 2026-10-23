@@ -1,7 +1,7 @@
-﻿---
+---
 author: Explorer
 pubDatetime: 2026-09-23T04:55:00.000Z
-modDatetime: 2026-10-23T17:40:00.000Z
+modDatetime: 2026-10-23T10:23:38.443Z
 title: Qwen-Image-2.1 本地部署、MCP 智能体接入与运行复用指南
 featured: false
 draft: false
@@ -13,7 +13,6 @@ tags:
   - 本地部署
 description: 记录在消费级 8GB 显存显卡上部署阿里通义千问最新旗舰生图模型 Qwen-Image-2.1、接入 ComfyUI 官方 MCP 协议及工作流的工程落地全记录。
 ---
-# Qwen-Image-2.1 本地部署、MCP智能体接入与运行复用指南 (全功能完全体 v3.2)
 
 本文档记录了在 Windows 环境（NVIDIA GeForce RTX 2070 SUPER 8GB 显存 + 32GB 物理内存）下，成功部署阿里通义千问最新旗舰级图像生成模型 **Qwen-Image-2.1**，接入 **ComfyUI 官方 MCP 智能体协议**，并配置全套官方工作流、**方案 B 无审查去限制架构** 以及 **方案 C 提示词扩写（LM Studio 极速协同与直通选配）** 的完整工程落地手册与实测数据。
 
