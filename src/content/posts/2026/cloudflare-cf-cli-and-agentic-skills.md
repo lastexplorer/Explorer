@@ -1,4 +1,4 @@
----
+﻿---
 author: Explorer
 pubDatetime: 2026-09-29T11:30:00.000Z
 modDatetime: 2026-10-23T09:46:44.165Z
@@ -139,4 +139,3 @@ cf tunnel run <tunnel-name>
 3. **CI/CD 环境构建隔离**：  
    在自动化流水线中，推荐将 `cf` 安装在本地项目开发依赖或通过 `npx cf` 按需调用，确保构建节点版本严格锁死。
 
-<!-- test hook -->
