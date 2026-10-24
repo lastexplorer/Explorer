@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
@@ -24,7 +25,10 @@ const homePath = getRelativeLocaleUrl(locale, "");
 ---
 
 <Layout>
-  <!-- First Fold (第一幕全屏大背景): Inngest-style 3D Particle Code Stage with integrated transparent Header -->
+  <!-- Fixed Transparent Floating Header for Homepage -->
+  <Header transparent={true} />
+
+  <!-- First Fold (第一幕全屏大背景): Inngest-style 3D Particle Code Stage -->
   <ParticleCodeEngine />
 
   <main
@@ -46,7 +50,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
           <h2 class="text-2xl font-semibold tracking-wide">
             {t.home.featured}
           </h2>
-          <ul>
+          <ul class="home-post-list">
             {featuredPosts.map(data => (
               <Card variant="h3" {...data} />
             ))}
@@ -61,7 +65,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
           <h2 class="text-2xl font-semibold tracking-wide">
             {t.home.recentPosts}
           </h2>
-          <ul>
+          <ul class="home-post-list">
             {recentPosts.slice(0, postsConfig.perIndex).map(data => (
               <Card variant="h3" {...data} />
             ))}
@@ -79,6 +83,22 @@ const homePath = getRelativeLocaleUrl(locale, "");
   </main>
   <Footer />
 </Layout>
+
+<style is:inline>
+  .home-post-list > li {
+    position: relative;
+    padding-left: 0.85rem;
+    border-left: 2px solid transparent;
+    transition:
+      border-color 0.25s ease,
+      transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .home-post-list > li:hover {
+    border-left-color: rgba(255, 107, 1, 0.75);
+    transform: translate3d(4px, 0, 0);
+  }
+</style>
 
 <script>
   document.addEventListener("astro:page-load", () => {

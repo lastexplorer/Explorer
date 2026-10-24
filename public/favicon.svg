@@ -1,9 +1,58 @@
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 128 128">
-    <path d="M50.4 78.5a75.1 75.1 0 0 0-28.5 6.9l24.2-65.7c.7-2 1.9-3.2 3.4-3.2h29c1.5 0 2.7 1.2 3.4 3.2l24.2 65.7s-11.6-7-28.5-7L67 45.5c-.4-1.7-1.6-2.8-2.9-2.8-1.3 0-2.5 1.1-2.9 2.7L50.4 78.5Zm-1.1 28.2Zm-4.2-20.2c-2 6.6-.6 15.8 4.2 20.2a17.5 17.5 0 0 1 .2-.7 5.5 5.5 0 0 1 5.7-4.5c2.8.1 4.3 1.5 4.7 4.7.2 1.1.2 2.3.2 3.5v.4c0 2.7.7 5.2 2.2 7.4a13 13 0 0 0 5.7 4.9v-.3l-.2-.3c-1.8-5.6-.5-9.5 4.4-12.8l1.5-1a73 73 0 0 0 3.2-2.2 16 16 0 0 0 6.8-11.4c.3-2 .1-4-.6-6l-.8.6-1.6 1a37 37 0 0 1-22.4 2.7c-5-.7-9.7-2-13.2-6.2Z" />
-    <style>
-        path { fill: #000; }
-        @media (prefers-color-scheme: dark) {
-            path { fill: #FFF; }
-        }
-    </style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="16 8 96 112" fill="none">
+  <style>
+    .beacon-frame { fill: #111827; }
+    .beacon-core { fill: #ff6b01; }
+    @media (prefers-color-scheme: dark) {
+      .beacon-frame { fill: #f8fafc; }
+      .beacon-core { fill: #ff6b01; }
+    }
+  </style>
+  <!-- Outer Mast & Top/Bottom Exploration Pennants -->
+  <path
+    class="beacon-frame"
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="
+      M 22 13
+      C 22 11.3 23.3 10 25 10
+      H 31
+      C 32.7 10 34 11.3 34 13
+      V 18
+      H 106
+      C 108.6 18 110.1 20.6 108.8 22.9
+      L 93 44
+      H 34
+      V 84
+      H 106
+      C 108.6 84 110.1 86.6 108.8 88.9
+      L 93 110
+      H 34
+      V 115
+      C 34 116.7 32.7 118 31 118
+      H 25
+      C 23.3 118 22 116.7 22 115
+      V 13
+      Z
+    "
+  />
+  <!-- Middle Core Beacon Blade (Cosmic Orange #ff6b01) -->
+  <path
+    class="beacon-core"
+    d="
+      M 42 52
+      H 88
+      C 90.5 52 92 54.5 90.8 56.8
+      L 78 76
+      H 42
+      C 40.3 76 39 74.7 39 73
+      V 55
+      C 39 53.3 40.3 52 42 52
+      Z
+    "
+  />
+  <!-- Leading Star Spark -->
+  <path
+    class="beacon-core"
+    d="M 101 55 L 103.2 61.8 L 110 64 L 103.2 66.2 L 101 73 L 98.8 66.2 L 92 64 L 98.8 61.8 Z"
+  />
 </svg>

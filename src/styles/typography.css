@@ -86,11 +86,11 @@
     }
 
     code {
-      @apply bg-muted/75 text-foreground rounded p-1 wrap-break-word before:content-none after:content-none;
+      @apply bg-muted/40 text-foreground rounded p-1 wrap-break-word before:content-none after:content-none;
     }
 
     .astro-code code {
-      @apply flex-[1_0_100%] bg-inherit p-0;
+      @apply flex-[1_0_100%] bg-transparent p-0;
     }
 
     blockquote {
@@ -110,13 +110,23 @@
     }
   }
 
-  /* ===== Code Blocks & Syntax Highlighting ===== */
+  /* ===== Code Blocks & Syntax Highlighting (Translucent so 3D Cosmic Background shines through) ===== */
   .astro-code {
-    @apply outline-border flex border bg-(--shiki-light-bg) text-(--shiki-light) [&_span]:text-(--shiki-light);
+    @apply outline-border flex border text-(--shiki-light) [&_span]:text-(--shiki-light);
+    background-color: color-mix(
+      in srgb,
+      var(--shiki-light-bg, #f8fafc) 38%,
+      transparent
+    ) !important;
   }
 
   html[data-theme="dark"] .astro-code {
-    @apply bg-(--shiki-dark-bg) text-(--shiki-dark) [&_span]:text-(--shiki-dark);
+    @apply text-(--shiki-dark) [&_span]:text-(--shiki-dark);
+    background-color: color-mix(
+      in srgb,
+      var(--shiki-dark-bg, #0e1e2e) 32%,
+      transparent
+    ) !important;
   }
 
   /* Styles for Shiki transformers */

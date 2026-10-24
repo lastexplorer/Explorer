@@ -51,35 +51,57 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
               )
             )
               .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
-              .map(([month, monthGroup]) => (
-                <div class="flex flex-col sm:flex-row">
-                  <div class="mt-6 min-w-36 text-lg sm:my-6">
-                    <span class="font-bold">
-                      {monthFormatter.format(
-                        new Date(2000, Number(month) - 1, 1)
-                      )}
-                    </span>
-                    <sup class="text-muted-foreground text-xs">
-                      {monthGroup.length}
-                    </sup>
+              .map(([month, monthGroup]) => {
+                const sortedPosts = [...monthGroup].sort(
+                  (a, b) =>
+                    Math.floor(
+                      new Date(b.data.pubDatetime).getTime() / 1000
+                    ) -
+                    Math.floor(
+                      new Date(a.data.pubDatetime).getTime() / 1000
+                    )
+                );
+
+                return (
+                  <div
+                    class="archive-month-row flex flex-col sm:flex-row"
+                    data-state="collapsed"
+                    data-post-count={sortedPosts.length}
+                  >
+                    <div class="mt-6 min-w-36 text-lg sm:my-6 shrink-0">
+                      <button
+                        type="button"
+                        class="archive-month-trigger text-left cursor-pointer select-none hover:text-accent transition-colors focus-outline"
+                        aria-expanded="false"
+                      >
+                        <span class="archive-month-label font-bold transition-colors">
+                          {monthFormatter.format(
+                            new Date(2000, Number(month) - 1, 1)
+                          )}
+                        </span>
+                        <sup class="text-muted-foreground text-xs ms-0.5">
+                          {monthGroup.length}
+                        </sup>
+                      </button>
+                    </div>
+
+                    <!-- Right Stage: Miniature Particle Stream (when folded) -> Converges into Article Titles (when expanded) -->
+                    <div class="archive-month-stage relative flex-1 min-w-0">
+                      <canvas
+                        class="archive-particle-canvas block w-full pointer-events-none"
+                        aria-hidden="true"
+                      />
+                      <div class="archive-cards-clip">
+                        <ul class="archive-cards-list">
+                          {sortedPosts.map(data => (
+                            <Card {...data} />
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <ul>
-                    {monthGroup
-                      .sort(
-                        (a, b) =>
-                          Math.floor(
-                            new Date(b.data.pubDatetime).getTime() / 1000
-                          ) -
-                          Math.floor(
-                            new Date(a.data.pubDatetime).getTime() / 1000
-                          )
-                      )
-                      .map(data => (
-                        <Card {...data} />
-                      ))}
-                  </ul>
-                </div>
-              ))}
+                );
+              })}
           </div>
         ))
     }
@@ -87,3 +109,533 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
 
   <Footer />
 </Layout>
+
+<style is:inline>
+  .archive-month-row[data-state="expanding"] .archive-month-label,
+  .archive-month-row[data-state="expanded"] .archive-month-label {
+    color: var(--accent);
+  }
+
+  .archive-month-stage {
+    position: relative;
+  }
+
+  .archive-month-row[data-state="collapsed"] .archive-month-stage {
+    cursor: pointer;
+  }
+
+  .archive-particle-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .archive-cards-clip {
+    height: 44px;
+    overflow: hidden;
+    transition: height 0.58s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @media (min-width: 640px) {
+    .archive-cards-clip {
+      height: 76px;
+    }
+  }
+
+  .archive-cards-list {
+    opacity: 0;
+    pointer-events: none;
+    filter: blur(4px);
+    transition:
+      opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .archive-month-row[data-state="expanded"] .archive-cards-list {
+    opacity: 1;
+    pointer-events: auto;
+    filter: blur(0px);
+  }
+</style>
+
+<script>
+  interface MiniParticle {
+    // Roaming nebula coordinates (normalized 0..1 in collapsed bar)
+    nx: number;
+    ny: number;
+    vx: number;
+    vy: number;
+    phase: number;
+    size: number;
+    isOrange: boolean;
+    isCore: boolean;
+    // Animation start & target coordinates (in px relative to stage)
+    sx: number;
+    sy: number;
+    tx: number;
+    ty: number;
+    delay: number;
+  }
+
+  function initArchiveParticleCollapse() {
+    const rows = document.querySelectorAll<HTMLElement>(".archive-month-row");
+    if (!rows.length) return;
+
+    const cleanups: Array<() => void> = [];
+
+    rows.forEach(row => {
+      const trigger = row.querySelector<HTMLButtonElement>(
+        ".archive-month-trigger"
+      );
+      const stage = row.querySelector<HTMLElement>(".archive-month-stage");
+      const canvas = row.querySelector<HTMLCanvasElement>(
+        ".archive-particle-canvas"
+      );
+      const clip = row.querySelector<HTMLElement>(".archive-cards-clip");
+      const list = row.querySelector<HTMLElement>(".archive-cards-list");
+
+      if (!trigger || !stage || !canvas || !clip || !list) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const postCount = Number(row.dataset.postCount || 1);
+      // Rich cosmic particle swarm proportional to post count
+      const totalParticles = Math.min(64 + postCount * 18, 175);
+
+      const particles: MiniParticle[] = [];
+      for (let i = 0; i < totalParticles; i++) {
+        const isCore = i < postCount;
+        const isOrange = isCore || i % 3 !== 0; // ~68% cosmic orange (#ff6b01), ~32% starlight white
+        particles.push({
+          nx: isCore
+            ? ((i + 0.4) / Math.max(1, postCount)) * 0.76 + 0.03
+            : Math.random() * 0.88 + 0.01,
+          ny: 0.5 + (Math.random() - 0.5) * 0.42,
+          vx: (Math.random() - 0.5) * 0.0014,
+          vy: (Math.random() - 0.5) * 0.0035,
+          phase: Math.random() * Math.PI * 2,
+          size: isCore
+            ? 2.6
+            : isOrange
+              ? Math.random() * 1.45 + 1.0
+              : Math.random() * 1.25 + 0.85,
+          isOrange,
+          isCore,
+          sx: 0,
+          sy: 0,
+          tx: 0,
+          ty: 0,
+          delay: (i / totalParticles) * 0.2,
+        });
+      }
+
+      let state: "collapsed" | "expanding" | "expanded" | "collapsing" =
+        "collapsed";
+      let animStartTime = 0;
+      const EXPAND_DURATION = 620; // ms
+      const COLLAPSE_DURATION = 500; // ms
+
+      let isHovered = false;
+      let beaconBoost = 0;
+      let mouseX = -1000;
+      let mouseY = -1000;
+      let rafId = 0;
+      let time = Math.random() * 100;
+
+      const onBeaconPulse = (e: Event) => {
+        const detail = (e as CustomEvent).detail;
+        beaconBoost = Math.min(2.0, beaconBoost + (detail?.intensity ?? 1.0));
+      };
+      window.addEventListener("explorer:beacon-pulse", onBeaconPulse);
+
+      function getCollapsedHeight() {
+        return window.innerWidth >= 640 ? 76 : 44;
+      }
+
+      function ensureCanvasSize(targetW: number, targetH: number) {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.max(1, Math.floor(targetW));
+        const h = Math.max(1, Math.floor(targetH));
+        if (canvas!.width !== w * dpr || canvas!.height !== h * dpr) {
+          canvas!.width = w * dpr;
+          canvas!.height = h * dpr;
+          canvas!.style.height = `${h}px`;
+        }
+        return { w, h, dpr };
+      }
+
+      // Compute exact target positions along the real article titles (<a> inside <ul>)
+      // Uses list's own bounding rect so coordinates are 100% invariant during height transition!
+      function computeTitleTargets(stageW: number) {
+        const listRect = list!.getBoundingClientRect();
+        const links = Array.from(
+          list!.querySelectorAll<HTMLElement>("li > a")
+        );
+
+        if (!links.length) {
+          particles.forEach(p => {
+            p.tx = Math.random() * stageW * 0.7;
+            p.ty = 32;
+          });
+          return;
+        }
+
+        const linkBoxes = links.map(a => {
+          const r = a.getBoundingClientRect();
+          const top = r.top - listRect.top;
+          const left = r.left - listRect.left;
+          return {
+            x: Math.max(0, left),
+            y: Math.max(14, top + r.height * 0.52),
+            w: Math.max(90, Math.min(r.width, stageW * 0.94)),
+            h: Math.max(18, r.height),
+          };
+        });
+
+        particles.forEach((p, idx) => {
+          const boxIdx = idx % linkBoxes.length;
+          const box = linkBoxes[boxIdx];
+          // Distribute particles densely along the horizontal character line of each article title
+          const progressAlongTitle =
+            ((Math.floor(idx / linkBoxes.length) * 17 + idx * 11) % 100) / 100;
+          p.tx = box.x + progressAlongTitle * box.w;
+          p.ty = box.y + (Math.random() - 0.5) * Math.min(box.h * 0.45, 11);
+          p.delay =
+            Math.min(0.28, boxIdx * 0.04 + progressAlongTitle * 0.14);
+        });
+      }
+
+      function expandMonth() {
+        if (state === "expanding" || state === "expanded") return;
+        const stageW = stage!.clientWidth || 500;
+        const collapsedH = getCollapsedHeight();
+
+        // Snapshot current particle positions in the collapsed bar as start coordinates
+        particles.forEach(p => {
+          p.sx = p.nx * stageW;
+          p.sy = p.ny * collapsedH;
+        });
+
+        // Measure full natural height of the <Card /> list
+        const fullHeight = Math.max(collapsedH, list!.scrollHeight + 16);
+
+        // Immediately size the overlay canvas to the full expanded height so no particles clip
+        ensureCanvasSize(stageW, fullHeight);
+
+        // Compute exact article title coordinates
+        computeTitleTargets(stageW);
+
+        // Trigger smooth height expansion on the clip container
+        clip!.style.height = `${fullHeight}px`;
+
+        state = "expanding";
+        row.dataset.state = "expanding";
+        trigger!.setAttribute("aria-expanded", "true");
+        canvas!.style.opacity = "1";
+        list!.style.opacity = "0";
+        list!.style.filter = "blur(4px)";
+        animStartTime = performance.now();
+      }
+
+      function collapseMonth() {
+        if (state === "collapsing" || state === "collapsed") return;
+        const stageW = stage!.clientWidth || 500;
+        const currentH = Math.max(getCollapsedHeight(), list!.scrollHeight + 16);
+        const collapsedH = getCollapsedHeight();
+
+        // Lock explicit pixel height before transitioning back down
+        clip!.style.height = `${currentH}px`;
+        void clip!.offsetHeight; // force reflow
+
+        ensureCanvasSize(stageW, currentH);
+        computeTitleTargets(stageW);
+
+        // Spawn particles at the article title lines and set targets back to the miniature nebula stream
+        particles.forEach(p => {
+          p.sx = p.tx;
+          p.sy = p.ty;
+          p.tx = p.nx * stageW;
+          p.ty = p.ny * collapsedH;
+        });
+
+        state = "collapsing";
+        row.dataset.state = "collapsing";
+        trigger!.setAttribute("aria-expanded", "false");
+        canvas!.style.opacity = "1";
+        list!.style.opacity = "0";
+        list!.style.filter = "blur(4px)";
+        clip!.style.height = `${collapsedH}px`;
+        animStartTime = performance.now();
+      }
+
+      function toggleMonth() {
+        const rect = trigger!.getBoundingClientRect();
+        window.dispatchEvent(
+          new CustomEvent("explorer:archive-ripple", {
+            detail: { y: rect.top + rect.height * 0.5 },
+          })
+        );
+        if (state === "collapsed" || state === "collapsing") {
+          expandMonth();
+        } else {
+          collapseMonth();
+        }
+      }
+
+      trigger.onclick = toggleMonth;
+      stage.addEventListener("click", e => {
+        if (state === "collapsed") {
+          e.preventDefault();
+          expandMonth();
+        }
+      });
+
+      trigger.addEventListener("mouseenter", () => {
+        isHovered = true;
+      });
+      trigger.addEventListener("mouseleave", () => {
+        isHovered = false;
+      });
+      stage.addEventListener("mouseenter", () => {
+        isHovered = true;
+      });
+      stage.addEventListener("mouseleave", () => {
+        isHovered = false;
+        mouseX = -1000;
+        mouseY = -1000;
+      });
+      stage.addEventListener("mousemove", e => {
+        const r = stage.getBoundingClientRect();
+        mouseX = e.clientX - r.left;
+        mouseY = e.clientY - r.top;
+      });
+
+      function easeOutCubic(x: number) {
+        return 1 - Math.pow(1 - x, 3);
+      }
+
+      function renderLoop(now: number) {
+        time += 0.032;
+        beaconBoost *= 0.93;
+        const stageW = stage!.clientWidth || 500;
+        const collapsedH = getCollapsedHeight();
+
+        const isDark =
+          document.documentElement.getAttribute("data-theme") === "dark" ||
+          document.documentElement.classList.contains("dark");
+
+        if (state === "collapsed") {
+          const { w, h, dpr } = ensureCanvasSize(stageW, collapsedH);
+          ctx!.save();
+          ctx!.scale(dpr, dpr);
+          ctx!.clearRect(0, 0, w, h);
+
+          const corePts: Array<{ x: number; y: number }> = [];
+
+          particles.forEach(p => {
+            const speedBoost = (isHovered ? 2.1 : 1.0) + beaconBoost * 1.4;
+            p.nx += p.vx * speedBoost;
+            if (p.nx > 0.92) p.nx = 0.01;
+            if (p.nx < 0.01) p.nx = 0.92;
+
+            const waveY =
+              0.5 +
+              Math.sin(p.nx * 8.5 + time + p.phase) * 0.16 +
+              Math.cos(time * 0.65 + p.phase) * 0.07;
+            p.ny += (waveY - p.ny) * 0.08;
+
+            let px = p.nx * w;
+            let py = p.ny * h;
+
+            if (mouseX > 0) {
+              const dx = mouseX - px;
+              const dy = mouseY - py;
+              const dist = Math.hypot(dx, dy);
+              if (dist < 85 && dist > 1) {
+                px += (dx / dist) * (1 - dist / 85) * 5.5;
+                py += (dy / dist) * (1 - dist / 85) * 3.5;
+              }
+            }
+
+            if (p.isCore) {
+              corePts.push({ x: px, y: py });
+            }
+
+            const twinkle = 0.55 + 0.45 * Math.sin(time * 2.1 + p.phase);
+            const alpha = Math.min(
+              1,
+              (isHovered ? twinkle + 0.25 : twinkle * 0.85) + beaconBoost * 0.25
+            );
+
+            if (p.isOrange) {
+              if (p.isCore || isHovered || beaconBoost > 0.2) {
+                ctx!.fillStyle = `rgba(255, 107, 1, ${alpha * 0.28})`;
+                ctx!.beginPath();
+                ctx!.arc(px, py, p.size * 2.5, 0, Math.PI * 2);
+                ctx!.fill();
+              }
+              ctx!.fillStyle = `rgba(255, 107, 1, ${alpha})`;
+            } else {
+              ctx!.fillStyle = isDark
+                ? `rgba(234, 237, 243, ${alpha * 0.88})`
+                : `rgba(40, 39, 40, ${alpha * 0.72})`;
+            }
+
+            ctx!.beginPath();
+            ctx!.arc(px, py, p.size, 0, Math.PI * 2);
+            ctx!.fill();
+          });
+
+          if (corePts.length > 1) {
+            ctx!.strokeStyle = isHovered
+              ? "rgba(255, 107, 1, 0.34)"
+              : isDark
+                ? "rgba(234, 237, 243, 0.11)"
+                : "rgba(40, 39, 40, 0.11)";
+            ctx!.lineWidth = 0.85;
+            ctx!.beginPath();
+            corePts.sort((a, b) => a.x - b.x);
+            corePts.forEach((pt, idx) => {
+              if (idx === 0) ctx!.moveTo(pt.x, pt.y);
+              else ctx!.lineTo(pt.x, pt.y);
+            });
+            ctx!.stroke();
+          }
+
+          ctx!.restore();
+        } else if (state === "expanding") {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const w = canvas!.width / dpr;
+          const h = canvas!.height / dpr;
+
+          ctx!.save();
+          ctx!.scale(dpr, dpr);
+          ctx!.clearRect(0, 0, w, h);
+
+          const elapsed = now - animStartTime;
+          const rawProgress = Math.min(1, elapsed / EXPAND_DURATION);
+
+          // Cross-fade in the real <Card /> DOM as particles lock into the article title lines
+          if (rawProgress > 0.48) {
+            const textReveal = Math.min(1, (rawProgress - 0.48) / 0.44);
+            list!.style.opacity = String(textReveal);
+            list!.style.filter = `blur(${(1 - textReveal) * 3.5}px)`;
+          }
+
+          const fadeOut =
+            rawProgress > 0.7 ? 1 - (rawProgress - 0.7) / 0.3 : 1;
+
+          particles.forEach(p => {
+            const localP = Math.max(
+              0,
+              Math.min(1, (rawProgress - p.delay) / (1 - p.delay))
+            );
+            const eased = easeOutCubic(localP);
+
+            const arcOffset =
+              Math.sin(localP * Math.PI) * 16 * (p.isOrange ? 1 : -1);
+            const cx = p.sx + (p.tx - p.sx) * eased;
+            const cy = p.sy + (p.ty - p.sy) * eased + arcOffset;
+
+            // Stretch into horizontal glyph spark as it lands on the title text
+            const stretchX = localP > 0.58 ? 1 + (localP - 0.58) * 4.2 : 1;
+
+            ctx!.save();
+            ctx!.globalAlpha = Math.max(0, fadeOut);
+            ctx!.fillStyle = p.isOrange
+              ? "#ff6b01"
+              : isDark
+                ? "#eaedf3"
+                : "#282728";
+
+            ctx!.beginPath();
+            ctx!.ellipse(
+              cx,
+              cy,
+              p.size * stretchX,
+              p.size * 0.9,
+              0,
+              0,
+              Math.PI * 2
+            );
+            ctx!.fill();
+            ctx!.restore();
+          });
+
+          ctx!.restore();
+
+          if (rawProgress >= 1) {
+            state = "expanded";
+            row.dataset.state = "expanded";
+            clip!.style.height = "auto";
+            list!.style.opacity = "1";
+            list!.style.filter = "blur(0px)";
+            canvas!.style.opacity = "0";
+          }
+        } else if (state === "collapsing") {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const w = canvas!.width / dpr;
+          const h = canvas!.height / dpr;
+
+          ctx!.save();
+          ctx!.scale(dpr, dpr);
+          ctx!.clearRect(0, 0, w, h);
+
+          const elapsed = now - animStartTime;
+          const rawProgress = Math.min(1, elapsed / COLLAPSE_DURATION);
+
+          particles.forEach(p => {
+            const localP = Math.max(
+              0,
+              Math.min(1, (rawProgress - p.delay * 0.45) / (1 - p.delay * 0.45))
+            );
+            const eased = easeOutCubic(localP);
+            const cx = p.sx + (p.tx - p.sx) * eased;
+            const cy = p.sy + (p.ty - p.sy) * eased;
+
+            ctx!.fillStyle = p.isOrange
+              ? "#ff6b01"
+              : isDark
+                ? "#eaedf3"
+                : "#282728";
+            ctx!.beginPath();
+            ctx!.arc(cx, cy, p.size, 0, Math.PI * 2);
+            ctx!.fill();
+          });
+
+          ctx!.restore();
+
+          if (rawProgress >= 1) {
+            state = "collapsed";
+            row.dataset.state = "collapsed";
+            ensureCanvasSize(stageW, collapsedH);
+          }
+        }
+
+        rafId = requestAnimationFrame(renderLoop);
+      }
+
+      rafId = requestAnimationFrame(renderLoop);
+      cleanups.push(() => {
+        cancelAnimationFrame(rafId);
+        window.removeEventListener("explorer:beacon-pulse", onBeaconPulse);
+      });
+    });
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        cleanups.forEach(fn => fn());
+      },
+      { once: true }
+    );
+  }
+
+  initArchiveParticleCollapse();
+  document.addEventListener("astro:after-swap", initArchiveParticleCollapse);
+</script>

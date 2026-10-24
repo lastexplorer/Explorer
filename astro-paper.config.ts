@@ -13,7 +13,7 @@ export default defineAstroPaperConfig({
     dir: "ltr",
   },
   posts: {
-    perPage: 4,
+    perPage: 20,
     perIndex: 4,
     scheduledPostMargin: 15 * 60 * 1000,
   },
@@ -21,7 +21,8 @@ export default defineAstroPaperConfig({
     lightAndDarkMode: true,
     dynamicOgImage: false,
     showArchives: true,
-    showBackButton: true,
+    showBreadcrumb: false,
+    showBackButton: false,
     editPost: {
       enabled: true,
       url: "https://github.com/lastexplorer/Explorer/edit/main/",
@@ -36,12 +37,5 @@ export default defineAstroPaperConfig({
     { name: "facebook", url: "https://facebook.com/explorer" },
     { name: "mail",     url: "mailto:explorer@example.com" },
   ],
-  shareLinks: [
-    { name: "whatsapp", url: "https://wa.me/?text=" },
-    { name: "facebook", url: "https://www.facebook.com/sharer.php?u=" },
-    { name: "x",        url: "https://x.com/intent/post?url=" },
-    { name: "telegram", url: "https://t.me/share/url?url=" },
-    { name: "pinterest", url: "https://pinterest.com/pin/create/button/?url=" },
-    { name: "mail",     url: "mailto:?subject=See%20this%20post&body=" },
-  ],
+  shareLinks: [],
 });

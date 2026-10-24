@@ -43,32 +43,119 @@ const isActive = (path: string) => {
 <a
   id="skip-to-content"
   href="#main-content"
-  class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"
+  class="bg-background text-accent absolute inset-s-16 -top-full z-60 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"
 >
   {t.a11y.skipToContent}
 </a>
 
 <header
+  id="site-header"
+  data-transparent={transparent ? "true" : "false"}
   class:list={[
-    "flex flex-col items-center justify-between sm:flex-row w-full transition-all",
-    transparent ? "w-full px-6 sm:px-10 lg:px-14 xl:px-16" : "app-layout",
+    "group/header fixed top-0 left-0 right-0 z-50 w-full px-6 sm:px-10 lg:px-14 xl:px-16 transition-all duration-300 ease-in-out",
+    transparent
+      ? "bg-transparent backdrop-blur-xs"
+      : "bg-background/95 backdrop-blur-md",
   ]}
 >
   <div
+    id="header-inner"
     class:list={[
-      "relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6 transition-colors",
-      transparent
-        ? "border-border/30 bg-transparent backdrop-blur-xs"
-        : "border-border bg-background",
+      "relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6 transition-all duration-300 ease-in-out",
+      transparent ? "border-border/30" : "border-border",
     ]}
   >
+    <!-- Brand Logo: Default shows 'Explorer' text; On scroll morphs into 'E' Exploration Flag icon -->
     <a
       href={getRelativeLocaleUrl(locale, "")}
       id="site-logo-link"
-      class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+      class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none inline-grid items-center select-none group"
+      title={site.title}
+      aria-label={site.title}
     >
-      {site.title}
+      <!-- Default State (Top): Typography 'Explorer' -->
+      <span
+        id="logo-text"
+        class="col-start-1 row-start-1 justify-self-start origin-left group-hover:text-accent"
+      >
+        {site.title}
+      </span>
+
+      <!-- Scrolled State (Compressed): Star Beacon Exploration Flag 'E' Icon + Stardust Fountain Orb -->
+      <span
+        id="logo-icon"
+        class="col-start-1 row-start-1 justify-self-start origin-left relative flex items-center justify-center"
+      >
+        <canvas
+          id="logo-fountain-canvas"
+          width="64"
+          height="64"
+          class="pointer-events-none absolute -inset-3.5 z-0"
+          aria-hidden="true"
+        ></canvas>
+        <svg
+          width="34"
+          height="34"
+          class="text-foreground relative z-10 transition-transform duration-200 group-hover:scale-105 shrink-0 drop-shadow-[0_0_8px_rgba(255,107,1,0.25)]"
+          viewBox="16 8 96 112"
+          fill="none"
+        >
+          <!-- Outer Mast & Top/Bottom Pennants -->
+          <path
+            fill="currentColor"
+            class="transition-colors duration-200 group-hover:text-accent"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="
+              M 22 13
+              C 22 11.3 23.3 10 25 10
+              H 31
+              C 32.7 10 34 11.3 34 13
+              V 18
+              H 106
+              C 108.6 18 110.1 20.6 108.8 22.9
+              L 93 44
+              H 34
+              V 84
+              H 106
+              C 108.6 84 110.1 86.6 108.8 88.9
+              L 93 110
+              H 34
+              V 115
+              C 34 116.7 32.7 118 31 118
+              H 25
+              C 23.3 118 22 116.7 22 115
+              V 13
+              Z
+            "
+          />
+          <!-- Middle Core Beacon Blade (Cosmic Orange #ff6b01) -->
+          <path
+            fill="#ff6b01"
+            class="transition-transform duration-200 group-hover:translate-x-0.5"
+            d="
+              M 42 52
+              H 88
+              C 90.5 52 92 54.5 90.8 56.8
+              L 78 76
+              H 42
+              C 40.3 76 39 74.7 39 73
+              V 55
+              C 39 53.3 40.3 52 42 52
+              Z
+            "
+          />
+          <!-- Leading Star Spark (✦) -->
+          <path
+            fill="#ff6b01"
+            class="transition-transform duration-200 group-hover:translate-x-1"
+            d="M 101 55 L 103.2 61.8 L 110 64 L 103.2 66.2 L 101 73 L 98.8 66.2 L 92 64 L 98.8 61.8 Z"
+          />
+        </svg>
+      </span>
     </a>
+
+    <!-- Right Navigation Menu -->
     <nav
       id="nav-menu"
       class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
@@ -87,7 +174,7 @@ const isActive = (path: string) => {
       </button>
       <ul
         id="menu-items"
-        class="[&>li>a]:hover:text-accent mt-4 hidden w-44 grid-cols-2 place-content-center gap-2 sm:mt-0 sm:flex sm:w-auto sm:gap-x-5 sm:gap-y-0 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium sm:[&>li>a]:px-2 sm:[&>li>a]:py-1"
+        class="[&>li>a]:hover:text-accent mt-4 hidden w-44 grid-cols-2 place-content-center gap-2 sm:mt-0 sm:flex sm:w-auto sm:items-center sm:gap-x-5 sm:gap-y-0 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium sm:[&>li>a]:px-2 sm:[&>li>a]:py-1 origin-right transition-transform duration-300 ease-out"
       >
         <li class="col-span-2">
           <a
@@ -142,7 +229,7 @@ const isActive = (path: string) => {
             <li class="col-span-1 flex items-center justify-center">
               <LinkButton
                 href={getRelativeLocaleUrl(locale, "search")}
-                class:list={["focus-outline relative size-8"]}
+                class:list={["focus-outline relative size-12 p-4 sm:size-8 sm:p-0"]}
                 title={t.nav.search}
                 aria-label={t.nav.search}
               >
@@ -178,6 +265,103 @@ const isActive = (path: string) => {
     </nav>
   </div>
 </header>
+{!transparent && <div id="header-spacer" class="h-[73px] sm:h-[81px] w-full shrink-0" aria-hidden="true" />}
+
+<style is:inline>
+  #site-header.header-scrolled {
+    background-color: color-mix(in srgb, var(--background) 90%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  #site-header.header-scrolled #header-inner {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom-color: color-mix(in srgb, var(--border) 75%, transparent);
+  }
+  @media (min-width: 640px) {
+    #site-header.header-scrolled #header-inner {
+      padding-top: 0.625rem;
+      padding-bottom: 0.625rem;
+    }
+  }
+
+  /* Default (Unscrolled) State for Logo Text & Icon */
+  #logo-text {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0px);
+    pointer-events: auto;
+    transition:
+      opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      color 0.2s ease;
+    will-change: transform, opacity, filter;
+  }
+
+  #logo-icon {
+    opacity: 0;
+    transform: translate3d(-8px, 0, 0) scale(0.6);
+    filter: blur(3px);
+    pointer-events: none;
+    transition:
+      opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity, filter;
+  }
+
+  #logo-icon svg {
+    width: 30px;
+    height: 30px;
+    display: block;
+  }
+  #logo-fountain-canvas {
+    width: 58px;
+    height: 58px;
+    left: -14px;
+    top: -12px;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  @media (min-width: 640px) {
+    #logo-icon svg {
+      width: 34px;
+      height: 34px;
+    }
+    #logo-fountain-canvas {
+      width: 62px;
+      height: 62px;
+      left: -14px;
+      top: -14px;
+    }
+  }
+
+  /* Scrolled State: Text smoothly morphs into Star Beacon 'E' Icon */
+  #site-header.header-scrolled #logo-text {
+    opacity: 0;
+    transform: translate3d(-10px, 0, 0) scale(0.75);
+    filter: blur(3px);
+    pointer-events: none;
+  }
+
+  #site-header.header-scrolled #logo-icon {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0px);
+    pointer-events: auto;
+  }
+
+  #site-header.header-scrolled #logo-fountain-canvas {
+    opacity: 1;
+  }
+
+  @media (min-width: 640px) {
+    #site-header.header-scrolled #menu-items {
+      transform: scale(0.86);
+    }
+  }
+</style>
 
 <script>
   function toggleNav() {
@@ -185,13 +369,14 @@ const isActive = (path: string) => {
     const menuItems = document.querySelector("#menu-items");
     const menuIcon = document.querySelector("#menu-icon");
     const closeIcon = document.querySelector("#close-icon");
+    const header = document.querySelector<HTMLElement>("#site-header");
 
     if (!menuBtn || !menuItems || !menuIcon || !closeIcon) return;
 
     const openLabel = menuBtn.dataset.labelOpen ?? "Open menu";
     const closeLabel = menuBtn.dataset.labelClose ?? "Close menu";
 
-    menuBtn.addEventListener("click", () => {
+    menuBtn.onclick = () => {
       const openMenu = menuBtn.getAttribute("aria-expanded") === "true";
 
       menuBtn.setAttribute("aria-expanded", openMenu ? "false" : "true");
@@ -201,7 +386,13 @@ const isActive = (path: string) => {
       menuItems.classList.toggle("grid");
       menuIcon.classList.toggle("hidden");
       closeIcon.classList.toggle("hidden");
-    });
+
+      if (header && header.dataset.transparent === "true" && window.scrollY <= 20) {
+        header.classList.toggle("bg-background/95", !openMenu);
+        header.classList.toggle("backdrop-blur-md", !openMenu);
+        header.classList.toggle("bg-transparent", openMenu);
+      }
+    };
   }
 
   function handleSkipToContent() {
@@ -246,12 +437,208 @@ const isActive = (path: string) => {
     });
   }
 
-  toggleNav();
-  document.addEventListener("astro:after-swap", toggleNav);
+  let scrollHandler: (() => void) | null = null;
+  let fountainRafId = 0;
 
-  handleSkipToContent();
-  document.addEventListener("astro:after-swap", handleSkipToContent);
+  function emitBeaconPulse(intensity = 1.0, source = "orb") {
+    window.dispatchEvent(
+      new CustomEvent("explorer:beacon-pulse", {
+        detail: { intensity, source, timestamp: performance.now() },
+      })
+    );
+  }
 
-  handleLogoClick();
-  document.addEventListener("astro:after-swap", handleLogoClick);
+  function handleHeaderScroll() {
+    const header = document.getElementById("site-header");
+    if (!header) return;
+
+    if (scrollHandler) {
+      window.removeEventListener("scroll", scrollHandler);
+    }
+
+    let wasScrolled = window.scrollY > 20;
+    let lastScrollY = window.scrollY;
+
+    scrollHandler = () => {
+      const currentHeader = document.getElementById("site-header");
+      if (!currentHeader) return;
+      const y = window.scrollY;
+      const scrolled = y > 20;
+      currentHeader.classList.toggle("header-scrolled", scrolled);
+
+      if (scrolled && !wasScrolled) {
+        // Trigger stardust ignition burst when 'Explorer' morphs into 'E' Beacon
+        emitBeaconPulse(1.15, "morph");
+      } else if (scrolled && Math.abs(y - lastScrollY) > 65) {
+        emitBeaconPulse(0.75, "scroll");
+      }
+      wasScrolled = scrolled;
+      lastScrollY = y;
+    };
+
+    window.addEventListener("scroll", scrollHandler, { passive: true });
+    scrollHandler();
+  }
+
+  function initLogoFountainOrb() {
+    if (fountainRafId) {
+      cancelAnimationFrame(fountainRafId);
+      fountainRafId = 0;
+    }
+
+    const canvas = document.getElementById(
+      "logo-fountain-canvas"
+    ) as HTMLCanvasElement | null;
+    const logoLink = document.getElementById("site-logo-link");
+    const header = document.getElementById("site-header");
+    if (!canvas || !logoLink || !header) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const size = 62;
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+
+    interface OrbParticle {
+      angle: number;
+      radiusX: number;
+      radiusY: number;
+      speed: number;
+      tilt: number;
+      size: number;
+      isOrange: boolean;
+      phase: number;
+    }
+
+    // 16 orbital stardust particles revolving around the 'E' Star Beacon
+    const ringParticles: OrbParticle[] = Array.from({ length: 16 }, (_, i) => ({
+      angle: (i / 16) * Math.PI * 2,
+      radiusX: 19 + (i % 3) * 3.0,
+      radiusY: 12 + (i % 2) * 4.0,
+      speed: (0.02 + (i % 4) * 0.005) * (i % 2 === 0 ? 1 : -0.85),
+      tilt: i % 3 === 0 ? -0.34 : 0.28,
+      size: i % 3 === 0 ? 1.65 : 1.2,
+      isOrange: i % 3 !== 0,
+      phase: i * 0.7,
+    }));
+
+    let isHovered = false;
+    let pulseBoost = 0;
+    let t = 0;
+
+    const onPulse = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      pulseBoost = Math.min(2.0, pulseBoost + (detail?.intensity ?? 1));
+    };
+
+    window.addEventListener("explorer:beacon-pulse", onPulse);
+
+    logoLink.addEventListener("mouseenter", () => {
+      isHovered = true;
+      if (header.classList.contains("header-scrolled")) {
+        emitBeaconPulse(1.0, "hover");
+      }
+    });
+    logoLink.addEventListener("mouseleave", () => {
+      isHovered = false;
+    });
+
+    function renderOrb() {
+      if (!document.body.contains(canvas)) return;
+
+      const isScrolled = header!.classList.contains("header-scrolled");
+      if (!isScrolled && pulseBoost <= 0.01) {
+        ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
+        fountainRafId = requestAnimationFrame(renderOrb);
+        return;
+      }
+
+      t += 0.032;
+      pulseBoost *= 0.93;
+
+      const isDark =
+        document.documentElement.getAttribute("data-theme") === "dark" ||
+        document.documentElement.classList.contains("dark");
+
+      ctx!.save();
+      ctx!.scale(dpr, dpr);
+      ctx!.clearRect(0, 0, size, size);
+
+      const cx = size / 2;
+      const cy = size / 2;
+      const speedMult = 1 + (isHovered ? 1.25 : 0) + pulseBoost * 1.2;
+
+      // Subtle ambient core aura behind the 'E' beacon when hovered or pulsing
+      if (isHovered || pulseBoost > 0.15) {
+        const auraAlpha = Math.min(
+          0.24,
+          (isHovered ? 0.12 : 0) + pulseBoost * 0.14
+        );
+        const grad = ctx!.createRadialGradient(cx, cy, 4, cx, cy, 26);
+        grad.addColorStop(0, `rgba(255, 107, 1, ${auraAlpha})`);
+        grad.addColorStop(1, "rgba(255, 107, 1, 0)");
+        ctx!.fillStyle = grad;
+        ctx!.beginPath();
+        ctx!.arc(cx, cy, 26, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+
+      // Render 3D orbital stardust ring particles (no downward diagonal shedding stream)
+      for (const p of ringParticles) {
+        p.angle += p.speed * speedMult;
+        const cosA = Math.cos(p.angle);
+        const sinA = Math.sin(p.angle);
+        const cosT = Math.cos(p.tilt);
+        const sinT = Math.sin(p.tilt);
+
+        const rx = cosA * p.radiusX;
+        const ry = sinA * p.radiusY;
+        const px = cx + rx * cosT - ry * sinT;
+        const py = cy + rx * sinT + ry * cosT;
+
+        const depth = 0.55 + 0.45 * sinA;
+        const twinkle = 0.6 + 0.4 * Math.sin(t * 2.2 + p.phase);
+        const alpha = Math.min(1, depth * twinkle * (0.72 + pulseBoost * 0.25));
+
+        if (p.isOrange) {
+          ctx!.fillStyle = `rgba(255, 107, 1, ${alpha})`;
+        } else {
+          ctx!.fillStyle = isDark
+            ? `rgba(234, 237, 243, ${alpha * 0.85})`
+            : `rgba(40, 39, 40, ${alpha * 0.7})`;
+        }
+
+        ctx!.beginPath();
+        ctx!.arc(px, py, p.size * (0.8 + depth * 0.35), 0, Math.PI * 2);
+        ctx!.fill();
+      }
+
+      ctx!.restore();
+      fountainRafId = requestAnimationFrame(renderOrb);
+    }
+
+    fountainRafId = requestAnimationFrame(renderOrb);
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        window.removeEventListener("explorer:beacon-pulse", onPulse);
+        if (fountainRafId) cancelAnimationFrame(fountainRafId);
+      },
+      { once: true }
+    );
+  }
+
+  function initHeader() {
+    toggleNav();
+    handleSkipToContent();
+    handleLogoClick();
+    handleHeaderScroll();
+    initLogoFountainOrb();
+  }
+
+  initHeader();
+  document.addEventListener("astro:after-swap", initHeader);
 </script>

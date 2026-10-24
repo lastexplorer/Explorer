@@ -1,0 +1,762 @@
+---
+// CosmicGutterEngine.astro
+// Unified 3D Deep-Space Celestial Engine (z-0 background layer, strictly behind #main-content & footer):
+// 1. 'home' (2nd fold): Pure 3D Deep-Space Celestial Starfield
+// 2. 'posts' (/posts): 3D Z-Axis Depth Flight & Perspective Warp Streaks on scroll
+// 3. 'post-detail' (/posts/*): Pure 3D Z-Axis Depth Flight & Perspective Warp Streaks + Footer-Safe Reading Progress Filament (0% -> 100%)
+// 4. 'tags' (/tags/*): 3D Holographic Constellation Polyhedra with luminous wireframe networks
+// 5. 'about' (/about): 3D Fibonacci Point-Cloud Stardust Spheres (centered in open left/right 3D space)
+// 6. 'archives' (/archives): 3D Deep-Space Time-Dust + 3D Gravitational Ripple on Month Expand/Collapse
+---
+
+<canvas
+  id="cosmic-gutter-canvas"
+  class="pointer-events-none fixed inset-0 z-0 block"
+  aria-hidden="true"
+></canvas>
+
+<script>
+  type PageMode =
+    | "home"
+    | "posts"
+    | "tags"
+    | "about"
+    | "post-detail"
+    | "archives"
+    | "other";
+
+  interface AmbientStar3D {
+    x: number;
+    y: number;
+    z: number;
+    baseSize: number;
+    alpha: number;
+    isOrange: boolean;
+    phase: number;
+  }
+
+  interface ClusterNode3D {
+    clusterIdx: number;
+    cx: number;
+    cy: number;
+    cz: number;
+    ox: number;
+    oy: number;
+    oz: number;
+    isCore: boolean;
+    isOrange: boolean;
+    size: number;
+    phase: number;
+  }
+
+  interface SphereDot3D {
+    nx: number;
+    ny: number;
+    nz: number;
+    side: "right" | "left";
+    isInnerCore: boolean;
+    isOrange: boolean;
+    size: number;
+    phase: number;
+  }
+
+  let engineRafId = 0;
+  let cleanupFns: Array<() => void> = [];
+
+  function clamp(v: number, min = 0, max = 1) {
+    return Math.max(min, Math.min(max, v));
+  }
+
+  function detectPageMode(): PageMode {
+    const rawPath = window.location.pathname.replace(/\/+$/, "") || "/";
+    if (rawPath === "/") return "home";
+    if (rawPath === "/posts") return "posts";
+    if (rawPath.startsWith("/posts/")) {
+      if (/^\/posts\/\d+$/.test(rawPath)) return "posts";
+      return "post-detail";
+    }
+    if (rawPath === "/tags" || rawPath.startsWith("/tags/")) return "tags";
+    if (rawPath === "/about") return "about";
+    if (rawPath === "/archives") return "archives";
+    return "other";
+  }
+
+  function initCosmicGutterEngine() {
+    if (engineRafId) {
+      cancelAnimationFrame(engineRafId);
+      engineRafId = 0;
+    }
+    cleanupFns.forEach(fn => fn());
+    cleanupFns = [];
+
+    const canvas = document.getElementById(
+      "cosmic-gutter-canvas"
+    ) as HTMLCanvasElement | null;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const mode = detectPageMode();
+    if (mode === "other") {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      return;
+    }
+
+    let W = window.innerWidth;
+    let H = window.innerHeight;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function resizeCanvas() {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas!.width = W * dpr;
+      canvas!.height = H * dpr;
+      canvas!.style.width = `${W}px`;
+      canvas!.style.height = `${H}px`;
+    }
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas, { passive: true });
+    cleanupFns.push(() => window.removeEventListener("resize", resizeCanvas));
+
+    const isMobile = W < 768;
+    const maxRadius = Math.max(W, H) * 0.85;
+
+    // 1. Base 3D Ambient Starfield (shared 3D cosmic depth foundation)
+    const ambientStars: AmbientStar3D[] = [];
+    const ambientCount = isMobile
+      ? 45
+      : mode === "posts" || mode === "post-detail"
+        ? 165
+        : 145;
+
+    for (let i = 0; i < ambientCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = (0.12 + 0.88 * Math.sqrt(Math.random())) * maxRadius;
+      ambientStars.push({
+        x: dist * Math.cos(angle),
+        y: (Math.random() - 0.5) * (H * 1.45),
+        z: dist * Math.sin(angle),
+        baseSize:
+          i % 4 === 0
+            ? 1.3 + Math.random() * 0.7
+            : 0.95 + Math.random() * 0.65,
+        alpha: i % 4 === 0 ? 0.78 : 0.66,
+        isOrange: i % 4 === 0,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    // 2. Page-Specific 3D Signature Structures
+    // (A) TAGS Page: 4 3D Polyhedral Constellation Clusters
+    const clusterNodes: ClusterNode3D[] = [];
+    if (!isMobile && mode === "tags") {
+      const centers = [
+        { cx: -W * 0.48, cy: -H * 0.22, cz: 160 },
+        { cx: -W * 0.46, cy: H * 0.24, cz: -120 },
+        { cx: W * 0.48, cy: -H * 0.18, cz: 140 },
+        { cx: W * 0.46, cy: H * 0.26, cz: -140 },
+      ];
+      const verticesPerCluster = 11;
+      centers.forEach((c, cIdx) => {
+        for (let j = 0; j < verticesPerCluster; j++) {
+          if (j === 0) {
+            clusterNodes.push({
+              clusterIdx: cIdx,
+              cx: c.cx,
+              cy: c.cy,
+              cz: c.cz,
+              ox: 0,
+              oy: 0,
+              oz: 0,
+              isCore: true,
+              isOrange: true,
+              size: 2.35,
+              phase: cIdx,
+            });
+          } else {
+            const phi = Math.acos(1 - (2 * j) / verticesPerCluster);
+            const theta = Math.PI * (1 + Math.sqrt(5)) * j;
+            const r = 42 + (j % 3) * 18;
+            clusterNodes.push({
+              clusterIdx: cIdx,
+              cx: c.cx,
+              cy: c.cy,
+              cz: c.cz,
+              ox: r * Math.sin(phi) * Math.cos(theta),
+              oy: r * Math.sin(phi) * Math.sin(theta),
+              oz: r * Math.cos(phi),
+              isCore: false,
+              isOrange: j % 2 === 0,
+              size: 1.45 + (j % 2) * 0.3,
+              phase: j * 0.8 + cIdx,
+            });
+          }
+        }
+      });
+    }
+
+    // (B) ABOUT Page: Pure-Dot 3D Fibonacci Stardust Spheres
+    const sphereDots: SphereDot3D[] = [];
+    if (!isMobile && mode === "about") {
+      const configs: Array<{
+        count: number;
+        side: "right" | "left";
+        isInnerCore: boolean;
+      }> = [
+        { count: 220, side: "right", isInnerCore: false },
+        { count: 60, side: "right", isInnerCore: true },
+        { count: 140, side: "left", isInnerCore: false },
+        { count: 36, side: "left", isInnerCore: true },
+      ];
+      for (const cfg of configs) {
+        for (let i = 0; i < cfg.count; i++) {
+          const y = 1 - (i / Math.max(1, cfg.count - 1)) * 2;
+          const rSlice = Math.sqrt(Math.max(0, 1 - y * y));
+          const theta = Math.PI * (3 - Math.sqrt(5)) * i;
+          sphereDots.push({
+            nx: Math.cos(theta) * rSlice,
+            ny: y,
+            nz: Math.sin(theta) * rSlice,
+            side: cfg.side,
+            isInnerCore: cfg.isInnerCore,
+            isOrange: cfg.isInnerCore || i % 3 === 0,
+            size: cfg.isInnerCore ? 1.55 : i % 3 === 0 ? 1.65 : 1.3,
+            phase: i * 0.25,
+          });
+        }
+      }
+    }
+
+    let hoverTargetY: number | null = null;
+    let smoothHoverY = H * 0.5;
+    let hoverStrength = 0;
+    let beaconPulse = 0;
+    let archiveRippleY = H * 0.5;
+    let archiveRippleRadius = 0;
+    let archiveRippleStrength = 0;
+
+    const onBeaconPulse = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      beaconPulse = Math.min(1.8, beaconPulse + (detail?.intensity ?? 1.0));
+    };
+    window.addEventListener("explorer:beacon-pulse", onBeaconPulse);
+    cleanupFns.push(() =>
+      window.removeEventListener("explorer:beacon-pulse", onBeaconPulse)
+    );
+
+    const onArchiveRipple = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      archiveRippleY = detail?.y ?? H * 0.5;
+      archiveRippleRadius = 20;
+      archiveRippleStrength = 1.0;
+    };
+    window.addEventListener("explorer:archive-ripple", onArchiveRipple);
+    cleanupFns.push(() =>
+      window.removeEventListener("explorer:archive-ripple", onArchiveRipple)
+    );
+
+    if (mode === "home" || mode === "posts" || mode === "tags") {
+      const selector =
+        mode === "home"
+          ? "#featured li, #recent-posts li"
+          : mode === "tags"
+            ? '#main-content a[href*="/tags/"], #main-content ul > li'
+            : "#main-content ul > li";
+      const items = document.querySelectorAll<HTMLElement>(selector);
+      items.forEach(item => {
+        const onEnter = () => {
+          const r = item.getBoundingClientRect();
+          hoverTargetY = r.top + r.height * 0.5;
+        };
+        const onLeave = () => {
+          hoverTargetY = null;
+        };
+        item.addEventListener("mouseenter", onEnter);
+        item.addEventListener("mouseleave", onLeave);
+        cleanupFns.push(() => {
+          item.removeEventListener("mouseenter", onEnter);
+          item.removeEventListener("mouseleave", onLeave);
+        });
+      });
+    }
+
+    let continuousTime = 0;
+    let smoothScrollY = window.scrollY || 0;
+    let scrollVelocity = 0;
+    let lastTimestamp = performance.now();
+
+    function getReadingColumnBounds() {
+      const main = document.getElementById("main-content");
+      if (main) {
+        const r = main.getBoundingClientRect();
+        return { left: r.left, right: r.right };
+      }
+      const half = Math.min(384, W * 0.42);
+      return { left: W * 0.5 - half, right: W * 0.5 + half };
+    }
+
+    function project3D(
+      wx: number,
+      wy: number,
+      wz: number,
+      centerX: number,
+      centerY: number,
+      camZ: number,
+      focal: number
+    ) {
+      const safeDist = Math.max(480, camZ - wz);
+      const scale = clamp(focal / safeDist, 0.14, 1.55);
+      return {
+        sx: centerX + wx * scale,
+        sy: centerY + wy * scale,
+        scale,
+        depthProgress: clamp((wz + 600) / 1200, 0, 1),
+      };
+    }
+
+    function renderLoop(now: number) {
+      if (!document.body.contains(canvas)) return;
+
+      const dt = Math.min(50, Math.max(0, now - lastTimestamp) || 16.7);
+      lastTimestamp = now;
+
+      const targetScroll = window.scrollY || 0;
+      const scrollDelta = targetScroll - smoothScrollY;
+      smoothScrollY += scrollDelta * Math.min(1, dt * 0.015);
+      scrollVelocity =
+        scrollVelocity * 0.88 + Math.min(35, Math.abs(scrollDelta)) * 0.12;
+
+      const speedBoost = 1 + beaconPulse * 1.6 + hoverStrength * 0.4;
+      continuousTime += dt * speedBoost;
+      beaconPulse *= 0.94;
+
+      if (archiveRippleStrength > 0.01) {
+        archiveRippleRadius += dt * 0.65;
+        archiveRippleStrength *= 0.96;
+      }
+
+      if (hoverTargetY !== null) {
+        smoothHoverY += (hoverTargetY - smoothHoverY) * 0.12;
+        hoverStrength += (1 - hoverStrength) * 0.1;
+      } else {
+        hoverStrength += (0 - hoverStrength) * 0.07;
+      }
+
+      let globalVisibility = 1.0;
+      if (mode === "home") {
+        const main = document.getElementById("main-content");
+        if (main) {
+          const r = main.getBoundingClientRect();
+          globalVisibility = clamp((H * 0.92 - r.top) / (H * 0.48), 0, 1);
+        } else {
+          globalVisibility = clamp((smoothScrollY - H * 0.2) / (H * 0.45), 0, 1);
+        }
+      }
+
+      ctx!.save();
+      ctx!.scale(dpr, dpr);
+      ctx!.clearRect(0, 0, W, H);
+
+      if (globalVisibility <= 0.01) {
+        ctx!.restore();
+        engineRafId = requestAnimationFrame(renderLoop);
+        return;
+      }
+
+      const isDark =
+        document.documentElement.getAttribute("data-theme") === "dark" ||
+        document.documentElement.classList.contains("dark");
+
+      const starColor = isDark ? "#ffffff" : "#1e293b";
+      const starGlow = isDark
+        ? "rgba(255, 255, 255, 0.22)"
+        : "rgba(30, 41, 59, 0.14)";
+      const orangeColor = "#ff6b01";
+      const orangeGlow = isDark
+        ? "rgba(255, 107, 1, 0.30)"
+        : "rgba(255, 107, 1, 0.20)";
+
+      const ct = continuousTime;
+      const camZ = 1600;
+      const focal = 1100;
+      const invScale0 = camZ / focal;
+      const centerX = W * 0.5;
+      const centerY = H * 0.5;
+
+      const { left: colLeft, right: colRight } = getReadingColumnBounds();
+      const colCenter = (colLeft + colRight) * 0.5;
+      const colHalfWidth = Math.max(180, (colRight - colLeft) * 0.5);
+
+      function getReadingMask(screenX: number) {
+        const distFromColCenter = Math.abs(screenX - colCenter);
+        if (distFromColCenter >= colHalfWidth) return 1.0;
+        const edgeRatio = distFromColCenter / colHalfWidth;
+        const minCenterAlpha = 0.26;
+        return minCenterAlpha + (1 - minCenterAlpha) * Math.pow(edgeRatio, 2.0);
+      }
+
+      const docHeight = Math.max(
+        1,
+        document.documentElement.scrollHeight - H
+      );
+
+      // =====================================================================
+      // LAYER 1: 3D Ambient Starfield
+      // Both '/posts' and '/posts/[...slug]' ('post-detail') enjoy the full
+      // 3D Z-Axis Depth Flight & Perspective Warp Streaks!
+      // =====================================================================
+      const isWarpMode = mode === "posts" || mode === "post-detail";
+
+      const bgYaw = isWarpMode
+        ? ct * 0.000006
+        : ct * 0.000014 + smoothScrollY * 0.00016;
+      const bgPitch = 0.055 + Math.sin(ct * 0.0000065) * 0.035;
+      const cosY = Math.cos(bgYaw);
+      const sinY = Math.sin(bgYaw);
+      const cosX = Math.cos(bgPitch);
+      const sinX = Math.sin(bgPitch);
+      const verticalWrapSpan = H * 1.45;
+      const zWrapSpan = 1650;
+
+      for (let i = 0; i < ambientStars.length; i++) {
+        const s = ambientStars[i];
+        const rx1 = s.x * cosY + s.z * sinY;
+        const rz1 = -s.x * sinY + s.z * cosY;
+
+        let wy = s.y;
+        let wz = rz1;
+
+        if (isWarpMode) {
+          // Pure 3D Z-Axis Depth Flight (flying forward into the starfield as you scroll)
+          const zTravel = (ct * 0.045 + smoothScrollY * 1.15) % zWrapSpan;
+          wz = ((rz1 + zTravel + 825) % zWrapSpan) - 825;
+        } else {
+          const parallaxOffset = (smoothScrollY * 0.22) % verticalWrapSpan;
+          wy = s.y - parallaxOffset;
+          if (wy < -verticalWrapSpan * 0.5) wy += verticalWrapSpan;
+          if (wy > verticalWrapSpan * 0.5) wy -= verticalWrapSpan;
+        }
+
+        const ry2 = wy * cosX - wz * sinX;
+        const rz2 = wy * sinX + wz * cosX;
+
+        const proj = project3D(rx1, ry2, rz2, centerX, centerY, camZ, focal);
+        let sx = proj.sx;
+        let sy = proj.sy;
+
+        if (sx < -60 || sx > W + 60 || sy < -60 || sy > H + 60) continue;
+
+        let rippleBoost = 0;
+        if (mode === "archives" && archiveRippleStrength > 0.02) {
+          const distFromRipple = Math.hypot(sx - centerX, sy - archiveRippleY);
+          const waveBand = Math.abs(distFromRipple - archiveRippleRadius);
+          if (waveBand < 95) {
+            rippleBoost = (1 - waveBand / 95) * archiveRippleStrength;
+            const angleOut = Math.atan2(sy - archiveRippleY, sx - centerX);
+            sx += Math.cos(angleOut) * rippleBoost * 10;
+            sy += Math.sin(angleOut) * rippleBoost * 10;
+          }
+        }
+
+        const mask = getReadingMask(sx);
+        const starRadius = clamp(s.baseSize * proj.scale, 0.65, 2.25);
+        const twinkle = 0.72 + 0.28 * Math.sin(ct * 0.0018 + s.phase);
+        const alphaBase = isDark
+          ? 0.30 + 0.58 * proj.depthProgress
+          : 0.35 + 0.48 * proj.depthProgress;
+        const finalAlpha = clamp(
+          (alphaBase * twinkle + rippleBoost * 0.4) * mask * globalVisibility,
+          0,
+          0.92
+        );
+
+        if (finalAlpha <= 0.015) continue;
+        ctx!.globalAlpha = finalAlpha;
+
+        // Render radial 3D perspective warp streaks in '/posts' and 'post-detail'
+        if (isWarpMode && !isMobile) {
+          const warpFactor = clamp(0.18 + scrollVelocity * 0.035, 0.18, 0.85);
+          const tailZ = rz2 - 55 * warpFactor;
+          const tailProj = project3D(
+            rx1,
+            ry2,
+            tailZ,
+            centerX,
+            centerY,
+            camZ,
+            focal
+          );
+          ctx!.strokeStyle = s.isOrange ? orangeColor : starColor;
+          ctx!.lineWidth = starRadius * 0.75;
+          ctx!.beginPath();
+          ctx!.moveTo(tailProj.sx, tailProj.sy);
+          ctx!.lineTo(sx, sy);
+          ctx!.stroke();
+        }
+
+        if (starRadius > 1.25 || rippleBoost > 0.2) {
+          ctx!.fillStyle =
+            s.isOrange || rippleBoost > 0.2 ? orangeGlow : starGlow;
+          ctx!.beginPath();
+          ctx!.arc(sx, sy, starRadius * 1.85, 0, Math.PI * 2);
+          ctx!.fill();
+        }
+
+        ctx!.fillStyle = s.isOrange ? orangeColor : starColor;
+        ctx!.beginPath();
+        ctx!.arc(sx, sy, starRadius, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+
+      // =====================================================================
+      // LAYER 2: Distinct 3D Spatial Signatures for Tags & About (Desktop)
+      // =====================================================================
+      if (!isMobile) {
+        if (mode === "tags") {
+          const rotA = ct * 0.00038 * (1 + hoverStrength * 1.4);
+          const rotB = ct * 0.00026;
+          const cA = Math.cos(rotA);
+          const sA = Math.sin(rotA);
+          const cB = Math.cos(rotB);
+          const sB = Math.sin(rotB);
+
+          const groups: Array<
+            Array<{
+              sx: number;
+              sy: number;
+              scale: number;
+              alpha: number;
+              isCore: boolean;
+              isOrange: boolean;
+            }>
+          > = [[], [], [], []];
+
+          for (const node of clusterNodes) {
+            const rx1 = node.ox * cA + node.oz * sA;
+            const rz1 = -node.ox * sA + node.oz * cA;
+            const ry2 = node.oy * cB - rz1 * sB;
+            const rz2 = node.oy * sB + rz1 * cB;
+
+            const wx = node.cx + rx1;
+            const wy =
+              node.cy + ry2 + Math.sin(ct * 0.0008 + node.clusterIdx) * 10;
+            const wz = node.cz + rz2;
+
+            const proj = project3D(wx, wy, wz, centerX, centerY, camZ, focal);
+            const mask = getReadingMask(proj.sx);
+            const alpha = clamp(
+              (0.45 + 0.5 * proj.depthProgress) * mask,
+              0,
+              0.95
+            );
+
+            groups[node.clusterIdx].push({
+              sx: proj.sx,
+              sy: proj.sy,
+              scale: proj.scale,
+              alpha,
+              isCore: node.isCore,
+              isOrange: node.isOrange,
+            });
+          }
+
+          for (const g of groups) {
+            if (!g.length) continue;
+            const core = g[0];
+            const isNearHover =
+              hoverStrength > 0.05 && Math.abs(core.sy - smoothHoverY) < 180;
+
+            for (let i = 0; i < g.length; i++) {
+              for (let j = i + 1; j < g.length; j++) {
+                const d = Math.hypot(g[i].sx - g[j].sx, g[i].sy - g[j].sy);
+                const maxEdge = i === 0 ? 78 : 56;
+                if (d < maxEdge) {
+                  const edgeAlpha =
+                    (1 - d / maxEdge) *
+                    (isNearHover ? 0.42 : 0.24) *
+                    Math.min(g[i].alpha, g[j].alpha);
+                  ctx!.globalAlpha = edgeAlpha;
+                  ctx!.strokeStyle =
+                    i === 0 || isNearHover ? orangeColor : starColor;
+                  ctx!.lineWidth = i === 0 ? 1.05 : 0.75;
+                  ctx!.beginPath();
+                  ctx!.moveTo(g[i].sx, g[i].sy);
+                  ctx!.lineTo(g[j].sx, g[j].sy);
+                  ctx!.stroke();
+                }
+              }
+            }
+
+            for (const pt of g) {
+              ctx!.globalAlpha = pt.alpha;
+              const r = pt.isCore ? 3.0 * pt.scale : 1.55 * pt.scale;
+              if (pt.isCore || isNearHover) {
+                ctx!.fillStyle = orangeGlow;
+                ctx!.beginPath();
+                ctx!.arc(pt.sx, pt.sy, r * 2.5, 0, Math.PI * 2);
+                ctx!.fill();
+              }
+              ctx!.fillStyle = pt.isOrange ? orangeColor : starColor;
+              ctx!.beginPath();
+              ctx!.arc(pt.sx, pt.sy, r, 0, Math.PI * 2);
+              ctx!.fill();
+            }
+          }
+        } else if (mode === "about") {
+          const rotY = ct * 0.00032 + smoothScrollY * 0.0022;
+          const rotX = 0.28 + Math.sin(ct * 0.0002) * 0.14;
+          const cRY = Math.cos(rotY);
+          const sRY = Math.sin(rotY);
+          const cRX = Math.cos(rotX);
+          const sRX = Math.sin(rotX);
+
+          const rightMarginW = Math.max(180, W - colRight);
+          const leftMarginW = Math.max(180, colLeft);
+          const rightScreenCx = colRight + rightMarginW * 0.50;
+          const leftScreenCx = leftMarginW * 0.50;
+
+          const rightWorldCx = (rightScreenCx - centerX) * invScale0;
+          const leftWorldCx = (leftScreenCx - centerX) * invScale0;
+
+          const rightOuterR = Math.min(165, rightMarginW * 0.38 * invScale0);
+          const leftOuterR = Math.min(125, leftMarginW * 0.30 * invScale0);
+
+          for (const dot of sphereDots) {
+            const baseR =
+              dot.side === "right"
+                ? dot.isInnerCore
+                  ? rightOuterR * 0.46
+                  : rightOuterR
+                : dot.isInnerCore
+                  ? leftOuterR * 0.46
+                  : leftOuterR;
+
+            const waveR =
+              baseR +
+              Math.sin(dot.ny * 5.5 + ct * 0.0018 + dot.phase) *
+                (dot.isInnerCore ? 3.0 : 6.5);
+
+            const dir = dot.isInnerCore ? -1 : 1;
+            const lx = dot.nx * waveR;
+            const ly = dot.ny * waveR;
+            const lz = dot.nz * waveR;
+
+            const rx1 = lx * cRY + lz * sRY * dir;
+            const rz1 = -lx * sRY * dir + lz * cRY;
+            const ry2 = ly * cRX - rz1 * sRX;
+            const rz2 = ly * sRX + rz1 * cRX;
+
+            const worldCx =
+              dot.side === "right" ? rightWorldCx : leftWorldCx;
+            const worldCy =
+              (dot.side === "right" ? -H * 0.03 : H * 0.12) * invScale0;
+
+            const proj = project3D(
+              worldCx + rx1,
+              worldCy + ry2,
+              rz2,
+              centerX,
+              centerY,
+              camZ,
+              focal
+            );
+
+            const sphereFrontRatio = clamp(
+              (rz2 + baseR) / (2 * Math.max(1, baseR)),
+              0,
+              1
+            );
+            const alpha = clamp(
+              0.18 + 0.72 * Math.pow(sphereFrontRatio, 1.35),
+              0.15,
+              0.92
+            );
+
+            const r =
+              dot.size * (0.78 + 0.52 * sphereFrontRatio) * proj.scale;
+            ctx!.globalAlpha = alpha;
+
+            if (dot.isOrange && sphereFrontRatio > 0.55) {
+              ctx!.fillStyle = orangeGlow;
+              ctx!.beginPath();
+              ctx!.arc(proj.sx, proj.sy, r * 2.2, 0, Math.PI * 2);
+              ctx!.fill();
+            }
+
+            ctx!.fillStyle = dot.isOrange ? orangeColor : starColor;
+            ctx!.beginPath();
+            ctx!.arc(proj.sx, proj.sy, r, 0, Math.PI * 2);
+            ctx!.fill();
+          }
+        }
+      }
+
+      // =====================================================================
+      // LAYER 3: Post-Detail Footer-Safe Reading Progress Filament (0% -> 100%)
+      // =====================================================================
+      if (mode === "post-detail" && W >= 1024) {
+        const header = document.getElementById("site-header");
+        const footer = document.querySelector("footer");
+        const headerBottom = header
+          ? header.getBoundingClientRect().bottom
+          : 64;
+        const footerTop = footer ? footer.getBoundingClientRect().top : H;
+
+        const topY = Math.max(92, headerBottom + 28);
+        const bottomY = Math.max(
+          topY + 60,
+          Math.min(H - 72, footerTop - 32)
+        );
+
+        const exactScrollRatio = clamp(targetScroll / docHeight, 0, 1);
+        const trackX = Math.max(36, colLeft - 28);
+        const currentY = topY + exactScrollRatio * (bottomY - topY);
+
+        ctx!.globalAlpha = 1;
+        ctx!.strokeStyle = isDark
+          ? "rgba(234, 237, 243, 0.08)"
+          : "rgba(40, 39, 40, 0.08)";
+        ctx!.lineWidth = 1;
+        ctx!.beginPath();
+        ctx!.moveTo(trackX, topY);
+        ctx!.lineTo(trackX, bottomY);
+        ctx!.stroke();
+
+        if (currentY > topY + 1) {
+          const progGrad = ctx!.createLinearGradient(0, topY, 0, currentY);
+          progGrad.addColorStop(0, "rgba(255, 107, 1, 0.08)");
+          progGrad.addColorStop(1, "rgba(255, 107, 1, 0.68)");
+          ctx!.strokeStyle = progGrad;
+          ctx!.lineWidth = 1.5;
+          ctx!.beginPath();
+          ctx!.moveTo(trackX, topY);
+          ctx!.lineTo(trackX, currentY);
+          ctx!.stroke();
+        }
+
+        ctx!.fillStyle = "rgba(255, 107, 1, 0.24)";
+        ctx!.beginPath();
+        ctx!.arc(trackX, currentY, 6.5, 0, Math.PI * 2);
+        ctx!.fill();
+
+        ctx!.fillStyle = "#ff6b01";
+        ctx!.beginPath();
+        ctx!.arc(trackX, currentY, 2.4, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+
+      ctx!.restore();
+      engineRafId = requestAnimationFrame(renderLoop);
+    }
+
+    engineRafId = requestAnimationFrame(renderLoop);
+    cleanupFns.push(() => {
+      if (engineRafId) cancelAnimationFrame(engineRafId);
+    });
+  }
+
+  initCosmicGutterEngine();
+  document.addEventListener("astro:after-swap", initCosmicGutterEngine);
+</script>

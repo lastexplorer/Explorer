@@ -37,3 +37,104 @@
 :target {
   scroll-margin-block: 1rem;
 }
+
+/* ==========================================================================
+   Fixed Header Scroll-Compression & Logo Morphing States
+   ========================================================================== */
+#site-header.header-scrolled {
+  background-color: color-mix(in srgb, var(--background) 90%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+#site-header.header-scrolled #header-inner {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom-color: color-mix(in srgb, var(--border) 75%, transparent);
+}
+
+@media (min-width: 640px) {
+  #site-header.header-scrolled #header-inner {
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+}
+
+#logo-text {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0px);
+  pointer-events: auto;
+  transition:
+    opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.2s ease;
+  will-change: transform, opacity, filter;
+}
+
+#logo-icon {
+  opacity: 0;
+  transform: translate3d(-8px, 0, 0) scale(0.6);
+  filter: blur(3px);
+  pointer-events: none;
+  transition:
+    opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity, filter;
+}
+
+#logo-icon svg {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+
+@media (min-width: 640px) {
+  #logo-icon svg {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* Default at top: text visible, icon hidden; On scroll: text morphs into icon */
+#site-header.header-scrolled #logo-text {
+  opacity: 0;
+  transform: translate3d(-10px, 0, 0) scale(0.75);
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+#site-header.header-scrolled #logo-icon {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0px);
+  pointer-events: auto;
+}
+
+/* Right navigation text & icons shrink synchronously in place on scroll */
+@media (min-width: 640px) {
+  #site-header.header-scrolled #menu-items {
+    transform: scale(0.86);
+  }
+}
+
+/* Ensure main content & footer always sit strictly above the z-0 3D background particle canvas */
+#main-content,
+footer {
+  position: relative;
+  z-index: 10;
+}
+
+/* Semi-transparent code block panels so the central 3D particle emblem shines through */
+pre.astro-code,
+html[data-theme="dark"] pre.astro-code {
+  background-color: rgba(14, 24, 38, 0.28) !important;
+  border-color: rgba(234, 237, 243, 0.14) !important;
+}
+
+html[data-theme="light"] pre.astro-code {
+  background-color: rgba(248, 250, 252, 0.42) !important;
+  border-color: rgba(40, 39, 40, 0.14) !important;
+}
