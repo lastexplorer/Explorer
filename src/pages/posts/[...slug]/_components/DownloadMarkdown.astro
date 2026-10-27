@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from "astro:content";
+import IconDownload from "@/assets/icons/IconDownload.svg";
+
+type Props = {
+  post: CollectionEntry<"posts">;
+};
+
+const { post } = Astro.props;
+const { title, description, tags, pubDatetime, modDatetime } = post.data;
+
+// Build a clean filename from the post id (last segment, strip extension)
+const filename =
+  (post.id.split("/").pop()?.replace(/\.(mdx?)$/, "") ?? "article") + ".md";
+
+// Reconstruct YAML frontmatter
+const escapedTitle = title.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+const escapedDesc = (description ?? "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+const tagsYaml =
+  tags && tags.length > 0
+    ? `tags:\n${tags.map((t: string) => `  - ${t}`).join("\n")}`
+    : "tags: []";
+
+const frontmatter = [
+  "---",
+  `title: "${escapedTitle}"`,
+  `description: "${escapedDesc}"`,
+  `pubDatetime: ${pubDatetime.toISOString()}`,
+  ...(modDatetime ? [`modDatetime: ${modDatetime.toISOString()}`] : []),
+  tagsYaml,
+  "---",
+  "",
+].join("\n");
+
+// Pass the full markdown content safely via JSON in an inline script variable
+const fullMarkdown = frontmatter + (post.body ?? "");
+const jsonContent = JSON.stringify(fullMarkdown);
+const jsonFilename = JSON.stringify(filename);
+---
+
+<div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start">
+  <span class="italic">下载文章</span>
+  <button
+    id="download-md-btn"
+    class="group inline-flex items-center gap-1 rounded p-2 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:p-1 scale-90 hover:rotate-6 transition-transform"
+    title="下载 Markdown 源文件"
+    aria-label="下载 Markdown 源文件"
+  >
+    <IconDownload
+      class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110"
+    />
+    <span class="sr-only">Download Markdown</span>
+  </button>
+</div>
+
+<script is:inline define:vars={{ jsonContent, jsonFilename }}>
+  (function () {
+    const btn = document.getElementById("download-md-btn");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      try {
+        const content = JSON.parse(jsonContent);
+        const filename = JSON.parse(jsonFilename);
+        const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (e) {
+        console.error("Download failed:", e);
+      }
+    });
+  })();
+</script>
