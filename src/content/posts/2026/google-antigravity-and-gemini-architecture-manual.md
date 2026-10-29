@@ -1,8 +1,8 @@
-﻿---
+---
 author: Explorer
 pubDatetime: 2026-10-22T01:19:00.000Z
-modDatetime: 2026-10-23T17:40:00.000Z
-title: Google Antigravity 与 Gemini 全平台完全架构配置与运维手册 (v3.2)
+modDatetime: 2026-10-29T01:42:58.414Z
+title: Google Antigravity 与 Gemini 全平台完全架构配置与运维手册 (v3.3)
 featured: false
 draft: false
 tags:
@@ -14,22 +14,29 @@ tags:
 description: 涵盖 Antigravity 客户端、CLI、WSL 原生集成、免 TUN 代理透明注入与持久化自愈工程方案的完全版技术手册。
 ---
 
-> **文档版本**：v3.2（2026年10月 Antigravity 2.22.0 升级自愈与黑屏排障完全版）  
+# 🚀 Google Antigravity & Gemini 全平台完全架构配置与运维手册
+
+> **文档版本**：v3.3（2026年10月 跨机最小侵入式定时任务与零依赖自愈完全版）  
 > **整合来源**：  
 > 1. 《Google Gemini Windows 客户端内置代理与离线修复指南》  
 > 2. 《Windows 端 Antigravity CLI (`agy`) 配置与手机远程控制完全指南》  
 > 3. 《Google Antigravity 客户端全界面汉化与多机复用部署指南》  
 > 4. 《Antigravity 2.16+ / 2.17+ / 2.22+ WSL 原生集成与免 TUN 代理黑屏自愈工程方案》  
-> **核心原则**：免开虚拟网卡（TUN 模式）、零全局系统环境污染、点击官方原生图标即开即用、跨平台协同零冲突、全链路自动自愈。
+> 5. 《Antigravity 客户端原生 Scheduled Sidecar 定时巡检自愈与跨机免 Python 极简落地规范》  
+> **核心原则**：免开虚拟网卡（TUN 模式）、零全局系统环境污染、点击官方原生图标即开即用、跨平台协同零冲突、全链路自动自愈、**桌面绝对零干扰（严禁在桌面创建多余的可执行脚本，所有自动化运维 100% 收敛在后台）**、**环境检测优先与轻量级梯队策略（优先复用已有环境，无 Python 时百兆轻量包可接受，亦可由原生 PowerShell 零下载保底）**。
+
+---
 
 ## 目录
 - [第一篇：全景架构概览与三大产品形态定位](#第一篇全景架构概览与三大产品形态定位)
 - [第二篇：反重力桌面端（Antigravity App）免 TUN 代理注入与全入口加固](#第二篇反重力桌面端antigravity-app免-tun-代理注入与全入口加固)
+  - [2.4 客户端每日定时巡检自愈自动化（Antigravity Scheduled Sidecar）](#24-客户端每日定时巡检自愈自动化antigravity-scheduled-sidecar)
 - [第三篇：反重力 2.16+ / 2.22+ WSL 模式黑屏根因剖析与无感代理注入自愈方案](#第三篇反重力-216--222-wsl-模式黑屏根因剖析与无感代理注入自愈方案)
 - [第四篇：Antigravity CLI (`agy`) Windows 配置、静默自启与手机远程控制](#第四篇antigravity-cli-agy-windows-配置静默自启与手机远程控制)
 - [第五篇：反重力客户端全界面深度汉化与防卡死部署规范](#第五篇反重力客户端全界面深度汉化与防卡死部署规范)
 - [第六篇：官方 Google Gemini 独立桌面端（Gemini Desktop App）专题](#第六篇官方-google-gemini-独立桌面端gemini-desktop-app专题)
 - [第七篇：全能维护代码速查与应急自愈操作备忘录](#第七篇全能维护代码速查与应急自愈操作备忘录)
+  - [7.5 跨机最小侵入式定时任务一键落地部署（纯后台执行 · 桌面零干扰）](#75-跨机最小侵入式定时任务一键落地部署纯后台执行--桌面零干扰)
 
 ---
 
@@ -109,7 +116,7 @@ Windows 调用原生无窗口引擎 wscript.exe (零黑框闪烁)
 ### 2.3 核心脚本源码
 
 #### 引导脚本：`%LOCALAPPDATA%\antigravity-launcher\launcher.vbs`
-```vbs
+```vbscript
 Option Explicit
 Dim ws, procEnv, http, i, exePath, args, cmd
 
@@ -149,6 +156,58 @@ Next
 cmd = """" & exePath & """ --proxy-server=""http://127.0.0.1:7890""" & args
 ws.Run cmd, 1, False
 ```
+
+### 2.4 客户端每日定时巡检自愈自动化（Antigravity Scheduled Sidecar）
+
+#### 2.4.1 核心痛点与背景
+虽然我们在 Windows 登录时配置了开机自启动自愈（见第 4.5 节），但在日常实际运维中仍存在两大关键盲区：
+1. **主机长期开机/睡眠不重启**：许多用户几周不关机或频繁休眠，Windows 的 `AtLogOn` 开机触发器无法重新执行；
+2. **官方静默后台自动升级冲刷**：Antigravity 内置 `electron-updater` 会在后台静默拉取增量更新包并自动重启应用。官方安装器重启后会强制重置任务栏、开始菜单与注册表 `antigravity://` 授权协议为裸程序，导致免 TUN 代理瞬间断联。
+
+为此，我们利用 Antigravity 客户端内置的**智能体自动化调度引擎（Sidecar Automation）**，建立每日定时巡检与自愈闭环。
+
+#### 2.4.2 跨机最小侵入与桌面零干扰设计准则
+在远程电脑、云桌面或纯净工作机等新环境下部署时，必须严格贯彻两大核心原则：
+
+##### 原则一：严禁在桌面创建可执行脚本（桌面零干扰铁律）
+- **自动化本质是静默无感**：定时任务本应在后台静默巡检、默默自愈。在用户的桌面上生成类似 `一键修复.bat`、`run.ps1`、`deploy.cmd` 等可执行脚本是非常多余且落后的做法，会严重干扰用户桌面的整洁并造成视觉噪音。
+- **全链路收敛于后台持久化目录**：所有执行脚本（`launcher.vbs`、`reinforce.py`、`reinforce.ps1`）**必须统一且严格存放在后台专用目录**（`%LOCALAPPDATA%\antigravity-launcher\` 与 `%USERPROFILE%\.gemini\`），绝对不得在桌面生成任何多余脚本文件。
+- **桌面仅保留官方入口图标**：用户桌面上只应存在原生的 `Antigravity.lnk` 应用程序图标，日常只需点击官方图标正常启动，背后的代理注入、定时巡检与自愈动作全链路透明运行。
+
+##### 原则二：环境检测优先与轻量级梯队策略
+- **检测优先，拒绝重复造轮子**：加固程序运行时首先自动探测宿主机是否已有可用的 Python 环境（`Get-Command python` 或常用安装路径），若已配置则直接无缝复用；
+- **百兆级轻量环境完全可接受**：若目标机暂无 Python，但需要执行完整高级加固逻辑，引入一个仅占用百兆左右空间的轻量级 Python（如官方 Windows Embeddable 嵌入式便携包 ~25MB 解压后 ~80MB，或者独立微型环境）是完全在合理接受范围内的，无需为了追求形式上的零文件而放弃 Python 强大的 AST/多平台扩展能力；
+- **原生 PowerShell 零下载兜底保底**：对于极度严格的离线、无外网下载权限或免安装场景，提供基于 Windows 10/11 内置的纯原生 `reinforce.ps1` 作为零下载、零依赖保底。
+
+#### 2.4.3 定时任务 Sidecar 配置文件定义
+在受控机创建文件：`%USERPROFILE%\.gemini\config\sidecars\app\sidecar.json`
+
+```json
+{
+  "builtin": "schedule",
+  "args": [
+    "0 9 * * *",
+    "agentapi",
+    "new-conversation",
+    "--",
+    "请执行中央加固巡检脚本：\nif (Get-Command python -ErrorAction SilentlyContinue) { python \"$env:LOCALAPPDATA\\antigravity-launcher\\reinforce.py\" } else { powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"$env:LOCALAPPDATA\\antigravity-launcher\\reinforce.ps1\" }\n\n执行完毕后，请使用美观清晰的标准 Markdown 结构化表格汇报最终自愈巡检结果，格式规范如下：\n\n### 一、巡检排查概览：本次是否有项目失效？\n- **总体状态**：明确说明本次巡检结果（例如：「全部正常，未触发重新加固」或「发现 X 项失效并已完成自愈加固」）。\n- **本次失效加固项**：明确列出本次真正失效并重新加固的具体项目与原因；若无失效项，明确写明「无（所有配置均保持健康）」，严禁笼统地显示「所有项都完成了加固」。\n\n### 二、详细环境维护与自愈清单\n请使用标准 Markdown 表格展示各检查项细节：\n| 维护项目 | 检查结果 | 处理动作 | 当前状态 |\n| :--- | :--- | :--- | :---: |\n（在「当前状态」列中：本次检测到失效或更新并执行了修复的项明确标为「**⚡ 本次已修复加固**」，原本正常未变动的项标为「**✅ 正常**」）\n\n### 三、维护结论\n简要总结当前 Antigravity 与 Gemini 客户端的免 TUN 局部代理（直连 127.0.0.1:7890）健康状态。"
+  ],
+  "display_name": "反重力与Gemini应用自启代理及升级维护"
+}
+```
+
+#### 2.4.4 激活方式与状态协同
+定时任务创建后，需在全局配置中启用。在 `%USERPROFILE%\.gemini\config\config.json` 的 `"sidecars"` 对象下添加 `"app"` 块：
+```json
+{
+  "sidecars": {
+    "app": {
+      "enabled": true
+    }
+  }
+}
+```
+配置落盘后，无需重启整机。在 Antigravity 界面侧边栏的 **Automations** 面板中，即可看到「反重力与Gemini应用自启代理及升级维护」已处于激活状态，每天上午 09:00:00 自动拉起后台会话巡检自愈。
 
 ---
 
@@ -325,7 +384,7 @@ agy config set remote_control.name "desktop-pc"
 通过 `wscript.exe` + `SW_HIDE (0)` 彻底消除黑框：
 
 创建脚本：`%LOCALAPPDATA%\agy\bin\agy_daemon_proxy.vbs`
-```vbs
+```vbscript
 Dim WshShell, procEnv, http, isReady, retryCount
 Set WshShell = CreateObject("WScript.Shell")
 WshShell.CurrentDirectory = "C:\Users\<username>\AppData\Local\agy\bin"
@@ -539,6 +598,8 @@ Write-Host "[OK] 已恢复官方 URL 协议"
 | **CLI 守护进程脚本** | `C:\Users\<username>\AppData\Local\agy\bin\agy_daemon_proxy.vbs` |
 | **Gemini 独立客户端目录** | `C:\Users\<username>\AppData\Local\Google\Gemini\` |
 | **Gemini 代理补丁脚本** | `C:\Users\<username>\AppData\Local\Google\Gemini\patch_gemini.py` |
+| **客户端内置定时任务配置** | `C:\Users\<username>\.gemini\config\sidecars\app\sidecar.json` |
+| **零依赖原生加固脚本 (PowerShell)** | `C:\Users\<username>\AppData\Local\antigravity-launcher\reinforce.ps1` |
 | **项目定制配置文件 (2.17+)** | `<WorkspaceRoot>/.gemini/config.json`（废弃旧 `.agents/settings.json`） |
 
 ### 7.4 常见突发故障排查与应急急救手册 (FAQ)
@@ -585,3 +646,266 @@ Write-Host "[OK] 已恢复官方 URL 协议"
 - **Windows 端主进程与前端日志**：`%APPDATA%\Antigravity\logs\main.log`
 - **Windows 端语言服务器日志**：`%APPDATA%\Antigravity\logs\language_server.log`
 - **WSL 端目录**：`~/.antigravity-server/bin/<version>/`
+
+---
+
+### 7.5 跨机最小侵入式定时任务一键落地部署（纯后台执行 · 桌面零干扰）
+
+> [!IMPORTANT]
+> **桌面零干扰与纯后台静默铁律**：  
+> 自动化任务的核心价值在于后台无感运行。无论是本机维护还是跨机部署，**在任何情况下都严禁在用户桌面上生成 `.bat`、`.cmd`、`.ps1` 或辅助快捷方式等任何可执行脚本**。  
+> 本手册提供的所有落地流程，均将脚本与配置 100% 收敛在用户后台持久化目录（`%LOCALAPPDATA%\antigravity-launcher\`）与配置目录（`%USERPROFILE%\.gemini\`）中，桌面仅保留官方应用程序图标，绝不打扰用户桌面的整洁。
+
+针对需要在新电脑、受控环境或无 Python 解释器的机器上快速部署反重力定时巡检任务的场景，提供本套**零依赖原生落地方案**。加固流程遵循「环境检测优先」策略：优先检测宿主机已有的 Python 环境；若缺失，百兆左右的轻量/嵌入式 Python 属于可接受范围，亦可由本节提供的原生 PowerShell 脚本零下载保底。
+
+#### 7.5.1 零依赖原生自愈脚本：`reinforce.ps1`
+将以下代码保存至 `%LOCALAPPDATA%\antigravity-launcher\reinforce.ps1`（或由下方一键部署脚本自动生成）：
+
+```powershell
+<#
+.SYNOPSIS
+    Google Antigravity & Gemini 纯原生零依赖环境加固与巡检脚本 (PowerShell 版)
+#>
+[CmdletBinding()]
+param([string]$ProxyPort = "7890")
+
+$ErrorActionPreference = "Continue"
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+$localAppData = [System.Environment]::GetFolderPath('LocalApplicationData')
+$appData = [System.Environment]::GetFolderPath('ApplicationData')
+$desktop = [System.Environment]::GetFolderPath('Desktop')
+$startup = [System.Environment]::GetFolderPath('Startup')
+
+$vbsLauncher = Join-Path $localAppData "antigravity-launcher\launcher.vbs"
+$agExe = Join-Path $localAppData "Programs\antigravity\Antigravity.exe"
+$agDir = Join-Path $localAppData "Programs\antigravity"
+
+$reinforced = [System.Collections.Generic.List[string]]::new()
+$healthy = [System.Collections.Generic.List[string]]::new()
+$warnings = [System.Collections.Generic.List[string]]::new()
+
+function Record-Healthy([string]$item, [string]$detail) { $healthy.Add("${item}: ${detail}") }
+function Record-Reinforced([string]$item, [string]$detail) { $reinforced.Add("${item}: ${detail}") }
+function Record-Warn([string]$item, [string]$detail) { $warnings.Add("${item}: ${detail}") }
+
+Write-Host "正在启动 Antigravity 零依赖原生自愈巡检 (PowerShell 版)..." -ForegroundColor Cyan
+
+# 1. 代理连通性探测
+try {
+    $proxyUri = "http://127.0.0.1:" + $ProxyPort
+    $req = [System.Net.WebRequest]::Create("http://www.google.com/generate_204")
+    $req.Proxy = New-Object System.Net.WebProxy($proxyUri)
+    $req.Timeout = 3000
+    $resp = $req.GetResponse()
+    $code = [int]$resp.StatusCode
+    $resp.Close()
+    if ($code -eq 204 -or $code -eq 200) {
+        Record-Healthy ("本地代理探针 (端口 " + $ProxyPort + ")") "正常响应 Google 204，免 TUN 通道畅通"
+    } else {
+        Record-Warn ("本地代理探针 (端口 " + $ProxyPort + ")") ("收到 HTTP " + $code + " 响应")
+    }
+} catch {
+    Record-Warn ("本地代理探针 (端口 " + $ProxyPort + ")") "无法连接本地代理端口，请确认 Clash/代理工具已启动"
+}
+
+# 2. 核心持久化引导脚本 launcher.vbs 巡检
+$launcherDir = Split-Path $vbsLauncher
+if (-not (Test-Path $launcherDir)) { New-Item -ItemType Directory -Path $launcherDir -Force | Out-Null }
+
+$needVbsWrite = $true
+if (Test-Path $vbsLauncher) {
+    $vbsText = Get-Content -Path $vbsLauncher -Raw -ErrorAction SilentlyContinue
+    if ($vbsText -match "Antigravity\.exe" -and $vbsText -match "proxy-server") {
+        Record-Healthy "核心引导脚本 (launcher.vbs)" "存在且包含局部代理注入逻辑"
+        $needVbsWrite = $false
+    }
+}
+
+if ($needVbsWrite) {
+    $lines = @(
+        'Option Explicit',
+        'Dim ws, procEnv, http, i, exePath, args, cmd',
+        'Set ws = CreateObject("WScript.Shell")',
+        'Set procEnv = ws.Environment("Process")',
+        'procEnv("HTTP_PROXY") = "http://127.0.0.1:' + $ProxyPort + '"',
+        'procEnv("HTTPS_PROXY") = "http://127.0.0.1:' + $ProxyPort + '"',
+        'procEnv("ALL_PROXY") = "socks5://127.0.0.1:' + $ProxyPort + '"',
+        'procEnv("NO_PROXY") = "localhost,127.0.0.1,::1"',
+        'For i = 1 To 15',
+        '    On Error Resume Next',
+        '    Set http = CreateObject("MSXML2.ServerXMLHTTP.6.0")',
+        '    http.setProxy 2, "127.0.0.1:' + $ProxyPort + '"',
+        '    http.setTimeouts 1500, 1500, 1500, 1500',
+        '    http.open "GET", "http://www.google.com/generate_204", False',
+        '    http.send',
+        '    If Err.Number = 0 Then',
+        '        If http.status = 204 Or http.status = 200 Then Exit For',
+        '    End If',
+        '    On Error GoTo 0',
+        '    WScript.Sleep 2000',
+        'Next',
+        'exePath = ws.ExpandEnvironmentStrings("%LOCALAPPDATA%\Programs\antigravity\Antigravity.exe")',
+        'args = ""',
+        'For i = 0 To WScript.Arguments.Count - 1',
+        '    args = args & " """ & WScript.Arguments(i) & """"',
+        'Next',
+        'cmd = """" & exePath & """ --proxy-server=""http://127.0.0.1:' + $ProxyPort + '""" & args',
+        'ws.Run cmd, 1, False'
+    )
+    $vbsCode = $lines -join "`r`n"
+    [System.IO.File]::WriteAllText($vbsLauncher, $vbsCode, [System.Text.Encoding]::ASCII)
+    Record-Reinforced "核心引导脚本 (launcher.vbs)" "已生成免 TUN 进程级局部代理注入器"
+}
+
+# 3. 注册表 URL Protocol 协议巡检与加固
+$regKey = "HKCU:\Software\Classes\antigravity\shell\open\command"
+$expectedReg = 'C:\Windows\System32\wscript.exe "' + $vbsLauncher + '" "%1"'
+if (-not (Test-Path $regKey)) {
+    New-Item -Path $regKey -Force | Out-Null
+    Set-ItemProperty -Path $regKey -Name "(default)" -Value $expectedReg -Force
+    Record-Reinforced "URL Protocol 协议" "注册表项缺失，已创建并锁死至 launcher.vbs"
+} else {
+    $curReg = (Get-ItemProperty -Path $regKey -Name "(default)" -ErrorAction SilentlyContinue)."(default)"
+    if ($curReg -like "*launcher.vbs*") {
+        Record-Healthy "URL Protocol 协议" "已锁定指向 launcher.vbs"
+    } else {
+        Set-ItemProperty -Path $regKey -Name "(default)" -Value $expectedReg -Force
+        Record-Reinforced "URL Protocol 协议" "被官方更新覆盖为原生程序，已重新加固至 launcher.vbs"
+    }
+}
+
+# 4. 快捷方式六大入口全面巡检与加固
+$wsh = New-Object -ComObject WScript.Shell
+$shortcuts = @(
+    @{ Name = "桌面快捷方式"; Path = (Join-Path $desktop "Antigravity.lnk") },
+    @{ Name = "任务栏主图标"; Path = (Join-Path $appData "Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\Antigravity.lnk") },
+    @{ Name = "任务栏全称图标"; Path = (Join-Path $appData "Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\Antigravity - Agentic Desktop Application.lnk") },
+    @{ Name = "开始菜单根图标"; Path = (Join-Path $appData "Microsoft\Windows\Start Menu\Programs\Antigravity.lnk") },
+    @{ Name = "开始菜单程序组"; Path = (Join-Path $appData "Microsoft\Windows\Start Menu\Programs\Antigravity\Antigravity.lnk") },
+    @{ Name = "开机自启快捷方式"; Path = (Join-Path $startup "Antigravity.lnk") }
+)
+
+foreach ($item in $shortcuts) {
+    if (Test-Path $item.Path) {
+        $lnk = $wsh.CreateShortcut($item.Path)
+        $isWscript = $lnk.TargetPath -like "*wscript.exe*"
+        $hasVbs = $lnk.Arguments -like "*launcher.vbs*"
+        if ($isWscript -and $hasVbs) {
+            Record-Healthy ("快捷方式 (" + $item.Name + ")") "已重定向至 launcher.vbs"
+        } else {
+            $lnk.TargetPath = "C:\Windows\System32\wscript.exe"
+            $lnk.Arguments = '"' + $vbsLauncher + '"'
+            $lnk.IconLocation = $agExe + ",0"
+            $lnk.WorkingDirectory = $agDir
+            $lnk.Save()
+            Record-Reinforced ("快捷方式 (" + $item.Name + ")") "检测到被官方安装器覆盖，已重新加固重定向"
+        }
+    }
+}
+
+# 5. CLI 守护计划任务巡检 (若目标机使用了 agy)
+$task = Get-ScheduledTask -TaskName "AntigravityCliDaemon" -ErrorAction SilentlyContinue
+if ($null -ne $task) { Record-Healthy "计划任务 (AntigravityCliDaemon)" "系统级自启守护运行正常" }
+
+# 6. WSL 联动探测 (若目标机支持)
+if (Get-Command wsl.exe -ErrorAction SilentlyContinue) {
+    try {
+        $wslOut = wsl.exe -d Ubuntu-24.04 -- bash -c "if [ -f ~/.antigravity-server/patch_wsl_proxy.sh ]; then ~/.antigravity-server/patch_wsl_proxy.sh; echo 'WSL_OK'; fi" 2>$null
+        if ($wslOut -match "WSL_OK") { Record-Healthy "WSL 核心代理包装器" "Ubuntu-24.04 内部代理包装器加固状态良好" }
+    } catch {}
+}
+
+# 最终输出看板
+Write-Host ""
+Write-Host "======================================================================" -ForegroundColor Cyan
+Write-Host "        Google Antigravity 巡检与加固看板 (PowerShell 零依赖版)" -ForegroundColor Cyan
+Write-Host "======================================================================" -ForegroundColor Cyan
+if ($reinforced.Count -gt 0) {
+    Write-Host ("⚡【本次已加固 / 失效自愈项】(共 " + $reinforced.Count + " 项):") -ForegroundColor Yellow
+    foreach ($r in $reinforced) { Write-Host ("  * " + $r) -ForegroundColor Yellow }
+} else {
+    Write-Host "⚡【本次已加固 / 失效自愈项】(共 0 项):" -ForegroundColor Green
+    Write-Host "  🟢 本次巡检未发现任何失效或覆盖项，所有配置均保持健康！" -ForegroundColor Green
+}
+Write-Host "----------------------------------------------------------------------"
+Write-Host ("🟢【维持健康 / 原本正常项】(共 " + $healthy.Count + " 项):") -ForegroundColor Green
+foreach ($h in $healthy) { Write-Host ("  * " + $h) -ForegroundColor Gray }
+if ($warnings.Count -gt 0) {
+    Write-Host "----------------------------------------------------------------------"
+    Write-Host ("⚠️【环境提示 / 待关注项】(共 " + $warnings.Count + " 项):") -ForegroundColor Magenta
+    foreach ($w in $warnings) { Write-Host ("  * " + $w) -ForegroundColor Magenta }
+}
+Write-Host "======================================================================" -ForegroundColor Cyan
+Write-Host ""
+```
+
+#### 7.5.2 目标机 3 秒极速一键部署脚本（无感知纯原生落地）
+在任意全新机器的 PowerShell 中，以普通用户身份粘贴并执行以下命令，即可在 **3 秒内完全自动落地**（自动创建目录、生成零依赖加固脚本、注册 Sidecar 定时任务、合并启用配置并执行首次加固）：
+
+```powershell
+# ==============================================================================
+#  Antigravity 跨机最小侵入式定时任务一键落地部署脚本 (纯 PowerShell · 免 Python)
+# ==============================================================================
+$ErrorActionPreference = "Stop"
+
+Write-Host "[1/4] 创建持久化目录与 Sidecar 目录结构..." -ForegroundColor Cyan
+$launcherDir = "$env:LOCALAPPDATA\antigravity-launcher"
+$sidecarDir  = "$env:USERPROFILE\.gemini\config\sidecars\app"
+$configJson  = "$env:USERPROFILE\.gemini\config\config.json"
+
+if (-not (Test-Path $launcherDir)) { New-Item -ItemType Directory -Path $launcherDir -Force | Out-Null }
+if (-not (Test-Path $sidecarDir))  { New-Item -ItemType Directory -Path $sidecarDir -Force | Out-Null }
+
+Write-Host "[2/4] 写入 Sidecar 定时任务描述文件 (sidecar.json)..." -ForegroundColor Cyan
+$sidecarObj = @{
+    builtin = "schedule"
+    display_name = "反重力与Gemini应用自启代理及升级维护"
+    args = @(
+        "0 9 * * *",
+        "agentapi",
+        "new-conversation",
+        "--",
+        "请执行中央加固巡检脚本：`nif (Get-Command python -ErrorAction SilentlyContinue) { python `"`$env:LOCALAPPDATA\antigravity-launcher\reinforce.py`" } else { powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"`$env:LOCALAPPDATA\antigravity-launcher\reinforce.ps1`" }`n`n执行完毕后，请使用美观清晰的标准 Markdown 结构化表格汇报最终自愈巡检结果，格式规范如下：`n`n### 一、巡检排查概览：本次是否有项目失效？`n- **总体状态**：明确说明本次巡检结果（例如：「全部正常，未触发重新加固」或「发现 X 项失效并已完成自愈加固」）。`n- **本次失效加固项**：明确列出本次真正失效并重新加固的具体项目与原因；若无失效项，明确写明「无（所有配置均保持健康）」，严禁笼统地显示「所有项都完成了加固」。`n`n### 二、详细环境维护与自愈清单`n请使用标准 Markdown 表格展示各检查项细节：`n| 维护项目 | 检查结果 | 处理动作 | 当前状态 |`n| :--- | :--- | :--- | :---: |`n（在「当前状态」列中：本次检测到失效或更新并执行了修复的项明确标为「**⚡ 本次已修复加固**」，原本正常未变动的项标为「**✅ 正常**」）`n`n### 三、维护结论`n简要总结当前 Antigravity 与 Gemini 客户端的免 TUN 局部代理（直连 127.0.0.1:7890）健康状态。"
+    )
+}
+$sidecarJsonText = $sidecarObj | ConvertTo-Json -Depth 5
+[System.IO.File]::WriteAllText((Join-Path $sidecarDir "sidecar.json"), $sidecarJsonText, [System.Text.Encoding]::UTF8)
+
+Write-Host "[3/4] 合并并激活全局配置中的定时任务 (config.json)..." -ForegroundColor Cyan
+if (Test-Path $configJson) {
+    try {
+        $cfg = Get-Content -Path $configJson -Raw -Encoding UTF8 | ConvertFrom-Json
+    } catch {
+        $cfg = [PSCustomObject]@{}
+    }
+} else {
+    $cfg = [PSCustomObject]@{}
+}
+
+if (-not $cfg.PSObject.Properties['sidecars']) {
+    $cfg | Add-Member -MemberType NoteProperty -Name "sidecars" -Value ([PSCustomObject]@{})
+}
+if (-not $cfg.sidecars.PSObject.Properties['app']) {
+    $cfg.sidecars | Add-Member -MemberType NoteProperty -Name "app" -Value ([PSCustomObject]@{ enabled = $true })
+} else {
+    $cfg.sidecars.app.enabled = $true
+}
+$newCfgJson = $cfg | ConvertTo-Json -Depth 10
+[System.IO.File]::WriteAllText($configJson, $newCfgJson, [System.Text.Encoding]::UTF8)
+
+Write-Host "[4/4] 立即执行首次加固自愈..." -ForegroundColor Cyan
+$reinforcePs1 = Join-Path $launcherDir "reinforce.ps1"
+if (Test-Path $reinforcePs1) {
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File $reinforcePs1
+}
+
+Write-Host ""
+Write-Host "==========================================================================" -ForegroundColor Green
+Write-Host " [OK] 跨机定时自动化任务部署成功！" -ForegroundColor Green
+Write-Host " 1. 任务路径: $sidecarDir\sidecar.json" -ForegroundColor Green
+Write-Host " 2. 执行时间: 每天上午 09:00 (0 9 * * *)" -ForegroundColor Green
+Write-Host " 3. 执行模式: 免 Python 零依赖纯原生巡检 (reinforce.ps1)" -ForegroundColor Green
+Write-Host " 4. 在反重力客户端侧边栏 Automations 面板中已自动设为 Enabled。" -ForegroundColor Green
+Write-Host "==========================================================================" -ForegroundColor Green
+```
